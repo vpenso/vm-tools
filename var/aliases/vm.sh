@@ -55,7 +55,7 @@ function vm() {
   "exec"|"ex")       virsh-instance exec $@ ;;
   "image"|"i")       virsh-instance list ;;
   "kill"|"k")        virsh undefine "$1" ; virsh destroy "$1" ;;
-  "list"|"l")        virsh list --all ;;
+  "list"|"l")        virsh list --all --name | sed '/^$/d';;
   "login"|"lo")      vm cd $1 ; ssh-exec -r ;;
   "lookup"|"lk")     virsh-nat-bridge lookup $@ ;;
   "nat"|"n")         virsh-nat-bridge $@ ;;

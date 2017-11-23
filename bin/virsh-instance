@@ -222,12 +222,19 @@ class Virsh
     System::run command
   end
 
-  def self.start(path)
-    config = "#{path}/libvirt_instance.xml"
-    name = File.basename path
-    raise("No libvirt configuration in #{path}") unless File.exists?(config)
-    System::run("virsh define #{config} | sed '/^$/d'")
-    System::run("virsh start #{name} | sed '/^$/d'")
+  def self.start(name) 
+    # FQDN of the virtual machine instance
+    name = self.instance(name)
+    # absolute path to the libvirt configuration
+    config = "#{self.path(name)}/libvirt_instance.xml"
+    if File.exists?(config)
+      # define the virtual machine instance if required
+      System::run("virsh define #{config} | sed '/^$/d'") unless self.defined?(name)
+      # start the virtual machine instance if requried
+      System::run("virsh start #{name} | sed '/^$/d'") unless self.running?(name)
+    else
+      raise("Missing instance configuration: #{name}")
+    end
   end
 
   def self.remove(name)
@@ -235,21 +242,38 @@ class Virsh
     System::run("virsh undefine #{Virsh.instance name} | sed '/^$/d'")
   end
 
-  def self.start(name)
-    System::run("virsh start #{Virsh.instance name} | sed '/^$/d'")
-  end
-
   def self.shutdown(name)
     System::run("virsh shutdown #{Virsh.instance name} | sed '/^$/d'")
   end
 
+  def self.defined?(name)
+    name = self.instance(name)
+    output = System::exec("virsh list --all --name | grep -s #{name}")
+    if output.is_a? String and not output.empty? 
+      $logger.debug("Instance #{name} is defined")
+      return true
+    end
+    if output.nil?
+      $logger.debug("Instance #{name} is not defined")
+      return false
+    end
+  end
+
   def self.running?(name)
+    name = self.instance(name)
     output = System::exec("virsh list | grep #{name} >/dev/null 2>&1")
     if output.nil?
-      false
+      return false
     else
-      true
+      $logger.debug("Instance #{name} running")
+      return true
     end
+  end
+
+  # absolute path to a virtual machine instance
+  def self.path(name)
+    $logger.debug("Resolve path for instance [#{name}]")
+    "#{$options.instance_path}/#{self.instance(name)}"  
   end
 
   def self.instance(name)
@@ -364,12 +388,12 @@ begin
     # check user arguments
     image = ARGV.shift || raise('Expecting image name as argument!')
     image = "#{$options.image_path}/#{image}"
-    instance = ARGV.shift || raise('Expecting instance name as argument')
+    name = ARGV.shift || raise('Expecting instance name as argument')
 
     # Append domain name if missing
-    instance = Virsh::instance(instance)
+    name = Virsh::instance(name)
     # Path to virtual machine instance
-    path = "#{$options.instance_path}/#{instance}"
+    path = Virsh::path(name)
 
     # clone options
     options = Hash.new
@@ -378,7 +402,7 @@ begin
 
     Virsh::Image.clone(image,path,options)
     Virsh.config(path)
-    Virsh.start(path)
+    Virsh.start(name)
 
   when 'exec','ex','e','sync','sy'
 
@@ -434,25 +458,13 @@ begin
   when 'start','st'
 
     name = ARGV.shift || raise('Expecting name as argument!')
-
-    # Append domain name if missing
-    name = Virsh::instance(name)
-
-    if not Virsh.running?(name)
-      Virsh.start(name)
-    else
-      $stdout.puts("Instance #{name} is running.")
-    end
+    Virsh.start(name)
   
   when 'path','p'
 
     # Name of the virtual machine instance
     name = ARGV.shift || raise('Expecting name as argument!')
-    # Append domain name if missing
-    name = Virsh::instance(name)
-    # Path to virtual machine instance
-    path = "#{$options.instance_path}/#{name}" 
-    $stdout.puts path
+    $stdout.puts Virsh.path(name)
 
   when 'help'
     $stdout.puts HELP
