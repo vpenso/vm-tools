@@ -1,12 +1,12 @@
 # VM Tools
 
-The programs distributed with this repository enable user to quickly configure and **use virtual machines as development and test environment** on a Linux workstation. In conjunction all programs in the [bin/](bin) sub-directory build a tool-chain to bootstrap many virtual machine instance in a very customizable way. The tool-chain is based on software available in all modern Linux distributions: 
+The programs distributed with this repository enable user to quickly configure and **use virtual machines as development and test environment** on a Linux workstation. In conjunction all programs in the [bin/](bin) sub-directory build a tool-chain to bootstrap many virtual machine instances in a very customizable way. 
 
-* [KVM](http://www.linux-kvm.org)
-* [Libvirt](http://libvirt.org/)
-* [SSH](http://www.openssh.com/)
-* [Rsync](http://rsync.samba.org/i)
-* [SSHfs](http://fuse.sourceforge.net/sshfs.html)
+The tool-chain is based on software available in all modern Linux distributions: 
+
+* Linux [KVM](http://www.linux-kvm.org) is used as virtualization platform.
+* [Libvirt](http://libvirt.org/) is used as generic interface on top of KVM.
+* [SSH](http://www.openssh.com/), [Rsync](http://rsync.samba.org/), and [SSHfs](http://fuse.sourceforge.net/sshfs.html) allows access the virtual machine instances.
 
 ### Prerequisites 
 
