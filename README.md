@@ -10,10 +10,8 @@ The tool-chain is based on software available in all modern Linux distributions:
 * [SSH](http://www.openssh.com/)
 * [Rsync](http://rsync.samba.org/i)
 * [SSHfs](http://fuse.sourceforge.net/sshfs.html)
-* [Chef](https://wiki.opscode.com).
 
-
-## Prerequisites 
+### Prerequisites 
 
 Install following packages on Debian:
 
@@ -45,7 +43,7 @@ group = "jdow"
 >>> sudo systemctl restart libvirtd
 ```
 
-## Environment
+### Environment
 
 The shell script ↴ [source_me.sh](source_me.sh) adds the tool-chain in this repository to your shell environment:
 
@@ -55,12 +53,13 @@ The shell script ↴ [source_me.sh](source_me.sh) adds the tool-chain in this re
 
 It will add the [bin/](bin/) sub-directory to your `PATH` and define several additional environment variables.
 
-## Usage
+# Usage
 
-The [docs/](docs) sub-directory includes all documentation required us this tool-chain:
+The [docs/](docs) sub-directory includes all documentation required to us this tool-chain:
 
 * The [network](docs/network.md) document explains the setup of the virtual machine network.
-* The [image](docs/images.md) document describes how to create re-usable template virtual machine images.
+* The [image](docs/image.md) document describes how to create re-usable template virtual machine images.
+* The [instance](docs/instance.md) document show how to use virtual machine images to create any number of virtual machine instances.
 
 ## License
 
