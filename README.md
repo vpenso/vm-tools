@@ -1,9 +1,6 @@
 # VM Tools
 
-The tool-chain included in this repository allow a quick setup of virtual machines 
-for development and testing on your Linux workstation.
-
-The tool-chain is based on software available in all modern Linux distributions: 
+The programs distributed with this repository enable user to quickly configure and **use virtual machines as development and test environment** on a Linux workstation. In conjunction all programs in the [bin/](bin) sub-directory build a tool-chain to bootstrap many virtual machine instance in a very customizable way. The tool-chain is based on software available in all modern Linux distributions: 
 
 * [KVM](http://www.linux-kvm.org)
 * [Libvirt](http://libvirt.org/)

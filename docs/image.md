@@ -55,7 +55,7 @@ Install a virtual machine image with pressed and the **Debian Installer**:
              --initrd-inject=$VM_FUNCTIONS/var/debian/8/preseed.cfg
 ```
 
-Find Debian pressed files in [var/debian/](../../var/debian).
+Find Debian pressed files in [var/debian/](../var/debian).
 
 Install with CentOS/Fedora **Kickstart**:
 
@@ -70,7 +70,7 @@ Install with CentOS/Fedora **Kickstart**:
                            inst.text inst.ks=file:/kickstart.cfg'
 ```
 
-Find the kickstart file in [var/centos](../../var/centos).
+Find the kickstart file in [var/centos](../var/centos).
 
 ### Permissions
 
@@ -93,7 +93,7 @@ After the installation has finished the virtual machine image can be booted and 
 disk.img
 ```
 
-The [virsh-config](../bin/virsh-config) command creates a file called `libvirt_instance.xml` which contains the configuration required by libvirt to operate the virtual machine image. Similar the [ssh-instance](../bin/ssh-instance) command prepares the configuration file `ssh_config` and a SSH key-pair for login:
+The ↴ [virsh-config](../bin/virsh-config) command creates a file called `libvirt_instance.xml` which contains the configuration required by libvirt to operate the virtual machine image. Similar the ↴ [ssh-instance](../bin/ssh-instance) command prepares the configuration file `ssh_config` and a SSH key-pair for login:
 
 ```bash
 >>> virsh-config --vnc
@@ -119,7 +119,7 @@ Domain lxdev01.devops.test created from ./libvirt_instance.xml
 >>> virt-viewer lxdev01.devops.test
 ```
 
-The [ssh-exec](../bin/ssh-exec) command allows login to and the execution of command in the virtual machine. Similar the [ssh-sync](..bin/ssh-sync) allow top copy file into and from the virtual machine. Use these tools to enable password-less SSH login to the virtual machine image for the users root and devops: 
+The ↴ [ssh-exec](../bin/ssh-exec) command allows login to and the execution of command in the virtual machine. Similar the ↴ [ssh-sync](..bin/ssh-sync) allow top copy file into and from the virtual machine. Use these tools to enable password-less SSH login to the virtual machine image for the users root and devops: 
 
 ```bash
 # install required packages on Debian Stretch
