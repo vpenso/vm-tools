@@ -1,4 +1,4 @@
-# VM Tools
+# Virtual Machine Tools
 
 The programs distributed with this repository enable user to quickly configure and **use virtual machines as development and test environment** on a Linux workstation. In conjunction all programs in the [bin/](bin) sub-directory build a tool-chain to bootstrap many virtual machine instances in a very customizable way. 
 
@@ -24,7 +24,7 @@ Install following package group on Fedora:
 >>> sudo dnf -y install @virtualization
 ```
 
-Enable your user to manage virtual machines (re-login to active these group rights):
+Enable your user to manage virtual machines (re-login to activate these group rights):
 
 ```bash
 >>> sudo usermod -a -G libvirt,kvm `id -un`      

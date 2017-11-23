@@ -1,16 +1,14 @@
 # Instances
 
-The tool ↴ [virsh-instance](../bin/virsh-instance) creates new **virtual machine instances**:
+The ↴ [virsh-instance](../bin/virsh-instance) program creates new **virtual machine instances**:
 
-* A virtual machine instance is derived from a virtual machine image.
-* Each virtual machine instance uses a dedicated [network](network.md) configuration.
-* The virtual machine instance configuration and the disk image is deployed into a sub-directory of the path defined by the environment variable `VM_INSTANCE_PATH`
+* A virtual machine instance is derived from a virtual machine image (cf. [image](image.md)).
+* Each virtual machine instance uses a dedicated network configuration (cf [network](network.md)).
+* The virtual machine instance configuration and the disk image is deployed into a sub-directory of the path defined by the environment variable **`VM_INSTANCE_PATH`**.
 
 ## Usage
 
-The [image](image.md) document describes how to install virtual machine image templates.
-
-List the available virtual machine images:
+**List the available virtual machine images**:
 
 ```bash
 >>> virsh-instance list    
@@ -20,12 +18,12 @@ Images in /srv/projects/vm-tools/vm/images:
   centos7
 ```
 
-A source virtual machine image can be used as template for a virtual machine instance with **two modes**:
+Virtual machine images are used as template for virtual machine instances in **two modes**:
 
-1. Create a `clone` of the original disk image **without any association** to the original.
-2. Create a `shadow` of the original disk image keeping an association **storing only the delta difference**.
+1. Create a **`clone`** of the original disk image **without any association** to the original.
+2. Create a **`shadow`** of the original disk image keeping an association **storing only the delta difference**.
 
-Create a shadow of a virtual machine image and use it to **start a new virtual machine instance** with the name `lxdev01.devops.test`:
+Create a shadow of a virtual machine image and use it to **start a new virtual machine instance**:
 
 ```bash
 >>> virsh-instance shadow debian8 lxdev01                                       
