@@ -5,7 +5,7 @@ The programs distributed with this repository enable user to quickly configure a
 The tool-chain is based on software available in all modern Linux distributions: 
 
 * Linux [KVM](http://www.linux-kvm.org) is used as virtualization platform.
-* [Libvirt](http://libvirt.org/) is used as generic interface on top of KVM.
+* [Libvirt](http://libvirt.org/) is used as generic interface on top of KVM, and to manage the virtual machine network.
 * [SSH](http://www.openssh.com/), [Rsync](http://rsync.samba.org/), and [SSHfs](http://fuse.sourceforge.net/sshfs.html) allows access the virtual machine instances.
 
 ### Prerequisites 
@@ -48,7 +48,7 @@ The shell script ↴ [source_me.sh](source_me.sh) adds the tool-chain in this re
 >>> source source_me.sh
 ```
 
-It will add the [bin/](bin/) sub-directory to your `PATH` and define several additional environment variables.
+It will add the [bin/](bin/) sub-directory to your `PATH` and define several additional environment variables cf. [var/aliases/env.sh](var/aliases/env.sh).
 
 # Usage
 
