@@ -79,7 +79,7 @@ The `virt-install` program may leave the disk images with the wrong permissions.
 The following command will adjust the permissions to all `disk.img` files in `VM_IMAGE_PATH`:
 
 ```bash
->>> sudo find $VM_IMAGE_PATH/ -name disk.img -exec chown $USER:$(id -g -n) {} \;
+>>> sudo find $VM_IMAGE_PATH/ -name disk.img -exec chmod a+rw {} \;
 ```
 
 ## Configuration
