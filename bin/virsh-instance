@@ -28,12 +28,13 @@ HELP = <<EOF
 <command>
   c,  clone <img> <name>          Clone image and start instance 
   e,  exec <name> <cmd>           Execute command in instance
-  in, install <name> <path>       Install a new image
   l,  list                        List available images
   lo, login <name>                Login to instance
   p,  path <name>                 Print path ot the instance
-  rm, remove <name>               Shutdown and undefine instance
+  rm, remove <name>               Undefine and destroy instance
   s,  shadow <img> <name>         Shadow image and start instance 
+  sh, shutdown <name>             Shutdown instance
+  st, start <name>                Start instance
   sy, sync <name> <src> <dst>     Rsync between host and instance
 
 <options>
@@ -187,31 +188,6 @@ class Virsh
     @instance_path = instance_path
   end
 
-  def self.install(name,path,args = {})
-    
-    raise('Missing installation source!') unless args.has_key? :source
-
-    # Create the virtual machine disk image
-    self::Image.create(path,args[:size])
-
-    # Options for the `virt-install` command
-    options = [
-      "--os-type linux --virt-type kvm",
-      "--graphics vnc --noautoconsole",
-      "--connect qemu:///system",
-      "--network 'bridge=#{args[:bridge]}'",
-      "--name #{name} --ram #{args[:ram]}",
-      "--disk path=#{path},format=qcow2,bus=virtio" 
-    ]
-
-    command = "virt-install #{options.join(' ')} #{args[:source]}"
-
-    # Start the virtual machine image installation process
-    System::run(command)
-
-  end
-
-
   ##
   # Create the Libvirt XML configuration file, and the SSH configuration
   # file for a virtual machine instance.
@@ -257,6 +233,14 @@ class Virsh
   def self.remove(name)
     System::run("virsh destroy #{Virsh.instance name} | sed '/^$/d'")
     System::run("virsh undefine #{Virsh.instance name} | sed '/^$/d'")
+  end
+
+  def self.start(name)
+    System::run("virsh start #{Virsh.instance name} | sed '/^$/d'")
+  end
+
+  def self.shutdown(name)
+    System::run("virsh shutdown #{Virsh.instance name} | sed '/^$/d'")
   end
 
   def self.running?(name)
@@ -415,34 +399,6 @@ begin
     # Execute a command in target virtual machine instance
     $stdout.puts System::exec(%Q<cd #{path} ; ssh-#{command} -r #{args}>)
 
-  when 'install','in'
-
-    # Name for the virtual machine instance
-    name = ARGV.shift || raise('Expecting name as argument!')
-    # Path to the virtual machine disk image
-    path = ARGV.shift || raise('Expecting disk image path as argument!')
-
-    
-    # Append domain name if missing
-    #name = Virsh::instance(name)
-
-    # Use a URL for bootstrapping by default 
-    source = if not $options.cdrom.nil?
-               "--cdrom #{$options.cdrom}"
-             else
-               "--location #{$options.location}"
-             end
-
-    # Call the virtual machine installation with arguments
-    options = { 
-      :bridge => $options.bridge,
-      :size => $options.disk_size,
-      :ram => $options.ram,  
-      :source => source 
-    }
-
-    Virsh.install(name,path,options)
-
   when 'list','li','l'
 
     Virsh::Image.list($options.image_path)
@@ -457,7 +413,7 @@ begin
     path = "#{$options.instance_path}/#{name}" 
     System::run "cd #{path}; ssh-exec -r"
 
-  when 'remove','rm','r'
+  when 'remove','rm','r','shutdown','sh'
 
     name = ARGV.shift || raise('Expecting name as argument!')
 
@@ -465,9 +421,27 @@ begin
     name = Virsh::instance(name)
 
     if Virsh.running?(name)
-      Virsh.remove(name)
+      case command
+      when 'remove','rm','r'
+        Virsh.remove(name)
+      when 'shutdown','sh'
+        Virsh.shutdown(name)
+      end
     else
       $stdout.puts("Instance #{name} not running.")
+    end
+
+  when 'start','st'
+
+    name = ARGV.shift || raise('Expecting name as argument!')
+
+    # Append domain name if missing
+    name = Virsh::instance(name)
+
+    if not Virsh.running?(name)
+      Virsh.start(name)
+    else
+      $stdout.puts("Instance #{name} is running.")
     end
   
   when 'path','p'
@@ -480,8 +454,13 @@ begin
     path = "#{$options.instance_path}/#{name}" 
     $stdout.puts path
 
+  when 'help'
+    $stdout.puts HELP
+    exit 0
+
   else
     raise("Command #{command} unknown!")
+
   end
 
 rescue => exc

@@ -24,15 +24,16 @@ vm <command>
   c, create <file>            start VM instance from XML configuration
   d, define <file>            define a VM instance from an XML configuration
  ex, exec <name> <command>    execute a command in a VM instance
-  h, shutdown <id|fqdn>       graceful shutdown a VM instance        
+ sh, shutdown <name>          graceful shutdown a VM instance        
   k, kill <id|fqdn>           destroy a VM instance
   i, image                    list available VM images
   l, list                     list all VM instances
  lo, login <name>             login into VM instance
+ lk, lookup <name>            show network configuration tuple
   r, remove <name>            delete a VM instance
   p, path <name>              print path to VM instance
-  s, shadown <image> <name>   shadow a VM image, and start VM instance
- st, start <id|fqdn>          start a defined VM instance
+  s, shadow <image> <name>    shadow a VM image, and start VM instance
+ st, start <name>             start a defined VM instance
  sy, sync <name> <src> <dst>  rsync files to VM instance 
   u, undefine <id|fqdn>       undefine VM instance"
 
@@ -56,12 +57,13 @@ function vm() {
   "kill"|"k")        virsh undefine "$1" ; virsh destroy "$1" ;;
   "list"|"l")        virsh list --all ;;
   "login"|"lo")      vm cd $1 ; ssh-exec -r ;;
+  "lookup"|"lk")     virsh-nat-bridge lookup $@ ;;
   "nat"|"n")         virsh-nat-bridge $@ ;;
   "path"|"p")        virsh-instance path $@ ;;
   "remove"|"r")      virsh-instance remove $@ ;;
-  "shutdown"|"s")    virsh shutdown "$1" ;;
-  "shadow"|"sh")     virsh-instance shadow $@ ;;
-  "start"|"st")      virsh start $1 ;;
+  "shutdown"|"sh")   virsh-instance shutdown $@ ;;
+  "shadow"|"s")      virsh-instance shadow $@ ;;
+  "start"|"st")      virsh-instance start $@;;
   "sync"|"sy")       virsh-instance sync $@ ;;
   "undefine"|"u")    virsh undefine $@ ;;
   *) 
