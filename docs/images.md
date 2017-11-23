@@ -1,0 +1,117 @@
+# Virtual Machine Images
+
+In the following context the term virtual machine **image** refers to:
+
+* A generic configuration of a virtual machine and its corresponding disk image stored in a sub-directory defined by the environment variable **`VM_IMAGE_PATH`**.
+* A generic very basic Linux configuration (user accounts, network, etc.) common to the Linux deployed into the disk image.
+
+Virtual machine images are used as **templates** to create virtual machine instances in a _reproducible_ way for development and testing.
+
+## Manual Installation
+
+The [virt-install](https://virt-manager.org/) program creates a `disk.img` and start the installation program for a selected Linux distribution:
+
+```bash 
+## create a directory for the virtual machine image, e.g.:
+>>> mkdir -p $VM_IMAGE_PATH/debian9 && cd $VM_IMAGE_PATH/debian9
+## -- Debian 9 --
+>>> virt-install --name debian9 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
+             --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
+             --graphics none --console pty,target_type=serial --extra-args 'console=ttyS0,115200n8 serial' \
+             --location http://deb.debian.org/debian/dists/stretch/main/installer-amd64/
+## -- CentOS 7 --
+>>> virt-install --name centos7 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
+               --disk path=disk.img,size=100,format=qcow2,sparse=true,bus=virtio \
+               --graphics none --console pty,target_type=serial --extra-args 'console=ttyS0,115200n8 serial' \
+               --location http://mirror.centos.org/centos-7/7.3.1611/os/x86_64/
+## -- ArchLinux --
+# Install Archlinux with an ISO image downloaded from https://www.archlinux.org/download/
+>>> virt-install --name arch --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
+             --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
+             --cdrom /tmp/archlinux-2017.07.01-x86_64.iso
+```
+
+During installation following configuration are required:
+
+* Keymap: English
+* Host name (e.g the distribution nick-name squeeze or lucid)
+* Domain name `devops.test`
+* Use the password "root" for the `root` account
+* Create a user `devops` with password "devops"
+* Single primary partition for `/` (no SWAP).
+
+Install a minimal standard system, no desktop environment (unless really needed), no services, no development environment, no editor, nothing except a bootable Linux.
+
+### Automated Installation
+
+Install a virtual machine image with pressed and the **Debian Installer**:
+
+```bash
+>>> virt-install --name debian8 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
+             --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
+             --location http://deb.debian.org/debian/dists/jessie/main/installer-amd64/ \
+             --graphics none --console pty,target_type=serial \
+             --extra-args 'auto=true hostname=jessie domain=devops.test console=ttyS0,115200n8 serial' \
+             --initrd-inject=$VM_FUNCTIONS/var/debian/8/preseed.cfg
+```
+
+Find Debian pressed files in [var/debian/](../../var/debian).
+
+Install with CentOS/Fedora **Kickstart**:
+
+```bash
+>>> virt-install --name centos7 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
+             --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
+             --location http://mirror.centos.org/centos-7/7/os/x86_64/ \
+             --graphics none --console pty,target_type=serial \
+             --initrd-inject=$VM_FUNCTIONS/var/centos/7/kickstart.cfg \
+             --extra-args 'console=ttyS0,115200n8 serial \
+                           inst.repo=http://mirror.centos.org/centos-7/7/os/x86_64/ \
+                           inst.text inst.ks=file:/kickstart.cfg'
+```
+
+Find the kickstart file in [var/centos](../../var/centos).
+
+## Configuration
+
+Prepare a Libvirt configuration, start the virtual machine image, and access the console:
+
+```bash
+# create a defaultc configuration for LibVirt (with VNC support enabled)
+>>> virsh-config --vnc
+Domain name lxdev01.devops.test with MAC-address 02:FF:0A:0A:06:1C
+Using disk image with path: /srv/vms/images/debian9/disk.img
+Libvirt configuration: /srv/vms/images/debian9/libvirt_instance.xml
+# it uses the network configuration for the node lxdev01 by default
+>>> virsh-nat-bridge lookup lxdev01     
+lxdev01.devops.test 10.1.1.28 02:FF:0A:0A:06:1C
+# start the virtual machine instance
+>>> virsh create libvirt_instance.xml
+# access the VNC graphical console
+>>> virt-viewer lxdev01.devops.test
+```
+
+Configure SSH access to the virtual machine image:
+
+```bash
+# generate a default SSH configuration for lxdev01
+>>> ssh-instance   
+Password-less SSH key-pair create in /srv/vms/images/debian9/keys
+SSH configuration: /srv/vms/images/debian9/ssh_config
+```
+
+Enable password-less SSH login to the virtual machine image for the users root and devops: 
+
+```bash
+# install required packages on Debian Stretch
+>>> ssh-exec "su -lc 'apt install rsync sudo'"  # login as devops, execute command as root user
+# install required packages on CentOS
+>>> ssh-exec -r 'yum install rsync sudo'
+# Sudo configuration for user devops
+>>> ssh-exec "su -lc 'echo \"devops ALL = NOPASSWD: ALL\" > /etc/sudoers.d/devops'"
+# paths for the SSH key
+>>> ssh-exec 'mkdir -p -m 0700 /home/devops/.ssh ; sudo mkdir -p -m 0700 /root/.ssh'
+# deploy the SSH key for password-less login
+>>> ssh-sync keys/id_rsa.pub :.ssh/authorized_keys
+>>> ssh-exec -s 'cp ~/.ssh/authorized_keys /root/.ssh/authorized_keys'
+```
