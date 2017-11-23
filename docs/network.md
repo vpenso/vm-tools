@@ -1,6 +1,6 @@
 ## Virtual Machine Network
 
-↴ [virsh-nat-bridge][../bin/virsh-nat-bridge] adds a network configures to libvirt with following attributes:
+↴ [virsh-nat-bridge](../bin/virsh-nat-bridge) adds a network configures to libvirt with following attributes:
 
 * NAT Bridge `nbr0` connects virtual machine instances to the external network
 * Default network **10.1.1.0/24**, MAC-addresses prefix **02:FF**
@@ -26,8 +26,9 @@ Bridge:         nbr0
 
 ### Usage
 
-The configuration provides pre-defined list of tuples of a 
-MAC and IP address pair with a corresponding hostname.
+The default configuration provides a pre-defined list of **tuples for 
+MAC- and IP-address pairs with a corresponding hostname**. These are 
+used to configure network for the virtual machine instances.
 
 Use the `list` sub-command to show all pre-defined tuples:
 

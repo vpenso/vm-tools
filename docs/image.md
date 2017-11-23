@@ -7,7 +7,7 @@ In the following context the term virtual machine **image** refers to:
 
 Virtual machine images are used as **templates** to create virtual machine instances in a _reproducible_ way for development and testing.
 
-## Manual Installation
+## Installation
 
 The [virt-install](https://virt-manager.org/) program creates a `disk.img` and start the installation program for a selected Linux distribution:
 
@@ -42,7 +42,7 @@ During installation following configuration are required:
 
 Install a minimal standard system, no desktop environment (unless really needed), no services, no development environment, no editor, nothing except a bootable Linux.
 
-### Automated Installation
+### Automation
 
 Install a virtual machine image with pressed and the **Debian Installer**:
 
@@ -50,7 +50,7 @@ Install a virtual machine image with pressed and the **Debian Installer**:
 >>> virt-install --name debian8 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
              --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
              --location http://deb.debian.org/debian/dists/jessie/main/installer-amd64/ \
-             --graphics none --console pty,target_type=serial \
+             --graphics none --console pty,target_type=serial --noreboot \
              --extra-args 'auto=true hostname=jessie domain=devops.test console=ttyS0,115200n8 serial' \
              --initrd-inject=$VM_FUNCTIONS/var/debian/8/preseed.cfg
 ```
@@ -63,7 +63,7 @@ Install with CentOS/Fedora **Kickstart**:
 >>> virt-install --name centos7 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
              --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
              --location http://mirror.centos.org/centos-7/7/os/x86_64/ \
-             --graphics none --console pty,target_type=serial \
+             --graphics none --console pty,target_type=serial --noreboot \
              --initrd-inject=$VM_FUNCTIONS/var/centos/7/kickstart.cfg \
              --extra-args 'console=ttyS0,115200n8 serial \
                            inst.repo=http://mirror.centos.org/centos-7/7/os/x86_64/ \
@@ -71,6 +71,16 @@ Install with CentOS/Fedora **Kickstart**:
 ```
 
 Find the kickstart file in [var/centos](../../var/centos).
+
+### Permissions
+
+The `virt-install` program may leave the disk images with the wrong permissions. 
+
+The following command will adjust the permissions to all `disk.img` files in `VM_IMAGE_PATH`:
+
+```bash
+>>> sudo find $VM_IMAGE_PATH/ -name disk.img -exec chown $USER:$(id -g -n) {} \;
+```
 
 ## Configuration
 
