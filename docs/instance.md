@@ -20,14 +20,12 @@ Images in /srv/projects/vm-tools/vm/images:
   centos7
 ```
 
-A source virtual machine image can be used as template for a virtual machine instance with two methods:
+A source virtual machine image can be used as template for a virtual machine instance with **two modes**:
 
-1. Create a `clone` of the original disk image without any association to the original.
-2. Create a `shadow` of the original disk image keeping an association storing only the delta difference.
+1. Create a `clone` of the original disk image **without any association** to the original.
+2. Create a `shadow` of the original disk image keeping an association **storing only the delta difference**.
 
-### Start
-
-Create a shadow of a virtual machine image and use it to start a new virtual machine instance with the name `lxdev01.devops.test`:
+Create a shadow of a virtual machine image and use it to **start a new virtual machine instance** with the name `lxdev01.devops.test`:
 
 ```bash
 >>> virsh-instance shadow debian8 lxdev01                                       
@@ -58,14 +56,14 @@ ssh_config
 └── ssh_config
 ```
 
-Use the `login` sub-command to SSH into the virtual machine instance:
+Use the `login` sub-command to **SSH into the virtual machine instance**:
 
 ```bash
 >>> virsh-instance login lxdev01                  
 root@lxdev01:~# exit
 ```
 
-Shutdown and remove the virtual machine instance with the `remove` sub-command:
+Shutdown and **remove the virtual machine instance** with the `remove` sub-command:
 
 ```bash
 >>> virsh-instance remove lxdev01
