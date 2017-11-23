@@ -84,33 +84,42 @@ The following command will adjust the permissions to all `disk.img` files in `VM
 
 ## Configuration
 
-Prepare a Libvirt configuration, start the virtual machine image, and access the console:
+After the installation has finished the virtual machine image can be booted and customized.
 
 ```bash
-# create a defaultc configuration for LibVirt (with VNC support enabled)
+# make sure that the working directory contains the disk image file
+>>> cd $VM_IMAGE_PATH/debian8
+>>> ls -1
+disk.img
+```
+
+The [virsh-config](../bin/virsh-config) command creates a file called `libvirt_instance.xml` which contains the configuration required by libvirt to operate the virtual machine image. Similar the [ssh-instance](../bin/ssh-instance) command prepares the configuration file `ssh_config` and a SSH key-pair for login:
+
+```bash
 >>> virsh-config --vnc
 Domain name lxdev01.devops.test with MAC-address 02:FF:0A:0A:06:1C
-Using disk image with path: /srv/vms/images/debian9/disk.img
-Libvirt configuration: /srv/vms/images/debian9/libvirt_instance.xml
-# it uses the network configuration for the node lxdev01 by default
->>> virsh-nat-bridge lookup lxdev01     
-lxdev01.devops.test 10.1.1.28 02:FF:0A:0A:06:1C
-# start the virtual machine instance
->>> virsh create libvirt_instance.xml
-# access the VNC graphical console
+Using disk image with path: /srv/projects/vm-tools/vm/images/debian8/disk.img
+Libvirt configuration: /srv/projects/vm-tools/vm/images/debian8/libvirt_instance.xml
+>>> ssh-instance 
+Password-less SSH key-pair create in /srv/projects/vm-tools/vm/images/debian8/keys
+SSH configuration: /srv/projects/vm-tools/vm/images/debian8/ssh_config
+>>> ls -1 
+disk.img
+keys/
+libvirt_instance.xml
+ssh_config
+```
+
+Use the libvirt configuration file to start the virtual machine image with the `virsh` command
+
+```bash
+>>> virsh create ./libvirt_instance.xml
+Domain lxdev01.devops.test created from ./libvirt_instance.xml
+# follwoing command allows to access the VNC graphical console
 >>> virt-viewer lxdev01.devops.test
 ```
 
-Configure SSH access to the virtual machine image:
-
-```bash
-# generate a default SSH configuration for lxdev01
->>> ssh-instance   
-Password-less SSH key-pair create in /srv/vms/images/debian9/keys
-SSH configuration: /srv/vms/images/debian9/ssh_config
-```
-
-Enable password-less SSH login to the virtual machine image for the users root and devops: 
+The [ssh-exec](../bin/ssh-exec) command allows login to and the execution of command in the virtual machine. Similar the [ssh-sync](..bin/ssh-sync) allow top copy file into and from the virtual machine. Use these tools to enable password-less SSH login to the virtual machine image for the users root and devops: 
 
 ```bash
 # install required packages on Debian Stretch
@@ -124,4 +133,6 @@ Enable password-less SSH login to the virtual machine image for the users root a
 # deploy the SSH key for password-less login
 >>> ssh-sync keys/id_rsa.pub :.ssh/authorized_keys
 >>> ssh-exec -s 'cp ~/.ssh/authorized_keys /root/.ssh/authorized_keys'
+# shutdown the virtual machine image
+>>> ssh-exec "systemctl poweroff"
 ```
