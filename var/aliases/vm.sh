@@ -64,7 +64,7 @@ function vm() {
   "list"|"l")                  virsh list --all | tail -n +3 | sed '/^$/d';;
   "login"|"lo"|"exec"|"ex")    vm cd $1 ; shift ; ssh-exec $@ ;;
   "lookup"|"lk")               virsh-nat-bridge lookup $@ ;;
-  "mount"|"m")                 vm cd $1 ; sshfs-instance -r mount ;;
+  "mount"|"m")                 vm cd $1 ; shift ; sshfs-instance mount $@ ;;
   "nat"|"n")                   virsh-nat-bridge $@ ;;
   "path"|"p")                  virsh-instance path $@ ;;
   "remove"|"r")                virsh-instance remove $@ ;;

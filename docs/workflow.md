@@ -180,6 +180,21 @@ Using `ssh-sync -r` is internally executing `rsync` similar to:
 
 ## Mount
 
+Mount a directory from the virtual machine instance with the `mount` sub-command:
+
+```bash
+# mount the file-system root / directory from the virtual machine instance
+>>> vm mount lxdev03                       
+:/ mounted to mnt/
+## ... work with the mount point ...
+>>> vm cd lxdev03 && ls mnt/home 
+devops/
+# umount the the virtual machine instance
+>>> vm umount lxdev03
+# mount a sub-directory as user root
+>>> vm umount lxdev03 -r /home/devops
+```
+
 The ↴ [sshfs-instance](../bin/sshfs-instance) command is used to mount a parts of the virtual machine file-system:
 
 ```bash
