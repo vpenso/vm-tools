@@ -55,8 +55,10 @@ It will add the [bin/](bin/) sub-directory to your `PATH` and define several add
 The [docs/](docs) sub-directory includes all documentation required to us this tool-chain:
 
 * The [network](docs/network.md) document explains the setup of the virtual machine network.
-* The [image](docs/image.md) document describes how to create re-usable template virtual machine images.
-* The [instance](docs/instance.md) document show how to use virtual machine images to create any number of virtual machine instances.
+* The [image](docs/image.md) document describes how to create re-usable virtual machine images (aka templates).
+* The [instance](docs/instance.md) document shows how to use virtual machine images to create any number of virtual machine instances for development and testing.
+
+The [workflow](docs/workflow.md) document explains in great detail how to efficiently interact with virtual machine instances.
 
 ## License
 

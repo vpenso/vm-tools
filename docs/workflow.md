@@ -1,7 +1,7 @@
 
-The file ↴ [var/aliases/vm.sh](var/aliases/vm.s) defines a shell function called **`vm`** used as shorthand for frequent commands.
+The file ↴ [var/aliases/vm.sh](var/aliases/vm.s) defines a shell function called **`vm`** used as shorthand for frequent operation for multiple virtual machine instances.
 
-## Workflow
+# Workflow
 
 The following command sequence represents a typical workflow with a virtual machine instance:
 
@@ -19,9 +19,7 @@ Images in /srv/projects/vm-tools/vm/images:
 >>> vm exec lxdev01 'ip a | grep inet'    # execute a command
 # list running virtual machine instance
 >>> vm list
- Id    Name                           State
- ----------------------------------------------------
-  1     lxdev01.devops.test            running
+lxdev01.devops.test
 # shutdown virtual machine instance
 >>> vm shutdown lxdev01
 Domain lxdev01.devops.test is being shutdown
@@ -34,6 +32,8 @@ Domain lxdev01.devops.test started
 Domain lxdev01.devops.test destroyed
 Domain lxdev01.devops.test has been undefined
 ```
+
+The following sections describe the steps illustrated above in more detail.
 
 ## Login
 
@@ -57,10 +57,11 @@ The above commands will change into the directory containing a specific virtual 
 >>> cd $VM_INSTANCE_PATH/lxdev03.devops.test
 ```
 
-Afterwards it calls [ssh-exec](../bin/ssh-exec) with the `-r` option to **login as root user**:
+Afterwards it calls ↴ [ssh-exec](../bin/ssh-exec) with the `-r` option to **login as root user**:
 
 * It will automatically read the configuration from `$PWD/ssh_config` (if present).
 * The configuration references a SSH private key located in `$PWD/keys/id_rsa` used to login without password.
+* Note that the SSH configuration file is generated automatically with ↴  [ssh-instance](../bin/ssh-instance) 
 
 ```bash
 >>> ssh-exec -r
@@ -82,7 +83,7 @@ Given the configuration above, the login with `ssh-exec -r` basically executes f
 >>> ssh -gt -F $PWD/ssh_config -l root instance /usr/bin/env bash
 ```
 
-By default [ssh-exec](../bin/ssh-exec) without options performs a **login as the user devops**:
+By default ↴ [ssh-exec](../bin/ssh-exec) without options performs a **login as the user devops**:
 
 ```bash
 >>> ssh-exec                                                     
@@ -96,4 +97,36 @@ exit
 
 Additionally option `-s` allows to **login as devops and executes `sudo`**.
 
+## Execute Commands
 
+An optional command as argument to ↴ [ssh-exec](../bin/ssh-exec) will be executed in a virtual machine:
+
+```bash
+# shorthand
+>>> vm exec lxdev03 'uptime ; uname -a '
+ 09:54:39 up 16:48,  1 user,  load average: 0.00, 0.00, 0.00
+ Linux lxdev03 3.16.0-4-amd64 #1 SMP Debian 3.16.43-2+deb8u5 (2017-09-19) x86_64 GNU/Linux
+# is equivalent to
+>>> virsh-instance exec lxdev03 'cat /etc/sudoers.d/devops '
+ devops ALL = NOPASSWD: ALL
+```
+
+As described in the previous section the above commands execute `ssh-exec`:
+
+```bash
+>>> vm cd lxdev03
+# execute a command as default user
+>>> ssh-exec whoami
+devops
+# login as devops and exeute a command with sudo
+>>> ssh-exec -s whoami                                                
+root
+# multple commands with sudo...
+>>> ssh-exec -s 'apt install -qy zsh' && ssh-exec -s '/usr/bin/env zsh'
+# pipes work as expected
+>>> ssh-exec -r 'cat /etc/passwd' | grep ^devops
+devops:x:1000:1000:devops,,,:/home/devops:/bin/bash
+# input pipes redirection 
+>>> echo text | ssh-exec 'cat - > /tmp/input.txt' && ssh-exec 'cat /tmp/input.txt'
+text
+```
