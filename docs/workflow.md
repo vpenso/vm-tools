@@ -99,7 +99,7 @@ Additionally option `-s` allows to **login as devops and executes `sudo`**.
 
 ## Execute Commands
 
-An **command as argument** to ↴ [ssh-exec](../bin/ssh-exec) will be executed in a virtual machine:
+The sub-command **`exec` will run a command** given by argument on a specified virtual machine:
 
 ```bash
 # shorthand
@@ -133,7 +133,7 @@ text
 
 ## Copy Files
 
-Similar to previous sections the sub-command `sync` allows to copy files from and to a virtual machine:
+The sub-command **`sync` allows to copy files from and to a virtual machine**:
 
 ```bash
 ## copy a file from the host to a virtual machine instance
@@ -146,5 +146,34 @@ Similar to previous sections the sub-command `sync` allows to copy files from an
 >>> virsh-instance sync lxdev03 :/etc/hostname /tmp
 ```
 
+Note that colon `:` prefixes the path within the virtual machine.
 
+In contrast to the previous sections here the ↴ [ssh-sync](../bin/ssh-sync) program is used:
 
+* Like `ssh-exec` it will read `$PWD/ssh_config` (if present).
+* The program is a **wrapper around the `rsync` program**, hence it is able to sync directory trees recursively also.
+
+```bash
+# change to the virtual machine instance directory
+>>> vm cd lxdev03
+# run rsync as user root and copy the /var/log directory from the virtual machine instance
+>>> ssh-sync -r :/var/log .
+>>> tree log/ | head
+log/
+├── alternatives.log
+├── apt
+│   ├── history.log
+│   └── term.log
+├── auth.log
+├── btmp
+├── daemon.log
+├── debug
+├── dmesg
+```
+
+Using `ssh-sync -r` is internally execution `rsync` similar to:
+
+```
+>>> RSYNC_RSH=ssh -q -F $PWD/ssh_config -l root
+>>> rsync --omit-dir-times --recursive --copy-links --copy-dirlinks --delete --verbose instance:/var/log .
+```
