@@ -37,7 +37,7 @@ Domain lxdev01.devops.test has been undefined
 
 ## Login
 
-Login to a virtual machine using `ssh`:
+Login to a virtual machine using `ssh` with following commands:
 
 ```bash
 # shorthand
@@ -46,9 +46,9 @@ Login to a virtual machine using `ssh`:
 >>> virsh-instance login lxdev03
 ```
 
-The above command will change into the directory with the specified virtual machine instance is located:
+The above commands will change into the directory containing a specific virtual machine instance:
 
-```
+```bash
 # shorthand
 >>> vm cd lxdev03
 # is equivalent to
@@ -57,15 +57,17 @@ The above command will change into the directory with the specified virtual mach
 >>> cd $VM_INSTANCE_PATH/lxdev03.devops.test
 ```
 
-Afterwards it calls [ssh-exec](../bin/ssh-exex) with the `-r` option to **login as root user**:
+Afterwards it calls [ssh-exec](../bin/ssh-exec) with the `-r` option to **login as root user**:
 
-* It will automatically read the configuration from `$PWD/ssh_config` (if present)
+* It will automatically read the configuration from `$PWD/ssh_config` (if present).
 * The configuration references a SSH private key located in `$PWD/keys/id_rsa` used to login without password.
 
-```
+```bash
 >>> ssh-exec -r
+root@lxdev03:~# exit
+exit
 # configuration of a specific virtual machine instance
->>> cat ssh_config                          
+>>> cat $PWD/ssh_config                          
 Host instance
   User devops
   HostName 10.1.1.28
@@ -74,6 +76,24 @@ Host instance
   IdentityFile /srv/projects/vm-tools/vm/instances/lxdev01.devops.test/keys/id_rsa
 ```
 
+Given the configuration above, the login with `ssh-exec -r` basically executes following command:
 
+```bash
+>>> ssh -gt -F $PWD/ssh_config -l root instance /usr/bin/env bash
+```
+
+By default [ssh-exec](../bin/ssh-exec) without options performs a **login as the user devops**:
+
+```bash
+>>> ssh-exec                                                     
+devops@lxdev03:~$ exit
+exit
+# login as devops, and execute sudo
+>>> ssh-exec -s                                                       
+root@jessie:/home/devops# exit
+exit
+```
+
+Additionally option `-s` allows to **login as devops and executes `sudo`**.
 
 
