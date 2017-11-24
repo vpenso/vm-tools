@@ -28,6 +28,7 @@ HELP = <<EOF
 <command>
   c,  clone <img> <name>          Clone image and start instance 
   e,  exec <name> <cmd>           Execute command in instance
+      fqdn <name>                 Print FQDN of instance
   l,  list                        List available images
   lo, login <name>                Login to instance
   p,  path <name>                 Print path ot the instance
@@ -431,6 +432,11 @@ begin
 
     name = ARGV.shift || raise('Expecting the name of a virtual machine instance')
     System::run "cd #{Virsh::path(name)}; ssh-exec -r"
+
+  when 'fqdn'
+
+    name = ARGV.shift || raise('Expecting the name of a virtual machine instance')
+    $stdout.puts Virsh::instance(name)
 
   when 'remove','rm','r','shutdown','sh'
 
