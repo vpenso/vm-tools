@@ -37,7 +37,7 @@ The following sections describe the steps illustrated above in more detail.
 
 ## Login
 
-Login to a virtual machine using `ssh` with following commands:
+**Login to a virtual machine** using the following commands:
 
 ```bash
 # shorthand
@@ -46,7 +46,7 @@ Login to a virtual machine using `ssh` with following commands:
 >>> virsh-instance login lxdev03
 ```
 
-The above commands will change into the directory containing a specific virtual machine instance:
+Transparent to the user the above commands will change into the directory containing the specific virtual machine instance:
 
 ```bash
 # shorthand
@@ -99,7 +99,7 @@ Additionally option `-s` allows to **login as devops and executes `sudo`**.
 
 ## Execute Commands
 
-An optional command as argument to ↴ [ssh-exec](../bin/ssh-exec) will be executed in a virtual machine:
+An **command as argument** to ↴ [ssh-exec](../bin/ssh-exec) will be executed in a virtual machine:
 
 ```bash
 # shorthand
@@ -126,7 +126,25 @@ root
 # pipes work as expected
 >>> ssh-exec -r 'cat /etc/passwd' | grep ^devops
 devops:x:1000:1000:devops,,,:/home/devops:/bin/bash
-# input pipes redirection 
+# input pipe redirection 
 >>> echo text | ssh-exec 'cat - > /tmp/input.txt' && ssh-exec 'cat /tmp/input.txt'
 text
 ```
+
+## Copy Files
+
+Similar to previous sections the sub-command `sync` allows to copy files from and to a virtual machine:
+
+```bash
+## copy a file from the host to a virtual machine instance
+>>> vm sy lxdev03 /etc/hostname :/tmp/
+# is equivalent to
+>>> virsh-instance sync lxdev03 :/tmp/bash /tmp/
+## copy a file from the virtual machine to the host
+>>> vm sy lxdev03 :/etc/hostname /tmp
+# is equivalent to
+>>> virsh-instance sync lxdev03 :/etc/hostname /tmp
+```
+
+
+
