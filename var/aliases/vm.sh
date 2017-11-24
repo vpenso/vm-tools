@@ -19,23 +19,25 @@ VM_FUNCTION_HELP="\
 vm <command> 
 
 <command>
-     cd <name>                change to the VM directory
- cl, clone <image> <name>     copy an VM image, and start VM instance
-  c, create <file>            start VM instance from XML configuration
-  d, define <file>            define a VM instance from an XML configuration
- ex, exec <name> <command>    execute a command in a VM instance
- sh, shutdown <name>          graceful shutdown a VM instance        
-  k, kill <id|fqdn>           destroy a VM instance
-  i, image                    list available VM images
-  l, list                     list all VM instances
- lo, login <name>             login into VM instance
+ cd  <name>                   change to an instance directory
+ c , create <file>            start instance from XML configuration
+ cl, clone <image> <name>     copy image, and start instance
+ d , define <file>            define an instance from an XML configuration
+ ex, exec <name> <args>       execute a command in instance
+ k , kill <name>              destroy an instance
+ i , image                    list available images
+ m , mount <name>             mount the instance rootfs
+ l , list                     list all instances
+ lo, login <name> <args>      login into an instance
  lk, lookup <name>            show network configuration tuple
-  r, remove <name>            delete a VM instance
-  p, path <name>              print path to VM instance
-  s, shadow <image> <name>    shadow a VM image, and start VM instance
- st, start <name>             start a defined VM instance
- sy, sync <name> <src> <dst>  rsync files to VM instance 
-  u, undefine <id|fqdn>       undefine VM instance"
+ r , remove <name>            delete an instance
+ p , path <name>              print path to an instance
+ s , shadow <image> <name>    shadow image, and start instance
+ sh, shutdown <name>          graceful shutdown instance        
+ st, start <name>             start a defined instance
+ sy, sync <name> <args>       rsync files to/from instance 
+ um, umount                   umount instance
+ u , undefine <id|fqdn>       undefine instance"
 
 
 ##
@@ -47,36 +49,31 @@ function vm() {
   # remove first argument if present
   [[ $# -ge 1 ]] && shift
   case "$command" in
-  cd)                cd $(virsh-instance path $1) ;;
-  "clone"|"cl")      virsh-instance clone $@ ;;
-  "config"|"cf")     virsh-config $@ ;;
-  "create"|"c")      virsh create $@ ;;
-  "define"|"d")      virsh define $@ ;;
-  "exec"|"ex")       virsh-instance exec $@ ;;
-  "image"|"i")       virsh-instance list ;;
+  cd)                
+    name=${1:?Expecting a virtual machine instance name as argument!}
+    cd $(virsh-instance path $name)
+    ;;
+  "clone"|"cl")                virsh-instance clone $@ ;;
+  "create"|"c")                virsh create $@ ;;
+  "define"|"d")                virsh define $@ ;;
+  "image"|"i")                 virsh-instance list ;;
   "kill"|"k")        
     virsh undefine $(virsh-instance fqdn $1)
     virsh destroy $(virsh-instance fqdn $1)
     ;;
-  "list"|"l")        virsh list --all | tail -n +3 | sed '/^$/d';;
-  "login"|"lo")      vm cd $1 ; ssh-exec -r ;;
-  "lookup"|"lk")     virsh-nat-bridge lookup $@ ;;
-  "mount"|"m") 
-    cd $(virsh-instance path $1)
-    sshfs-instance -r mount
-    ;;
-  "nat"|"n")         virsh-nat-bridge $@ ;;
-  "path"|"p")        virsh-instance path $@ ;;
-  "remove"|"r")      virsh-instance remove $@ ;;
-  "shutdown"|"sh")   virsh-instance shutdown $@ ;;
-  "shadow"|"s")      virsh-instance shadow $@ ;;
-  "start"|"st")      virsh-instance start $@;;
-  "sync"|"sy")       virsh-instance sync $@ ;;
-  "umount"|"um")
-    cd $(virsh-instance path $1)
-    sshfs-instance umount
-    ;;
-  "undefine"|"u")    virsh undefine $@ ;;
+  "list"|"l")                  virsh list --all | tail -n +3 | sed '/^$/d';;
+  "login"|"lo"|"exec"|"ex")    vm cd $1 ; shift ; ssh-exec $@ ;;
+  "lookup"|"lk")               virsh-nat-bridge lookup $@ ;;
+  "mount"|"m")                 vm cd $1 ; sshfs-instance -r mount ;;
+  "nat"|"n")                   virsh-nat-bridge $@ ;;
+  "path"|"p")                  virsh-instance path $@ ;;
+  "remove"|"r")                virsh-instance remove $@ ;;
+  "shutdown"|"sh")             virsh shutdown $(virsh-instance fqdn $1) ;;
+  "shadow"|"s")                virsh-instance shadow $@ ;;
+  "start"|"st")                virsh start $(virsh-instance fqdn $1) ;;
+  "sync"|"sy")                 vm cd $1 ; shift ; ssh-sync $@ ;;
+  "umount"|"um")               vm cd $1 ; sshfs-instance umount ;;
+  "undefine"|"u")              virsh undefine $(virsh-instance fqdn $1) ;;
   *) 
     echo "$VM_FUNCTION_HELP"
     ;;
