@@ -1,6 +1,6 @@
 # Virtual Machine Tools
 
-The programs distributed with this repository enable user to quickly configure and **use virtual machines as development and test environment** on a Linux workstation. In conjunction all programs in the [bin/](bin) sub-directory build a tool-chain to bootstrap many virtual machine instances in a very customizable way. 
+The programs distributed with this repository enable users to quickly configure and **use virtual machines as development and test environment** on a Linux workstation. In conjunction all programs in the [bin/](bin) sub-directory build a tool-chain to bootstrap many virtual machine instances in a very customizable way. 
 
 The tool-chain is based on software available in all modern Linux distributions: 
 
