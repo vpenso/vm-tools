@@ -1,0 +1,186 @@
+#!/usr/bin/env ruby
+#
+# Copyright 2017 Victor Penso
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+require 'ostruct'
+require 'getoptlong' 
+require 'logger'
+
+class System 
+
+  def self.exec(command)
+    # Remove line-feed and leading white-space
+    #
+    command = command.gsub(/^  */,'').gsub(/\n/,' ')
+    # Redirect error stream
+    command + ' 2>&1'
+    $logger.debug "Exec [#{command}]"
+    return String.new if $options.dry_run
+    # Execute command as subprocess and return the exit code
+    pipe = IO.popen(command)
+    # Get the process ID from the child
+    pid = pipe.pid
+    # Read the output from the stream
+    output = pipe.read
+    # Wait for successful return and pass back the code to the caller
+    Process.wait(pid)
+    state=$?
+    $logger.debug "Returned with #{state}"
+    if state == 0
+      return output
+    else
+      $logger.warn "Failed to execute [#{command}]"
+      return nil
+    end
+  end
+
+  def self.run(command)
+    command = command.gsub(/^  */,'').gsub(/\n/,' ').lstrip
+    $logger.debug "Run [#{command}]"
+    system(command) unless $options.dry_run
+  end
+
+end
+
+
+exec_name = File.split(__FILE__)[-1]
+HELP = <<EOF
+#{exec_name} [<options>] <command> [<arguments>]
+
+<command>
+      help                   Show this help information
+   l, list                   List all mounts of virtual machines
+   m, mount [<path>]         Mount <path> within virtual machine 
+                             ('/' root directory by default )
+   u, umount                 Umount virtual machine
+
+<options>
+  -d, --debug                Show stacktraces in case of errors.
+  -h, --help                 Show this help information.
+  -r, --root                 Mount as user root.
+  -v, --version              Print version number.
+EOF
+
+begin
+
+  stdin = $stdin.tty? ? String.new : $stdin.read
+
+  $options = OpenStruct.new
+  $options.debug = false
+  $options.root = false
+  $options.mount_point = 'mnt/'
+
+  $logger = Logger.new($stderr)
+  # Adjust the time format used for the logger
+  $logger.datetime_format = "%Y-%m-%dT%H:%M:%S"
+  $logger.formatter = proc do |severity, datetime, progname, message|
+    "[#{datetime.strftime($logger.datetime_format)}] #{severity} -- #{message}\n"
+  end
+  $logger.level = Logger::WARN
+
+
+  GetoptLong.new(
+    ['--debug','-d',GetoptLong::NO_ARGUMENT],
+    ['--help','-h',GetoptLong::NO_ARGUMENT],
+    ['--log-level','-L',GetoptLong::REQUIRED_ARGUMENT],
+    ['--root','-r',GetoptLong::NO_ARGUMENT],
+    ['--version','-v',GetoptLong::NO_ARGUMENT]
+  ).each do |opt,arg|
+    case opt
+    when '--debug'
+      $options.debug = true
+      $logger.level = Logger::DEBUG
+    when '--help'
+      $stdout.puts HELP
+      exit 0
+    when '--log-level'
+      $logger.level = case arg
+      when 'warn'
+        Logger::WARN
+      when 'debug'
+        Logger::DEBUG
+      when 'fatal'
+        Logger::FATAL
+      else
+        Logger::INFO
+       end
+    when '--root'
+    when '--version'
+      $stdout.puts 0.1
+      exit 0
+    end
+  end
+
+  command = ARGV.shift || raise('No command given!')
+  case command
+
+  when 'help'
+
+    $stdout.puts HELP
+     exit 0
+
+  when 'list','l'
+
+    System::run(%Q<mount | grep fuse.sshfs | grep #{ENV['VM_DOMAIN']} | cut -d' ' -f-3>)
+
+  when 'mount','m'
+
+    remote_path = ARGV.shift || '/'
+
+    args = ['-o idmap=user','-o allow_root']
+    if  File.exists?("#{ENV['PWD']}/ssh_config")
+      args << '-F $PWD/ssh_config'
+    else
+      raise('Missing SSH configuration for virtual machine in $PWD/ssh_config!')
+    end
+
+    if not File.directory? $options.mount_point
+      System::run("mkdir #{$options.mount_point}")
+    end
+
+    instance = $options.root ? 'instance:' : 'root@instance:'
+
+    cmd = %Q<sshfs #{args.join(' ')} #{instance}#{remote_path} #{$options.mount_point}>
+    state = System::exec(cmd)
+    if state.nil?
+      $stdout.puts "Could not mount :#{remote_path} to #{$options.mount_point}"
+    else
+      $stdout.puts ":#{remote_path} mounted to #{$options.mount_point}"
+    end
+
+  when 'umount','u'
+
+    cmd = %Q[( mount | grep #{$options.mount_point} &>/dev/null ) && fusermount -u #{$options.mount_point}]
+    System::exec(cmd)
+
+  else
+    raise("Command #{command} not supported!")
+  end
+
+rescue => exc
+  $stderr.puts "ERROR: #{exc.message}"
+  $stderr.puts " use -h for detailed instructions"
+  if $options.debug
+    $stderr.puts '-- Stack Trace --'
+    $stderr.puts exc.backtrace
+  else
+    $stderr.puts 'You may want run this in debug mode with \'-d\''
+  end
+  exit 1
+end
+
+exit 0

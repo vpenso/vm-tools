@@ -177,3 +177,29 @@ Using `ssh-sync -r` is internally executing `rsync` similar to:
 >>> RSYNC_RSH=ssh -q -F $PWD/ssh_config -l root
 >>> rsync --omit-dir-times --recursive --copy-links --copy-dirlinks --delete --verbose instance:/var/log .
 ```
+
+## Mount
+
+The ↴ [sshfs-instance](../bin/sshfs-instance) command is used to mount a parts of the virtual machine file-system:
+
+```bash
+# change to the virtual machine instance directory
+>>> vm cd lxdev03
+# mount the entire root-filesystem to the mnt/ sub-directory
+>>> sshfs-instance mount
+:/ mounted to mnt/
+>>> ls mnt 
+bin/  boot/  dev/  etc/  home/  initrd.img@  lib/  lib64/  lost+found/  media/  mnt/  opt/  proc/  root/  run/  sbin/  srv/  sys/  tmp/  usr/  var/  vmlinuz@
+>>> sshfs-instance umount
+# mount a specified directory as user root
+>>> sshfs-instance -r mount /var/log 
+:/var/log mounted to mnt/
+>>> sshfs-instance umount
+```
+
+The `sshfs-instance` command is internally executing `sshfs` similar to:
+
+```bash
+>>> sshfs -o idmap=user -o allow_root -F $PWD/ssh_config root@instance:/ mnt/
+```
+
