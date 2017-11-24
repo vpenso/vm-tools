@@ -371,7 +371,7 @@ begin
     when '--ram'
       $options.ram = arg
     when '--version'
-      $stdout.puts 1.0
+      $stdout.puts 1.1
       exit 0
     end
   end
@@ -429,17 +429,12 @@ begin
 
   when 'login', 'lo'
 
-    # Name of the virtual machine instance
-    name = ARGV.shift || raise('Expecting name for target VM instance')
-    # Append domain name if missing
-    name = Virsh::instance(name)
-    # Path to virtual machine instance
-    path = "#{$options.instance_path}/#{name}" 
-    System::run "cd #{path}; ssh-exec -r"
+    name = ARGV.shift || raise('Expecting the name of a virtual machine instance')
+    System::run "cd #{Virsh::path(name)}; ssh-exec -r"
 
   when 'remove','rm','r','shutdown','sh'
 
-    name = ARGV.shift || raise('Expecting name as argument!')
+    name = ARGV.shift || raise('Expecting the name of a virtual machine instance')
 
     # Append domain name if missing
     name = Virsh::instance(name)
