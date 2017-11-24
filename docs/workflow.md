@@ -171,9 +171,9 @@ log/
 ├── dmesg
 ```
 
-Using `ssh-sync -r` is internally execution `rsync` similar to:
+Using `ssh-sync -r` is internally executing `rsync` similar to:
 
-```
+```bash
 >>> RSYNC_RSH=ssh -q -F $PWD/ssh_config -l root
 >>> rsync --omit-dir-times --recursive --copy-links --copy-dirlinks --delete --verbose instance:/var/log .
 ```
