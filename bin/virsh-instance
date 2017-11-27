@@ -28,7 +28,7 @@ HELP = <<EOF
 <command>
   c,  clone <img> <name>          Clone image and start instance 
   f,  fqdn <name>                 Print FQDN of instance
-  l,  list                        List available images
+  i,  image                       List available images
   p,  path <name>                 Print path ot the instance
   rm, remove <name>               Undefine and destroy instance
   s,  shadow <img> <name>         Shadow image and start instance 
@@ -402,7 +402,7 @@ begin
     Virsh.config(path)
     Virsh.start(name)
 
-  when 'list','li','l'
+  when 'image','i'
 
     Virsh::Image.list($options.image_path)
 

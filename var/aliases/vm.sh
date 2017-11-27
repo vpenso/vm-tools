@@ -56,7 +56,7 @@ function vm() {
   "clone"|"cl")                virsh-instance clone $@ ;;
   "create"|"c")                virsh create $@ ;;
   "define"|"d")                virsh define $@ ;;
-  "image"|"i")                 virsh-instance list ;;
+  "image"|"i")                 virsh-instance image ;;
   "kill"|"k")        
     virsh undefine $(virsh-instance fqdn $1)
     virsh destroy $(virsh-instance fqdn $1)

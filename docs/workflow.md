@@ -143,9 +143,9 @@ The sub-command **`sync` allows to copy files from and to a virtual machine**:
 
 ```bash
 ## copy a file from the host to a virtual machine instance
->>> vm sy lxdev03 /etc/hostname :/tmp/
+>>> vm sync lxdev03 /etc/hostname :/tmp/
 ## copy a file from the virtual machine to the host
->>> vm sy lxdev03 :/etc/hostname /tmp
+>>> vm sync lxdev03 :/etc/hostname /tmp
 ```
 
 Note that colon `:` prefixes the path within the virtual machine.

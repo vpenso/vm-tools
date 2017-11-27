@@ -8,10 +8,10 @@ The ↴ [virsh-instance](../bin/virsh-instance) program creates new **virtual ma
 
 ## Usage
 
-**List the available virtual machine images**:
+List the available **virtual machine images**:
 
 ```bash
->>> virsh-instance list    
+>>> vm image
 Images in /srv/projects/vm-tools/vm/images:
   debian8
   debian9
@@ -26,12 +26,12 @@ Virtual machine images are used as template for virtual machine instances in **t
 Create a shadow of a virtual machine image and use it to **start a new virtual machine instance**:
 
 ```bash
->>> virsh-instance shadow debian8 lxdev01                                       
+>>> vm shadow debian8 lxdev01
 Domain name lxdev01.devops.test with MAC-address 02:FF:0A:0A:06:1C
-Using disk image with path: /srv/projects/vm-tools/vm/instances/lxdev01.devops.test/disk.img
-Libvirt configuration: /srv/projects/vm-tools/vm/instances/lxdev01.devops.test/libvirt_instance.xml
-SSH configuration: /srv/projects/vm-tools/vm/instances/lxdev01.devops.test/ssh_config
-Domain lxdev01.devops.test defined from /srv/projects/vm-tools/vm/instances/lxdev01.devops.test/libvirt_instance.xml
+Using disk image with path: /srv/vms/instances/lxdev01.devops.test/disk.img
+Libvirt configuration: /srv/vms/instances/lxdev01.devops.test/libvirt_instance.xml
+SSH configuration: /srv/vms/instances/lxdev01.devops.test/ssh_config
+Domain lxdev01.devops.test defined from /srv/vms/instances/lxdev01.devops.test/libvirt_instance.xml
 Domain lxdev01.devops.test started
 ```
 
@@ -57,14 +57,14 @@ ssh_config
 Use the `login` sub-command to **SSH into the virtual machine instance**:
 
 ```bash
->>> virsh-instance login lxdev01                  
+>>> vm login lxdev01                  
 root@lxdev01:~# exit
 ```
 
 Shutdown and **remove the virtual machine instance** with the `remove` sub-command:
 
 ```bash
->>> virsh-instance remove lxdev01
+>>> vm remove lxdev01
 Domain lxdev01.devops.test destroyed
 Domain lxdev01.devops.test has been undefined
 ```

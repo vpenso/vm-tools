@@ -131,8 +131,7 @@ The ↴ [ssh-instance](../bin/ssh-instance) command allows login to and the exec
 # paths for the SSH key
 >>> ssh-instance 'mkdir -p -m 0700 /home/devops/.ssh ; sudo mkdir -p -m 0700 /root/.ssh'
 # deploy the SSH key for password-less login
->>> rsync-instance
-keys/id_rsa.pub :.ssh/authorized_keys
+>>> rsync-instance keys/id_rsa.pub :.ssh/authorized_keys
 >>> ssh-instance -s 'cp ~/.ssh/authorized_keys /root/.ssh/authorized_keys'
 # shutdown the virtual machine image
 >>> ssh-instance "systemctl poweroff"
