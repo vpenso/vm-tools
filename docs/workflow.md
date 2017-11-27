@@ -61,7 +61,7 @@ Afterwards it calls ↴ [ssh-exec](../bin/ssh-exec) with the `-r` option to **lo
 
 * It will automatically read the configuration from `$PWD/ssh_config` (if present).
 * The configuration references a SSH private key located in `$PWD/keys/id_rsa` used to login without password.
-* Note that the SSH configuration file is generated automatically with ↴  [ssh-instance](../bin/ssh-instance) 
+* Note that the SSH configuration file is generated automatically with ↴  [ssh-config-instance](../bin/ssh-config-instance) 
 
 ```bash
 >>> ssh-exec -r

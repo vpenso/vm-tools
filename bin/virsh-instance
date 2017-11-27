@@ -213,7 +213,7 @@ class Virsh
 
     # Create the SSH configuration file for password-less login 
     command = "
-      ssh-instance
+      ssh-config-instance
         --user devops
         --identity-file #{path}/keys/id_rsa
         #{Virsh.instance_ip name} #{path}
