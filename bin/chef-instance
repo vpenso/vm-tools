@@ -21,7 +21,7 @@
 # exit of statement returns a non-true return value
 #set -o errexit
 
-VERSION=0.1
+VERSION=0.3
 
 # Filename of this script
 SCRIPT=${0##*/}
@@ -30,50 +30,32 @@ _DEBUG=false
 
 # Help text for this script
 HELP=\
-"Usage: 
+"$SCRIPT [<options>] <command> [<arguments]
+
+<command>
+  co, cookbook <name>        Add a cookbooks to the configuration.
+                             Search paths defined by CHEF_COOKBOOKS
+  ro, role <path>            Add a role to the configuration
+  so, solo                   Copy the configuration to the virtual
+                             machine instance and execute Chef.
   
-  $SCRIPT [-Dhv] [-d path] [-r run-list] 
-          [[user@]hostname] command [arguments]
+<options>
+  -r,--run-list <list>       Chef run-list to be executed
+  -d,--destination <path>    Directory used for the configuration 
+                             in the virtual machine instance.
+                             (defaults to /var/tmp/chef)
+  -V, --version              Print version information.
+  -D,--debug                 Run in debug mode.
+  -h,--help                  Show this information.
 
-Commands:
-
-  co,cookbook name [name,...]
-    Add a cookbook to the configuration in the cookbooks/
-    directory. Uses the CHEF_COOKBOOKS environment variable
-    to determine to location of the cookbooks.
-  ro,role path
-    Add a role to the configuration in roles/
-  so,solo
-    Copy the configuration to the remote node and execute
-    Chef in solo mode.
-  
-Options:
-
-  -r,--run-list string
-    Overwrites  chef_attributes.json  with the string
-    as the only Chef run-list element.
-  -d,--destination path
-    Remote directory used on target node for storing
-    the Chef configuration files.
-  -V, --version
-    Print version information.
-  -D,--debug
-    Run in debug mode.
-  -h,--help
-    Show this information.
-
-Description:
-
-Configure a remote node with a Chef configuration read
-from the current working directory.
+Following directories and files contain the configuration used to
+execute chef-solo on the target virtual machine instance:
 
    chef_attributes.json
    chef_config.json
    cookbooks/
    data-bags/
-   roles/
-
-The files chef_* will be generated if they are missing. "
+   roles/"
 
 # enable line numbers for debug output
 if [ "$_DEBUG" = "true" ] ; then
@@ -96,7 +78,7 @@ dest=/var/tmp/chef
 run_list=
 
 # Parse the command line options
-ARGS=$(getopt -o VhDr:d: -l "version,help,debug,run-list:,destination:" -- "$@")
+ARGS=$(getopt -o vhdr:d: -l "version,help,debug,run-list:,destination:" -- "$@")
 eval set -- "$ARGS"
 while true; do
   case "$1" in
@@ -110,7 +92,7 @@ while true; do
       run_list=$1
       shift
       ;;
-    -V|--version)
+    -v|--version)
       echo "$VERSION"
       exit 0
       ;;
@@ -118,7 +100,7 @@ while true; do
       echo "$HELP"
       exit 0
       ;;
-    -D|--debug)
+    -d|--debug)
       export _DEBUG=true
       shift
       ;;
