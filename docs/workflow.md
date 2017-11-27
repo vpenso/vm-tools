@@ -40,13 +40,14 @@ The following sections describe the steps illustrated above in more detail.
 **Login to a virtual machine** using the following commands:
 
 ```bash
-# shorthand
->>> vm lo lxdev03
-# is equivalent to
->>> virsh-instance login lxdev03
+>>> vm login lxdev03
+# login as devops run sudo
+>>> vm login lxdev03 -s
+# login as root
+>>> vm login lxdev03 -r
 ```
 
-Transparent to the user the above commands will change into the directory containing the specific virtual machine instance:
+The commands above will change into the directory containing the specific virtual machine instance:
 
 ```bash
 # shorthand
@@ -57,7 +58,7 @@ Transparent to the user the above commands will change into the directory contai
 >>> cd $VM_INSTANCE_PATH/lxdev03.devops.test
 ```
 
-Afterwards it calls ↴ [ssh-instance](../bin/ssh-instance) with the `-r` option to **login as root user**:
+Afterwards ↴ [ssh-instance](../bin/ssh-instance) is executed:
 
 * It will automatically read the configuration from `$PWD/ssh_config` (if present).
 * The configuration references a SSH private key located in `$PWD/keys/id_rsa` used to login without password.
@@ -102,13 +103,18 @@ Additionally option `-s` allows to **login as devops and executes `sudo`**.
 The sub-command **`exec` will run a command** given by argument on a specified virtual machine:
 
 ```bash
-# shorthand
->>> vm exec lxdev03 'uptime ; uname -a '
- 09:54:39 up 16:48,  1 user,  load average: 0.00, 0.00, 0.00
- Linux lxdev03 3.16.0-4-amd64 #1 SMP Debian 3.16.43-2+deb8u5 (2017-09-19) x86_64 GNU/Linux
-# is equivalent to
->>> virsh-instance exec lxdev03 'cat /etc/sudoers.d/devops '
- devops ALL = NOPASSWD: ALL
+# login as user devops
+>>> vm exec lxdev03 'whoami ; pwd'  
+devops
+/home/devops
+# login as user devops, run command with sudo  
+>>> vm exec lxdev03 -s 'whoami ; pwd'
+root
+/home/devops
+# login as user root
+>>> vm exec lxdev03 -r 'whoami ; pwd'
+root
+/root
 ```
 
 As described in the previous section the above commands execute `ssh-instance`:
@@ -138,12 +144,8 @@ The sub-command **`sync` allows to copy files from and to a virtual machine**:
 ```bash
 ## copy a file from the host to a virtual machine instance
 >>> vm sy lxdev03 /etc/hostname :/tmp/
-# is equivalent to
->>> virsh-instance sync lxdev03 :/tmp/bash /tmp/
 ## copy a file from the virtual machine to the host
 >>> vm sy lxdev03 :/etc/hostname /tmp
-# is equivalent to
->>> virsh-instance sync lxdev03 :/etc/hostname /tmp
 ```
 
 Note that colon `:` prefixes the path within the virtual machine.

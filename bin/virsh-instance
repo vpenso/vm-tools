@@ -27,16 +27,13 @@ HELP = <<EOF
 
 <command>
   c,  clone <img> <name>          Clone image and start instance 
-  e,  exec <name> <cmd>           Execute command in instance
-      fqdn <name>                 Print FQDN of instance
+  f,  fqdn <name>                 Print FQDN of instance
   l,  list                        List available images
-  lo, login <name>                Login to instance
   p,  path <name>                 Print path ot the instance
   rm, remove <name>               Undefine and destroy instance
   s,  shadow <img> <name>         Shadow image and start instance 
   sh, shutdown <name>             Shutdown instance
   st, start <name>                Start instance
-  sy, sync <name> <src> <dst>     Rsync between host and instance
 
 <options>
   -b, --bridge <name>              Network birdge to use (default nbr0)
@@ -372,7 +369,7 @@ begin
     when '--ram'
       $options.ram = arg
     when '--version'
-      $stdout.puts 1.1
+      $stdout.puts 1.2
       exit 0
     end
   end
@@ -405,35 +402,11 @@ begin
     Virsh.config(path)
     Virsh.start(name)
 
-  when 'exec','ex','e','sync','sy'
-
-    # Name of the virtual machine instance
-    name = ARGV.shift || raise('Expecting name for target VM instance')
-    # Command to be executed
-    raise('Provide a command to be executed in VM instance') unless ARGV.length > 0
-
-    # Append domain name if missing
-    name = Virsh::instance(name)
-    # Path to virtual machine instance
-    path = "#{$options.instance_path}/#{name}" 
-
-
-    args = ARGV.join(' ')
-    args =  "'#{args}'" if command == 'exec'
-
-    # Execute a command in target virtual machine instance
-    $stdout.puts System::exec(%Q<cd #{path} ; ssh-#{command} -r #{args}>)
-
   when 'list','li','l'
 
     Virsh::Image.list($options.image_path)
 
-  when 'login', 'lo'
-
-    name = ARGV.shift || raise('Expecting the name of a virtual machine instance')
-    System::run "cd #{Virsh::path(name)}; ssh-instance -r"
-
-  when 'fqdn'
+  when 'fqdn','f'
 
     name = ARGV.shift || raise('Expecting the name of a virtual machine instance')
     $stdout.puts Virsh::instance(name)
