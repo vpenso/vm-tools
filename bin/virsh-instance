@@ -431,7 +431,7 @@ begin
   when 'login', 'lo'
 
     name = ARGV.shift || raise('Expecting the name of a virtual machine instance')
-    System::run "cd #{Virsh::path(name)}; ssh-exec -r"
+    System::run "cd #{Virsh::path(name)}; ssh-instance -r"
 
   when 'fqdn'
 

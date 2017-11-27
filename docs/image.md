@@ -119,21 +119,21 @@ Domain lxdev01.devops.test created from ./libvirt_instance.xml
 >>> virt-viewer lxdev01.devops.test
 ```
 
-The ↴ [ssh-exec](../bin/ssh-exec) command allows login to and the execution of command in the virtual machine. Similar the ↴ [rsync-instance](..bin/rsync-instance) allow top copy file into and from the virtual machine. Use these tools to enable password-less SSH login to the virtual machine image for the users root and devops: 
+The ↴ [ssh-instance](../bin/ssh-instance) command allows login to and the execution of command in the virtual machine. Similar the ↴ [rsync-instance](..bin/rsync-instance) allow top copy file into and from the virtual machine. Use these tools to enable password-less SSH login to the virtual machine image for the users root and devops: 
 
 ```bash
 # install required packages on Debian Stretch
->>> ssh-exec "su -lc 'apt install rsync sudo'"  # login as devops, execute command as root user
+>>> ssh-instance "su -lc 'apt install rsync sudo'"  # login as devops, execute command as root user
 # install required packages on CentOS
->>> ssh-exec -r 'yum install rsync sudo'
+>>> ssh-instance -r 'yum install rsync sudo'
 # Sudo configuration for user devops
->>> ssh-exec "su -lc 'echo \"devops ALL = NOPASSWD: ALL\" > /etc/sudoers.d/devops'"
+>>> ssh-instance "su -lc 'echo \"devops ALL = NOPASSWD: ALL\" > /etc/sudoers.d/devops'"
 # paths for the SSH key
->>> ssh-exec 'mkdir -p -m 0700 /home/devops/.ssh ; sudo mkdir -p -m 0700 /root/.ssh'
+>>> ssh-instance 'mkdir -p -m 0700 /home/devops/.ssh ; sudo mkdir -p -m 0700 /root/.ssh'
 # deploy the SSH key for password-less login
 >>> rsync-instance
 keys/id_rsa.pub :.ssh/authorized_keys
->>> ssh-exec -s 'cp ~/.ssh/authorized_keys /root/.ssh/authorized_keys'
+>>> ssh-instance -s 'cp ~/.ssh/authorized_keys /root/.ssh/authorized_keys'
 # shutdown the virtual machine image
->>> ssh-exec "systemctl poweroff"
+>>> ssh-instance "systemctl poweroff"
 ```

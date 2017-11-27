@@ -62,7 +62,7 @@ function vm() {
     virsh destroy $(virsh-instance fqdn $1)
     ;;
   "list"|"l")                  virsh list --all | tail -n +3 | sed '/^$/d';;
-  "login"|"lo"|"exec"|"ex")    vm cd $1 ; shift ; ssh-exec $@ ;;
+  "login"|"lo"|"exec"|"ex")    vm cd $1 ; shift ; ssh-instance $@ ;;
   "lookup"|"lk")               virsh-nat-bridge lookup $@ ;;
   "mount"|"m")                 vm cd $1 ; shift ; sshfs-instance mount $@ ;;
   "nat"|"n")                   virsh-nat-bridge $@ ;;

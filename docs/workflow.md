@@ -57,14 +57,14 @@ Transparent to the user the above commands will change into the directory contai
 >>> cd $VM_INSTANCE_PATH/lxdev03.devops.test
 ```
 
-Afterwards it calls ↴ [ssh-exec](../bin/ssh-exec) with the `-r` option to **login as root user**:
+Afterwards it calls ↴ [ssh-instance](../bin/ssh-instance) with the `-r` option to **login as root user**:
 
 * It will automatically read the configuration from `$PWD/ssh_config` (if present).
 * The configuration references a SSH private key located in `$PWD/keys/id_rsa` used to login without password.
 * Note that the SSH configuration file is generated automatically with ↴  [ssh-config-instance](../bin/ssh-config-instance) 
 
 ```bash
->>> ssh-exec -r
+>>> ssh-instance -r
 root@lxdev03:~# exit
 exit
 # configuration of a specific virtual machine instance
@@ -77,20 +77,20 @@ Host instance
   IdentityFile /srv/projects/vm-tools/vm/instances/lxdev01.devops.test/keys/id_rsa
 ```
 
-Given the configuration above, the login with `ssh-exec -r` basically executes following command:
+Given the configuration above, the login with `ssh-instance -r` basically executes following command:
 
 ```bash
 >>> ssh -gt -F $PWD/ssh_config -l root instance /usr/bin/env bash
 ```
 
-By default ↴ [ssh-exec](../bin/ssh-exec) without options performs a **login as the user devops**:
+By default ↴ [ssh-instance](../bin/ssh-instance) without options performs a **login as the user devops**:
 
 ```bash
->>> ssh-exec                                                     
+>>> ssh-instance                  
 devops@lxdev03:~$ exit
 exit
 # login as devops, and execute sudo
->>> ssh-exec -s                                                       
+>>> ssh-instance -s                                                       
 root@jessie:/home/devops# exit
 exit
 ```
@@ -111,23 +111,23 @@ The sub-command **`exec` will run a command** given by argument on a specified v
  devops ALL = NOPASSWD: ALL
 ```
 
-As described in the previous section the above commands execute `ssh-exec`:
+As described in the previous section the above commands execute `ssh-instance`:
 
 ```bash
 >>> vm cd lxdev03
 # execute a command as default user
->>> ssh-exec whoami
+>>> ssh-instance whoami
 devops
 # login as devops and exeute a command with sudo
->>> ssh-exec -s whoami                                                
+>>> ssh-instance -s whoami                                                
 root
 # multple commands with sudo...
->>> ssh-exec -s 'apt install -qy zsh' && ssh-exec -s '/usr/bin/env zsh'
+>>> ssh-instance -s 'apt install -qy zsh' && ssh-instance -s '/usr/bin/env zsh'
 # pipes work as expected
->>> ssh-exec -r 'cat /etc/passwd' | grep ^devops
+>>> ssh-instance -r 'cat /etc/passwd' | grep ^devops
 devops:x:1000:1000:devops,,,:/home/devops:/bin/bash
 # input pipe redirection 
->>> echo text | ssh-exec 'cat - > /tmp/input.txt' && ssh-exec 'cat /tmp/input.txt'
+>>> echo text | ssh-instance 'cat - > /tmp/input.txt' && ssh-instance 'cat /tmp/input.txt'
 text
 ```
 
@@ -150,7 +150,7 @@ Note that colon `:` prefixes the path within the virtual machine.
 
 In contrast to the previous sections here the ↴ [rsync-instance](../bin/rsync-instance) program is used:
 
-* Like `ssh-exec` it will read `$PWD/ssh_config` (if present).
+* Like `ssh-instance` it will read `$PWD/ssh_config` (if present).
 * The program is a **wrapper around the `rsync` program**, hence it is able to sync directory trees recursively also.
 
 ```bash
