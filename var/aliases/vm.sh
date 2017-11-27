@@ -71,7 +71,7 @@ function vm() {
   "shutdown"|"sh")             virsh shutdown $(virsh-instance fqdn $1) ;;
   "shadow"|"s")                virsh-instance shadow $@ ;;
   "start"|"st")                virsh start $(virsh-instance fqdn $1) ;;
-  "sync"|"sy")                 vm cd $1 ; shift ; ssh-sync $@ ;;
+  "sync"|"sy")                 vm cd $1 ; shift ; rsync-instance $@ ;;
   "umount"|"um")               vm cd $1 ; sshfs-instance umount ;;
   "undefine"|"u")              virsh undefine $(virsh-instance fqdn $1) ;;
   *) 

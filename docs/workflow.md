@@ -148,7 +148,7 @@ The sub-command **`sync` allows to copy files from and to a virtual machine**:
 
 Note that colon `:` prefixes the path within the virtual machine.
 
-In contrast to the previous sections here the ↴ [ssh-sync](../bin/ssh-sync) program is used:
+In contrast to the previous sections here the ↴ [rsync-instance](../bin/rsync-instance) program is used:
 
 * Like `ssh-exec` it will read `$PWD/ssh_config` (if present).
 * The program is a **wrapper around the `rsync` program**, hence it is able to sync directory trees recursively also.
@@ -157,7 +157,7 @@ In contrast to the previous sections here the ↴ [ssh-sync](../bin/ssh-sync) pr
 # change to the virtual machine instance directory
 >>> vm cd lxdev03
 # run rsync as user root and copy the /var/log directory from the virtual machine instance
->>> ssh-sync -r :/var/log .
+>>> rsync-instance -r :/var/log .
 >>> tree log/ | head
 log/
 ├── alternatives.log
@@ -171,7 +171,7 @@ log/
 ├── dmesg
 ```
 
-Using `ssh-sync -r` is internally executing `rsync` similar to:
+Using `rsync-instance -r` is internally executing `rsync` similar to:
 
 ```bash
 >>> RSYNC_RSH=ssh -q -F $PWD/ssh_config -l root

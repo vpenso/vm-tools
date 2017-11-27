@@ -249,7 +249,7 @@ function solo() {
   # Create the base directory one the remote node
   ssh-exec $host "[ -d $dest ] || mkdir -p $dest"
   # Upload the Chef data and configuration files
-  ssh-sync "cookbooks roles data-bags chef_*" $host:$dest/ 2>&1 1>>sync.log
+  rsync-instance "cookbooks roles data-bags chef_*" $host:$dest/ 2>&1 1>>sync.log
   # Run chef-solo on the remote node
   ssh-exec -s $host "chef-solo -c $dest/chef_config.rb -j $dest/chef_attributes.json"
 }

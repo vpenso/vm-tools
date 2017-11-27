@@ -119,7 +119,7 @@ Domain lxdev01.devops.test created from ./libvirt_instance.xml
 >>> virt-viewer lxdev01.devops.test
 ```
 
-The ↴ [ssh-exec](../bin/ssh-exec) command allows login to and the execution of command in the virtual machine. Similar the ↴ [ssh-sync](..bin/ssh-sync) allow top copy file into and from the virtual machine. Use these tools to enable password-less SSH login to the virtual machine image for the users root and devops: 
+The ↴ [ssh-exec](../bin/ssh-exec) command allows login to and the execution of command in the virtual machine. Similar the ↴ [rsync-instance](..bin/rsync-instance) allow top copy file into and from the virtual machine. Use these tools to enable password-less SSH login to the virtual machine image for the users root and devops: 
 
 ```bash
 # install required packages on Debian Stretch
@@ -131,7 +131,8 @@ The ↴ [ssh-exec](../bin/ssh-exec) command allows login to and the execution of
 # paths for the SSH key
 >>> ssh-exec 'mkdir -p -m 0700 /home/devops/.ssh ; sudo mkdir -p -m 0700 /root/.ssh'
 # deploy the SSH key for password-less login
->>> ssh-sync keys/id_rsa.pub :.ssh/authorized_keys
+>>> rsync-instance
+keys/id_rsa.pub :.ssh/authorized_keys
 >>> ssh-exec -s 'cp ~/.ssh/authorized_keys /root/.ssh/authorized_keys'
 # shutdown the virtual machine image
 >>> ssh-exec "systemctl poweroff"
