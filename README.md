@@ -8,7 +8,7 @@ The tool-chain is based on software available in all modern Linux distributions:
 * [Libvirt](http://libvirt.org/) is used as generic interface on top of KVM, and to manage the virtual machine network.
 * [SSH](http://www.openssh.com/), [Rsync](http://rsync.samba.org/), and [SSHfs](http://fuse.sourceforge.net/sshfs.html) allows access the virtual machine instances.
 
-### Prerequisites 
+## Prerequisites 
 
 Install following packages on Debian:
 
@@ -23,6 +23,8 @@ Install following package group on Fedora:
 ```bash
 >>> sudo dnf -y install @virtualization
 ```
+
+### Configuration
 
 Enable your user to manage virtual machines (re-login to activate these group rights):
 
@@ -50,17 +52,23 @@ The shell script ↴ [source_me.sh](source_me.sh) adds the tool-chain in this re
 
 It will add the [bin/](bin/) sub-directory to your `PATH` and define several additional environment variables cf. [var/aliases/env.sh](var/aliases/env.sh).
 
-# Usage
+## Usage
 
 The [docs/](docs) sub-directory includes all documentation required to us this tool-chain:
 
-* The [network](docs/network.md) document explains the setup of the virtual machine network.
-* The [image](docs/image.md) document describes how to create re-usable virtual machine images (aka templates).
-* The [instance](docs/instance.md) document shows how to use virtual machine images to create any number of virtual machine instances for development and testing.
+* The [network](docs/network.md) document explains the setup of the **virtual machine network**.
+* The [image](docs/image.md) document describes how to create re-usable **virtual machine images** (aka templates).
+* The [instance](docs/instance.md) document shows how to use virtual machine images to create any number of **virtual machine instances** for development and testing.
 
 The [workflow](docs/workflow.md) document explains in great detail how to efficiently interact with virtual machine instances.
 
-## License
+### Provisioning
+
+Configure a virtual machine instance with a Configuration Management System:
+
+* The [chef](docs/chef.md) documents show how to configurean instance with `chef-cilent` from Chef Software, Inc.
+
+# License
 
 Copyright 2012-2017 Victor Penso
 
