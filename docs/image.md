@@ -47,18 +47,24 @@ Install a minimal standard system, no desktop environment (unless really needed)
 Install a virtual machine image with pressed and the **Debian Installer**:
 
 ```bash
+# install a Debian Jessie virtual machine image
+>>> mkdir -p $VM_IMAGE_PATH/debian8 && cd $VM_IMAGE_PATH/debian8
 >>> virt-install --name debian8 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
              --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
              --location http://deb.debian.org/debian/dists/jessie/main/installer-amd64/ \
              --graphics none --console pty,target_type=serial --noreboot \
              --extra-args 'auto=true hostname=jessie domain=devops.test console=ttyS0,115200n8 serial' \
              --initrd-inject=$VM_FUNCTIONS/var/debian/8/preseed.cfg
+>>> virsh undefine debian8
+# install a Debian Stretch virtual machine image
+>>> mkdir -p $VM_IMAGE_PATH/debian9 && cd $VM_IMAGE_PATH/debian9
 >>> virt-install --name debian9 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
              --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
              --location http://deb.debian.org/debian/dists/stretch/main/installer-amd64/ \
              --graphics none --console pty,target_type=serial --noreboot \
              --extra-args 'auto=true hostname=stretch domain=devops.test console=ttyS0,115200n8 serial' \
              --initrd-inject=$VM_FUNCTIONS/var/debian/9/preseed.cfg
+>>> virsh undefine debian9
 ```
 
 Find Debian pressed files in [var/debian/](../var/debian).
@@ -66,6 +72,7 @@ Find Debian pressed files in [var/debian/](../var/debian).
 Install with CentOS/Fedora **Kickstart**:
 
 ```bash
+>>> mkdir -p $VM_IMAGE_PATH/centos7 && cd $VM_IMAGE_PATH/centos7
 >>> virt-install --name centos7 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
              --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
              --location http://mirror.centos.org/centos-7/7/os/x86_64/ \
@@ -74,6 +81,7 @@ Install with CentOS/Fedora **Kickstart**:
              --extra-args 'console=ttyS0,115200n8 serial \
                            inst.repo=http://mirror.centos.org/centos-7/7/os/x86_64/ \
                            inst.text inst.ks=file:/kickstart.cfg'
+>>> virsh undefine centos7
 ```
 
 Find the kickstart file in [var/centos](../var/centos).
@@ -88,7 +96,7 @@ The following command will adjust the permissions to all `disk.img` files in `VM
 >>> sudo find $VM_IMAGE_PATH/ -name disk.img -exec chmod a+rw {} \;
 ```
 
-## Configuration
+## Customization
 
 After the installation has finished the virtual machine image can be booted and customized.
 
@@ -98,6 +106,8 @@ After the installation has finished the virtual machine image can be booted and 
 >>> ls -1
 disk.img
 ```
+
+### Image Configuration
 
 The ↴ [virsh-config](../bin/virsh-config) command creates a file called `libvirt_instance.xml` which contains the configuration required by libvirt to operate the virtual machine image. Similar the ↴ [ssh-config-instance](../bin/ssh-config-instance) command prepares the configuration file `ssh_config` and a SSH key-pair for login:
 
@@ -121,17 +131,26 @@ Use the libvirt configuration file to start the virtual machine image with the `
 ```bash
 >>> virsh create ./libvirt_instance.xml
 Domain lxdev01.devops.test created from ./libvirt_instance.xml
-# follwoing command allows to access the VNC graphical console
+# follwoing command allows to access the VNC graphical console (if required)
 >>> virt-viewer lxdev01.devops.test
 ```
 
-The ↴ [ssh-instance](../bin/ssh-instance) command allows login to and the execution of command in the virtual machine. Similar the ↴ [rsync-instance](..bin/rsync-instance) allow top copy file into and from the virtual machine. Use these tools to enable password-less SSH login to the virtual machine image for the users root and devops: 
+### Password-less Login
+
+The ↴ [ssh-instance](../bin/ssh-instance) command allows login to and the execution of command in the virtual machine. Similar the ↴ [rsync-instance](..bin/rsync-instance) allow top copy file into and from the virtual machine. 
+
+You may want to **install Sudo and Rsync** in the virtual machine unless this has been part of the basic OS deployment beforehand:
 
 ```bash
 # install required packages on Debian Stretch
 >>> ssh-instance "su -lc 'apt install rsync sudo'"  # login as devops, execute command as root user
 # install required packages on CentOS
 >>> ssh-instance -r 'yum install rsync sudo'
+```
+
+Use these tools to **enable password-less SSH login** to the virtual machine image for the users root and devops: 
+
+```bash
 # Sudo configuration for user devops
 >>> ssh-instance "su -lc 'echo \"devops ALL = NOPASSWD: ALL\" > /etc/sudoers.d/devops'"
 # paths for the SSH key
