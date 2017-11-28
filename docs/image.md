@@ -53,6 +53,12 @@ Install a virtual machine image with pressed and the **Debian Installer**:
              --graphics none --console pty,target_type=serial --noreboot \
              --extra-args 'auto=true hostname=jessie domain=devops.test console=ttyS0,115200n8 serial' \
              --initrd-inject=$VM_FUNCTIONS/var/debian/8/preseed.cfg
+>>> virt-install --name debian9 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
+             --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
+             --location http://deb.debian.org/debian/dists/stretch/main/installer-amd64/ \
+             --graphics none --console pty,target_type=serial --noreboot \
+             --extra-args 'auto=true hostname=stretch domain=devops.test console=ttyS0,115200n8 serial' \
+             --initrd-inject=$VM_FUNCTIONS/var/debian/9/preseed.cfg
 ```
 
 Find Debian pressed files in [var/debian/](../var/debian).
