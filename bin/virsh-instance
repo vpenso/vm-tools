@@ -135,11 +135,11 @@ class Virsh
       # Continue if the source virtual machine image exists
       raise("Image #{image} not existing") unless File.directory? image
 
+      name = File.basename instance
       # If the target directory exists?
       #
       if File.directory? instance
 
-        name = File.basename instance
 
         # Is the virtual machine instance running?
         if Virsh.running?(name)
@@ -156,14 +156,12 @@ class Virsh
 
         end
 
-        # Delete existing virtual machine instrance
-        System::exec("rm -rf #{instance}/*")
+        # Delete existing virtual machine instance
+        System::exec("rm -rf #{Virsh::path(name)}")
 
-      #
-      # Create target directory if missing
-      else
-        System::exec("mkdir -p #{instance}")
       end
+      
+      System::exec("mkdir -p #{instance}") unless File.directory? instance
 
       $logger.info("Copy image #{image}")
 
@@ -311,9 +309,9 @@ begin
   # Adjust the time format used for the logger
   $logger.datetime_format = "%Y-%m-%d %H:%M:%S "
   $logger.formatter = proc do |severity, datetime, progname, message|
-    "[#{datetime.strftime($logger.datetime_format)}] #{severity} -- #{message}\n"
+    "[#{datetime.strftime($logger.datetime_format)}] #{severity} -- #{exec_name} -- #{message}\n"
   end
-  $logger.level = Logger::FATAL
+  $logger.level = Logger::DEBUG
 
   GetoptLong.new(
     ['--bridge','-b',GetoptLong::REQUIRED_ARGUMENT],
