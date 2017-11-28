@@ -311,7 +311,7 @@ begin
   $logger.formatter = proc do |severity, datetime, progname, message|
     "[#{datetime.strftime($logger.datetime_format)}] #{severity} -- #{exec_name} -- #{message}\n"
   end
-  $logger.level = Logger::DEBUG
+  $logger.level = Logger::FATAL
 
   GetoptLong.new(
     ['--bridge','-b',GetoptLong::REQUIRED_ARGUMENT],
