@@ -44,7 +44,7 @@ Install a minimal standard system, no desktop environment (unless really needed)
 
 ### Automation
 
-Install a virtual machine image with pressed and the **Debian Installer**:
+Install a virtual machine image with [pressed](https://wiki.debian.org/DebianInstaller/Preseed) and the [Debian Installer](https://www.debian.org/releases/stable/amd64/ch06.html.en):
 
 ```bash
 # install a Debian Jessie virtual machine image
@@ -63,7 +63,8 @@ Install a virtual machine image with pressed and the **Debian Installer**:
              --location http://deb.debian.org/debian/dists/stretch/main/installer-amd64/ \
              --graphics none --console pty,target_type=serial --noreboot \
              --extra-args 'auto=true hostname=stretch domain=devops.test console=ttyS0,115200n8 serial' \
-             --initrd-inject=$VM_FUNCTIONS/var/debian/9/preseed.cfg
+             --initrd-inject=$VM_FUNCTIONS/var/debian/9/preseed.cfg \
+             --initrd-inject=$VM_FUNCTIONS/var/debian/9/post-install.sh
 >>> virsh undefine debian9
 ```
 
