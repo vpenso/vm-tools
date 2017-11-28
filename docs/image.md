@@ -160,5 +160,5 @@ Use these tools to **enable password-less SSH login** to the virtual machine ima
 >>> rsync-instance keys/id_rsa.pub :.ssh/authorized_keys
 >>> ssh-instance -s 'cp ~/.ssh/authorized_keys /root/.ssh/authorized_keys'
 # shutdown the virtual machine image
->>> ssh-instance "systemctl poweroff"
+>>> ssh-instance -r "systemctl poweroff"
 ```
