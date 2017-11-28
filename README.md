@@ -1,6 +1,6 @@
 # Virtual Machine Tools
 
-The programs distributed with this repository enable users to quickly configure and **use virtual machines as development and test environment** on a Linux workstation. In conjunction all programs in the [bin/](bin) sub-directory build a tool-chain to bootstrap many virtual machine instances in a very customizable way. 
+The programs distributed within this repository enable users to quickly configure and **use virtual machines as development and test environment** on a Linux workstation. Programs in the [bin/](bin) sub-directory build a tool-chain to bootstrap many virtual machine instances in a very customizable way. 
 
 The tool-chain is based on software available in all modern Linux distributions: 
 
@@ -10,7 +10,8 @@ The tool-chain is based on software available in all modern Linux distributions:
 
 ## Prerequisites 
 
-Install following packages on Debian:
+**Debian** packages required:
+
 
 ```bash
 >>> sudo apt -y install libvirt-daemon-system libvirt-dev libvirt-clients \
@@ -18,7 +19,7 @@ Install following packages on Debian:
                         qemu-utils qemu-kvm libguestfs-tools ovmf
 ```
 
-Install following package group on Fedora:
+**Fedora/CentOS** packages required:
 
 ```bash
 >>> sudo dnf -y install @virtualization
