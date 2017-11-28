@@ -1,9 +1,16 @@
-
+# connect to the local libvirtd instance (run as root)
 export LIBVIRT_DEFAULT_URI=qemu:///system
+
 # path to virtual machine images
-export VM_IMAGE_PATH=$VM_FUNCTIONS/vm/images
+if [ -z "${VM_IMAGE_PATH+1}" ]; then
+    export VM_IMAGE_PATH=$VM_FUNCTIONS/vm/images
+fi
+
 # path to virtual machine instances
-export VM_INSTANCE_PATH=$VM_FUNCTIONS/vm/instances
+if [ -z "${VM_INSTANCE_PATH+1}" ]; then
+    export VM_INSTANCE_PATH=$VM_FUNCTIONS/vm/instances
+fi
+
 # default DNS domain
 export VM_DOMAIN=devops.test
 
