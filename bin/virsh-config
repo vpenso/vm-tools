@@ -219,7 +219,7 @@ begin
   path = ARGV.shift || "#{ENV['PWD']}/libvirt_instance.xml"
   path = File.expand_path(path)
   Virsh::config(path)
-  $stdout.puts "#{$options.name} (#{$options.mac}) -> #{path}"
+  $stdout.puts "Domain #{$options.name} definition file #{path}"
 
 rescue => exc
   $stderr.puts "ERROR: #{exc.message}"
