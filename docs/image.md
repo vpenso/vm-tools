@@ -54,7 +54,7 @@ Install a virtual machine image with [pressed](https://wiki.debian.org/DebianIns
              --location http://deb.debian.org/debian/dists/jessie/main/installer-amd64/ \
              --graphics none --console pty,target_type=serial --noreboot \
              --extra-args 'auto=true hostname=jessie domain=devops.test console=ttyS0,115200n8 serial' \
-             --initrd-inject=$VM_FUNCTIONS/var/debian/8/preseed.cfg
+             --initrd-inject=$VM_TOOLS/var/debian/8/preseed.cfg
 >>> virsh undefine debian8
 # install a Debian Stretch virtual machine image
 >>> mkdir -p $VM_IMAGE_PATH/debian9 && cd $VM_IMAGE_PATH/debian9
@@ -63,8 +63,8 @@ Install a virtual machine image with [pressed](https://wiki.debian.org/DebianIns
              --location http://deb.debian.org/debian/dists/stretch/main/installer-amd64/ \
              --graphics none --console pty,target_type=serial --noreboot \
              --extra-args 'auto=true hostname=stretch domain=devops.test console=ttyS0,115200n8 serial' \
-             --initrd-inject=$VM_FUNCTIONS/var/debian/9/preseed.cfg \
-             --initrd-inject=$VM_FUNCTIONS/var/debian/9/post-install.sh
+             --initrd-inject=$VM_TOOLS/var/debian/9/preseed.cfg \
+             --initrd-inject=$VM_TOOLS/var/debian/9/post-install.sh
 >>> virsh undefine debian9
 ```
 
@@ -78,7 +78,7 @@ Install with CentOS/Fedora **Kickstart**:
              --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
              --location http://mirror.centos.org/centos-7/7/os/x86_64/ \
              --graphics none --console pty,target_type=serial --noreboot \
-             --initrd-inject=$VM_FUNCTIONS/var/centos/7/kickstart.cfg \
+             --initrd-inject=$VM_TOOLS/var/centos/7/kickstart.cfg \
              --extra-args 'console=ttyS0,115200n8 serial \
                            inst.repo=http://mirror.centos.org/centos-7/7/os/x86_64/ \
                            inst.text inst.ks=file:/kickstart.cfg'

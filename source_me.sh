@@ -31,16 +31,16 @@ do
 done
 __dir="$( cd -P "$( dirname "$__source" )" && pwd )"
 
-export VM_FUNCTIONS=$__dir
+export VM_TOOLS=$__dir
 
 unset __dir
 unset __source
 
-for file in `\ls $VM_FUNCTIONS/var/aliases/*.sh`
+for file in `\ls $VM_TOOLS/var/aliases/*.sh`
 do 
   source $file
 done
 
-export PATH=$VM_FUNCTIONS/bin:$PATH
+export PATH=$VM_TOOLS/bin:$PATH
 
 PATH=$(echo "$PATH" | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1) printf ORS; printf $a[$1]}')

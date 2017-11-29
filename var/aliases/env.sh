@@ -3,12 +3,12 @@ export LIBVIRT_DEFAULT_URI=qemu:///system
 
 # path to virtual machine images
 if [ -z "${VM_IMAGE_PATH+1}" ]; then
-    export VM_IMAGE_PATH=$VM_FUNCTIONS/vm/images
+    export VM_IMAGE_PATH=$VM_TOOLS/vm/images
 fi
 
 # path to virtual machine instances
 if [ -z "${VM_INSTANCE_PATH+1}" ]; then
-    export VM_INSTANCE_PATH=$VM_FUNCTIONS/vm/instances
+    export VM_INSTANCE_PATH=$VM_TOOLS/vm/instances
 fi
 
 # default DNS domain
