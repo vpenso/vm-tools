@@ -118,9 +118,8 @@ class Virsh
     end
 
     def self.list(path)
-      $stdout.puts "Images in #{path}:"
       images = Dir.glob("#{path}/**/*.img").map do |image|
-        image = image.gsub(%r{#{path}/},'  ').split('/')[0]
+        image = image.gsub(%r{#{path}/},'').split('/')[0]
       end
       images.uniq.sort.each do |image|
         $stdout.puts image.gsub(%r{#{path}/},'  ').split('/')[0]
