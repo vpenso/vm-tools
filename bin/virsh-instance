@@ -306,11 +306,19 @@ begin
 
   $logger = Logger.new($stderr)
   # Adjust the time format used for the logger
-  $logger.datetime_format = "%Y-%m-%d %H:%M:%S "
+  $logger.datetime_format = "%Y-%m-%dT%H:%M:%S"
   $logger.formatter = proc do |severity, datetime, progname, message|
     "[#{datetime.strftime($logger.datetime_format)}] #{severity} -- #{exec_name} -- #{message}\n"
   end
   $logger.level = Logger::FATAL
+
+  # Read all shell environment variables
+  if ENV.has_key? 'VM_TOOLS_DEBUG'
+    $options.debug = true
+    $logger.level = Logger::DEBUG
+  end
+  $options.image_path = ENV['VM_IMAGE_PATH'] if ENV.has_key? 'VM_IMAGE_PATH'
+  $options.instance_path = ENV['VM_INSTANCE_PATH'] if ENV.has_key? 'VM_INSTANCE_PATH'
 
   GetoptLong.new(
     ['--bridge','-b',GetoptLong::REQUIRED_ARGUMENT],
@@ -373,8 +381,6 @@ begin
 
   command = ARGV.shift || raise('Expecting command argument!')
 
-  $options.image_path = ENV['VM_IMAGE_PATH'] if ENV.has_key? 'VM_IMAGE_PATH'
-  $options.instance_path = ENV['VM_INSTANCE_PATH'] if ENV.has_key? 'VM_INSTANCE_PATH'
 
   case command
 

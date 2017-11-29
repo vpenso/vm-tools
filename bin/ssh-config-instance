@@ -24,7 +24,7 @@ class System
   
   def self.exec(command)
     command + ' 2>&1'
-    $logger.debug "Exec [#{command}]"
+    $logger.debug("Exec [#{command}]")
     # Execute command as subprocess and return the exit code
     pipe = IO.popen(command)
     # Get the process ID from the child
@@ -66,14 +66,6 @@ EOF
 
 begin
 
-  $logger = Logger.new($stderr)
-  # Adjust the time format used for the logger
-  $logger.datetime_format = "%Y-%m-%dT%H:%M:%S"
-  $logger.formatter = proc do |severity, datetime, progname, message|
-    "[#{datetime.strftime($logger.datetime_format)}] #{severity} -- #{message}\n"
-  end
-  $logger.level = Logger::WARN
-
   options = OpenStruct.new
   options.path = ENV['PWD']
   options.debug = false
@@ -83,8 +75,18 @@ begin
   options.overwrite = false
   options.kerberos = false
 
-  if ENV.has_key? '_DEBUG'
-    options.debug = true if ENV['_DEBUG']
+  $logger = Logger.new($stderr)
+  # Adjust the time format used for the logger
+  $logger.datetime_format = "%Y-%m-%dT%H:%M:%S"
+  $logger.formatter = proc do |severity, datetime, progname, message|
+    "[#{datetime.strftime($logger.datetime_format)}] #{severity} -- #{exec_name} -- #{message}\n"
+  end
+  $logger.level = Logger::FATAL
+
+  # Read all shell environment variables
+  if ENV.has_key? 'VM_TOOLS_DEBUG'
+    options.debug = true
+    $logger.level = Logger::DEBUG
   end
 
   GetoptLong.new(
@@ -124,12 +126,13 @@ begin
     when '--user'
       options.user = arg
     when '--version'
-      $stdout.puts 1.0
+      $stdout.puts 1.1
       exit 0
     end
   end
 
   hostname = ARGV[0] || options.ip
+
   if ARGV.length > 1
     options.path = ARGV[1]
     raise("#{options.path} not existing ") unless File.directory? options.path
@@ -142,14 +145,13 @@ begin
     exit 0 unless answer.empty? or "Y" == answer.upcase
   end
 
-  config = <<-EOF
-    Host instance
-      User #{options.user}
-      HostName #{hostname}
-      UserKnownHostsFile /dev/null
-      StrictHostKeyChecking no
-  EOF
-
+  config = Array.new
+  config << "User #{options.user}"
+  config << "HostName #{hostname}"
+  config << "UserKnownHostsFile /dev/null"
+  config << "StrictHostKeyChecking no"
+  config << "GSSAPIAuthentication yes" if options.kerberos
+  
   ##
   # If the user dose not provide an SSH key-pair
   if options.id_file.empty?
@@ -159,29 +161,28 @@ begin
     System::exec('mkdir keys') unless File.directory?(path)
     # SSH key name
     key = "#{path}/id_rsa"
-    System::exec("ssh-keygen -q -t rsa -b 2048 -N '' -f keys/id_rsa") unless File.exists?(key)
-    $stdout.puts("Password-less SSH key-pair create in #{path}")
+    unless File.exists?(key)
+      System::exec("ssh-keygen -q -t rsa -b 2048 -N '' -f keys/id_rsa") 
+      $stdout.puts("Password-less SSH key-pair create in #{path}")
+    end
     # append to the SSH configuration 
-    config << "  IdentityFile #{key}"
+    config << "IdentityFile #{key}"
 
   ##
   # The user provides an SSH key
   #
   else 
     if File.exists? options.id_file
-      config << "  IdentityFile #{options.id_file}"
+      config << "IdentityFile #{options.id_file}"
     else
       raise("SSH identity file missing #{options.id_file}")
     end
   end
 
-  if options.kerberos
-    config << "  GSSAPIAuthentication yes"
-  end
-
-  File.open(config_file,'w') do |f|
-    f.puts config.gsub(/^    /,'')
-  end
+  ##
+  # Write the SSH configuration file
+  #
+  System::exec(%Q[/bin/echo -e "Host instance\\n  #{config.join('\\n  ')}" > #{config_file} ])
   $stdout.puts "SSH configuration: #{config_file}"
 
 rescue => exc
