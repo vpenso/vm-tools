@@ -44,6 +44,8 @@ Options:
     Print debug output.
   -h,--help
     Show this information.
+  -R,--relative
+    Use relative paths.
   -r, --root
     Use the root account for login."
 
@@ -67,7 +69,7 @@ function _error() {
 
 user=
 # Parse the command line options
-ARGS=$(getopt -o DhrV -l "help,debug,root,version" -- "$@")
+ARGS=$(getopt -o DhRrV -l "help,debug,relative,root,version" -- "$@")
 eval set -- "$ARGS"
 while true; do
   case "$1" in
@@ -77,6 +79,10 @@ while true; do
       ;;
     -D|--debug)
       _DEBUG=true
+      shift
+      ;;
+    -R|--relative)
+      relative_path='--relative'
       shift
       ;;
     -r|--root)
@@ -128,7 +134,7 @@ fi
 # Ignore version control system directories
 options="$options --exclude '.git' --exclude '.gitignore' --exclude '.svn'"
 # Copy options...
-options="$options --omit-dir-times --recursive --copy-links --copy-dirlinks --delete"
+options="$options $relative_path --omit-dir-times --recursive --copy-links --copy-dirlinks --delete"
 # Verbose
 options="$options --verbose"
 command="$options $src $dst" 
