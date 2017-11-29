@@ -55,7 +55,7 @@ HELP = <<EOF
                                   (defaults to ssh_config in the working directory).
 
 <options>
-  -D,--debug                      Show stacktraces in case of errors
+  -d,--debug                      Show stacktraces in case of errors
   -h,--help                       Show this help information
   -i,--identity-file [<path>]     Identity key to use for the connection.
   -k,--kerberos                   Enable GSSAPI Kerberos authentication.
@@ -88,7 +88,7 @@ begin
   end
 
   GetoptLong.new(
-    ['--debug','-D',GetoptLong::NO_ARGUMENT],
+    ['--debug','-d',GetoptLong::NO_ARGUMENT],
     ['--help','-h',GetoptLong::NO_ARGUMENT],
     ['--identity-file','-i',GetoptLong::REQUIRED_ARGUMENT],
     ['--kerberos','-k',GetoptLong::NO_ARGUMENT],

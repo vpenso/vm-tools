@@ -54,9 +54,9 @@ Options:
 
   -b,--bridge name
     Network bridge used as NAT gateway (default nbr0).
-  -D,--debug
+  -d,--debug
     Show stacktraces in case of errors.
-  -d,--domain name
+  -D,--domain name
     Domain name used for the hosts in the defined
     network (default 'devops.test').
   -h,--help
@@ -245,8 +245,8 @@ begin
 
   GetoptLong.new(
     ['--bridge','-b',GetoptLong::REQUIRED_ARGUMENT],
-    ['--domain','-d',GetoptLong::REQUIRED_ARGUMENT],
-    ['--debug','-D',GetoptLong::NO_ARGUMENT],
+    ['--domain','-D',GetoptLong::REQUIRED_ARGUMENT],
+    ['--debug','-d',GetoptLong::NO_ARGUMENT],
     ['--help','-h',GetoptLong::NO_ARGUMENT],
     ['--log-level','-L',GetoptLong::REQUIRED_ARGUMENT],
     ['--mac-addresses','-m',GetoptLong::REQUIRED_ARGUMENT],

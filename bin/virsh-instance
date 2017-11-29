@@ -38,7 +38,7 @@ HELP = <<EOF
 <options>
   -b, --bridge <name>              Network birdge to use (default nbr0)
       --cdrom <path>               Location of the CDROM ISO for installation.
-  -D, --debug                      Show stacktraces in case of errors.
+  -d, --debug                      Show stacktraces in case of errors.
   -s, --disk-size <size>           Image size when creating new images with the 
                                    command "create" (default 100G).
   -R, --dry-run                    Print the commands without execution.    
@@ -315,7 +315,7 @@ begin
   GetoptLong.new(
     ['--bridge','-b',GetoptLong::REQUIRED_ARGUMENT],
     ['--cdrom',GetoptLong::REQUIRED_ARGUMENT],
-    ['--debug','-D',GetoptLong::NO_ARGUMENT],
+    ['--debug','-d',GetoptLong::NO_ARGUMENT],
     ['--disk-size','-s',GetoptLong::REQUIRED_ARGUMENT],
     ['--dry-run','-R',GetoptLong::NO_ARGUMENT],
     ['--help','-h',GetoptLong::NO_ARGUMENT],
