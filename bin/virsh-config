@@ -18,6 +18,7 @@
 
 require 'ostruct'
 require 'getoptlong' 
+require 'logger'
 require 'erb'
 
 exec_name = File.split(__FILE__)[-1]
@@ -70,7 +71,7 @@ class Virsh
     disks_list = if $options.disks.empty?
                    disks = Dir.glob("#{dir}/disk*.img")
                    if not disks.empty?
-                     $stdout.puts "Using disk image with path: #{disks.join(',')}"
+                     $logger.debug "disk(s) #{disks.join(',')}"
                    end
                    disks
                  else
@@ -102,7 +103,6 @@ class Virsh
     config = ERB.new(DATA.read,nil,'-').result(binding)
     # write the configuration file
     File.open(path,'w') { |f| f.puts config }
-    $stdout.puts "Libvirt configuration: #{path}"
   end
 
   def self.vnc
@@ -139,6 +139,20 @@ begin
   $options.disk_type = 'qcow2'
   $options.kernel = nil
   $options.initrd = nil
+
+  $logger = Logger.new($stderr)
+  # Adjust the time format used for the logger
+  $logger.datetime_format = "%Y-%m-%dT%H:%M:%S"
+  $logger.formatter = proc do |severity, datetime, progname, message|
+    "[#{datetime.strftime($logger.datetime_format)}] #{severity} -- #{exec_name} -- #{message}\n"
+  end
+  $logger.level = Logger::FATAL
+
+  # Read all shell environment variables
+  if ENV.has_key? 'VM_TOOLS_DEBUG'
+    $options.debug = true
+    $logger.level = Logger::DEBUG
+  end
 
   GetoptLong.new(
     ['--bridge','-b',GetoptLong::REQUIRED_ARGUMENT],
@@ -203,8 +217,9 @@ begin
   end
 
   path = ARGV.shift || "#{ENV['PWD']}/libvirt_instance.xml"
-  $stdout.puts "Domain name #{$options.name} with MAC-address #{$options.mac}"
-  Virsh::config(File.expand_path(path))
+  path = File.expand_path(path)
+  Virsh::config(path)
+  $stdout.puts "#{$options.name} (#{$options.mac}) -> #{path}"
 
 rescue => exc
   $stderr.puts "ERROR: #{exc.message}"
