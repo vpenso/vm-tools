@@ -139,7 +139,7 @@ begin
   end
   config_file = "#{options.path}/ssh_config"
   
-  if File.exists? config_file and not options.overwrite
+  if File.exist? config_file and not options.overwrite
     $stdout.print "Overwrite #{config_file}? (Enter/Y/y to continue) "
     answer = $stdin.gets.chomp
     exit 0 unless answer.empty? or "Y" == answer.upcase
@@ -161,7 +161,7 @@ begin
     System::exec('mkdir keys') unless File.directory?(path)
     # SSH key name
     key = "#{path}/id_rsa"
-    unless File.exists?(key)
+    unless File.exist?(key)
       System::exec("ssh-keygen -q -t rsa -b 2048 -N '' -f keys/id_rsa") 
       $stdout.puts("Password-less SSH key-pair create in #{path}")
     end
@@ -172,7 +172,7 @@ begin
   # The user provides an SSH key
   #
   else 
-    if File.exists? options.id_file
+    if File.exist? options.id_file
       config << "IdentityFile #{options.id_file}"
     else
       raise("SSH identity file missing #{options.id_file}")

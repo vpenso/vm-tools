@@ -33,7 +33,7 @@ begin
   EOF
 
   # Create a configuration file if missing
-  unless File.exists? config_file
+  unless File.exist? config_file
     File.open(config_file,'w') do |f|
       f.puts config.gsub(/^    /,'')
     end

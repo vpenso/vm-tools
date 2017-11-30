@@ -107,7 +107,7 @@ class Virsh
   class Image
 
     def self.create(path,size = '40G')
-      if File.exists?(path) and not $options.overwrite
+      if File.exist?(path) and not $options.overwrite
         return unless CLI.ask?("Overwrite #{path}?")
       end
       dir = File.dirname(path)
@@ -222,7 +222,7 @@ class Virsh
     name = self.instance(name)
     # absolute path to the libvirt configuration
     config = "#{self.path(name)}/libvirt_instance.xml"
-    if File.exists?(config)
+    if File.exist?(config)
       # define the virtual machine instance if required
       System::run("virsh define #{config} | sed '/^$/d'") unless self.defined?(name)
       # start the virtual machine instance if requried
