@@ -25,7 +25,7 @@ The following example uses the Chef [base](https://github.com/vpenso/chef-base) 
 >>> chef-instance solo -r "role[apt]"
 ```
 
-All **configurations required by Chef** are available in the directory of the virtual machine instance:
+All **configurations required by Chef** are available under the directory path '/var/tmp/chef' of the virtual machine instance:
 
 * The `cookbooks/`, `roles/`, and `data-bags/` sub-directories contain the required files (or links to them).
 * The files `chef_config.rb`, and `chef_attributes.json` include the configuration for `chef-client`.
