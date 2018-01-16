@@ -128,7 +128,7 @@ devops
 # login as devops and exeute a command with sudo
 >>> ssh-instance -s whoami                                                
 root
-# multple commands with sudo...
+# multiple commands with sudo...
 >>> ssh-instance -s 'apt install -qy zsh' && ssh-instance -s '/usr/bin/env zsh'
 # pipes work as expected
 >>> ssh-instance -r 'cat /etc/passwd' | grep ^devops
