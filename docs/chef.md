@@ -22,7 +22,7 @@ The following example uses the Chef [base](https://github.com/vpenso/chef-base) 
 >>> chef-instance cookbook base
 >>> chef-instance role ~/projects/chef/cookbooks/base/test/roles/apt.rb
 # execute chef-solo in the virtual machine instance
->>> chef-instance solo -r "role[ssh]"
+>>> chef-instance solo -r "role[apt]"
 ```
 
 All **configurations required by Chef** are available in the directory of the virtual machine instance:
