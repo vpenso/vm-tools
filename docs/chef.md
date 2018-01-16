@@ -13,6 +13,7 @@ The ↴ [chef-instance](../bin/chef-instance) program uploads cookbook, roles, a
 The following example uses the Chef [base](https://github.com/vpenso/chef-base) cookbook.
 
 ```bash
+>>> git clone https://github.com/vpenso/chef-base ~/chef/cookbooks/base
 # define the search paths for Chef cookbooks
 >>> export CHEF_COOKBOOKS=~/chef/cookbooks:~/chef/site-cookbooks
 # change to the directory of a virtual machine instance

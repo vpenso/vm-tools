@@ -16,7 +16,7 @@ The tool-chain is based on software available in all modern Linux distributions:
 ```bash
 >>> sudo apt -y install libvirt-daemon-system libvirt-dev libvirt-clients \
                         virt-manager virt-viewer virt-top virtinst \
-                        qemu-utils qemu-kvm libguestfs-tools ovmf
+                        qemu-utils qemu-kvm libguestfs-tools ovmf ruby
 ```
 
 **Fedora/CentOS** packages required:
