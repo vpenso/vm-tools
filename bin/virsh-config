@@ -55,7 +55,7 @@ class Virsh
     dir = File.dirname(path)
 
     unless $options.overwrite 
-      if File.exists? path
+      if File.exist? path
         $stdout.print "Overwrite #{path}? (Enter/Y/y to continue) "
         answer = $stdin.gets.chomp
         exit 0 unless answer.empty? or "Y" == answer.upcase

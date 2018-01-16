@@ -142,7 +142,7 @@ begin
     remote_path = ARGV.shift || '/'
 
     args = ['-o idmap=user','-o allow_root']
-    if  File.exists?("#{ENV['PWD']}/ssh_config")
+    if  File.exist?("#{ENV['PWD']}/ssh_config")
       args << '-F $PWD/ssh_config'
     else
       raise('Missing SSH configuration for virtual machine in $PWD/ssh_config!')
