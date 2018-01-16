@@ -40,6 +40,7 @@ The following sections describe the steps illustrated above in more detail.
 **Login to a virtual machine** using the following commands:
 
 ```bash
+# login as devops
 >>> vm login lxdev03
 # login as devops run sudo
 >>> vm login lxdev03 -s
