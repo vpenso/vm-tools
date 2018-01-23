@@ -3,7 +3,7 @@
 The ↴ [virsh-instance](../bin/virsh-instance) program creates new **virtual machine instances**:
 
 * A virtual machine instance is derived from a virtual machine image (cf. [image](image.md)).
-* Each virtual machine instance uses a dedicated network configuration (cf [network](network.md)).
+* Each virtual machine instance uses a dedicated network configuration (cf. [network](network.md)).
 * The virtual machine instance configuration and the disk image is deployed into a sub-directory of the path defined by the environment variable **`VM_INSTANCE_PATH`**.
 
 ## Usage
