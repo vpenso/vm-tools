@@ -34,7 +34,7 @@ function virsh-nodeset() {
     "execute"|"exec"|"ex"|"e")
       shift
       local args=$@
-      nodeset-loop -s virsh-instance exec {} "'$args'"
+      nodeset-loop -s "cd \$(virsh-instance path {}) ; ssh-instance -r '$args'"
       ;;
     "shadow"|"sh"|"s")
       img=${2:-centos7}
