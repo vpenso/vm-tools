@@ -62,9 +62,9 @@ function vm() {
     virsh destroy $(virsh-instance fqdn $1)
     ;;
   "list"|"l")                  virsh list --all | tail -n +3 | sed '/^$/d' | tr -s ' ' | cut -d' ' -f3- ;;
-  "login"|"lo"|"exec"|"ex")    vm cd $1 ; shift ; ssh-instance $@ ;;
+  "login"|"lo"|"exec"|"ex")    vm cd $1 ; shift ; ssh-instance $@ ; cd -;;
   "lookup"|"lk")               virsh-nat-bridge lookup $@ ;;
-  "mount"|"m")                 vm cd $1 ; shift ; sshfs-instance mount $@ ;;
+  "mount"|"m")                 vm cd $1 ; shift ; sshfs-instance mount $@ ; cd - ;;
   "nat"|"n")                   virsh-nat-bridge $@ ;;
   "path"|"p")                  virsh-instance path $@ ;;
   "remove"|"r")                virsh-instance remove $@ ;;
@@ -72,7 +72,7 @@ function vm() {
   "shadow"|"s")                virsh-instance shadow $@ ;;
   "start"|"st")                virsh start $(virsh-instance fqdn $1) ;;
   "sync"|"sy")                 vm cd $1 ; shift ; rsync-instance $@ ; cd - ;;
-  "umount"|"um")               vm cd $1 ; sshfs-instance umount ;;
+  "umount"|"um")               vm cd $1 ; sshfs-instance umount ; cd - ;;
   "undefine"|"u")              virsh undefine $(virsh-instance fqdn $1) ;;
   *) 
     echo "$VM_FUNCTION_HELP"
