@@ -68,7 +68,6 @@ The [workflow](docs/workflow.md) document explains in great detail how to effici
 Configure a virtual machine instance with a Configuration Management System:
 
 * [Chef](docs/chef.md) - Configure a VM instance with `chef-inctance` from Chef Software, Inc.
-* [SaltStack](docs/saltstack.md) - Build a test cluster with a SaltStack master and a couple of minions.
 
 # License
 
