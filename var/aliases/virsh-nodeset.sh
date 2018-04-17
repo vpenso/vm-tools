@@ -48,3 +48,5 @@ function virsh-nodeset() {
       ;;
   esac
 }
+
+alias vn=virsh-nodeset
