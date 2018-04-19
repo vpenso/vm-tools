@@ -69,6 +69,10 @@ Configure a virtual machine instance with a Configuration Management System:
 
 * [Chef](docs/chef.md) - Configure a VM instance with `chef-inctance` from Chef Software, Inc.
 
+Find a comprehensive example using this tool-chain with [SaltStack](https://docs.saltstack.com) at:
+
+<https://github.com/vpenso/saltstack-slurm-example>
+
 # License
 
 Copyright 2012-2017 Victor Penso
