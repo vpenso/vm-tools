@@ -14,15 +14,16 @@ The tool-chain is based on software available in all modern Linux distributions:
 
 
 ```bash
->>> sudo apt -y install libvirt-daemon-system libvirt-dev libvirt-clients \
-                        virt-manager virt-viewer virt-top virtinst \
-                        qemu-utils qemu-kvm libguestfs-tools ovmf ruby
+>>> sudo apt -y install \
+  libvirt-daemon-system libvirt-dev libvirt-clients \
+  virt-manager virt-viewer virt-top virtinst clustershell \
+  qemu-utils qemu-kvm libguestfs-tools ovmf ruby 
 ```
 
 **Fedora/CentOS** packages required:
 
 ```bash
->>> sudo dnf -y install @virtualization
+>>> sudo dnf -y install @virtualization clustershell
 ```
 
 ### Configuration
@@ -57,11 +58,11 @@ It will add the [bin/](bin/) sub-directory to your `PATH` and define several add
 
 The [docs/](docs) sub-directory includes all documentation required to us this tool-chain:
 
-* The [network](docs/network.md) document explains the setup of the **virtual machine network**.
-* The [image](docs/image.md) document describes how to create re-usable **virtual machine images** (aka templates).
-* The [instance](docs/instance.md) document shows how to use virtual machine images to create any number of **virtual machine instances** for development and testing.
+* [docs/network](docs/network.md) explains the setup of the **virtual machine network**.
+* [docs/image](docs/image.md) describes how to create re-usable **virtual machine images** (aka templates).
+* [docs/instance](docs/instance.md) hows how to use virtual machine images to create any number of **virtual machine instances** for development and testing.
 
-The [workflow](docs/workflow.md) document explains in great detail how to efficiently interact with virtual machine instances.
+[docs/workflow](docs/workflow.md) document explains in great detail how to efficiently interact with virtual machine instances.
 
 ### Provisioning
 
