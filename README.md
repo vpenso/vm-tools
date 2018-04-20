@@ -67,7 +67,10 @@ The [workflow](docs/workflow.md) document explains in great detail how to effici
 
 Configure a virtual machine instance with a Configuration Management System:
 
-* [Chef](docs/chef.md) - Configure a VM instance with `chef-inctance` from Chef Software, Inc.
+* [docs/chef.md](docs/chef.md) describes how to us the `chef-instance` command 
+  to execute `chef-client` in a virtual machine instance.
+* [docs/salt.md](docs/salt.md) describes how to create a configuration to use 
+  Salt SSH with `salt-instance`
 
 Find a comprehensive example using this tool-chain with [SaltStack](https://docs.saltstack.com) at:
 
@@ -75,7 +78,7 @@ Find a comprehensive example using this tool-chain with [SaltStack](https://docs
 
 # License
 
-Copyright 2012-2017 Victor Penso
+Copyright 2012-2018 Victor Penso
 
 This is free software: you can redistribute it
 and/or modify it under the terms of the GNU General Public
