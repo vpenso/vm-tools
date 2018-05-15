@@ -105,6 +105,12 @@ The sub-command **`exec` will run a command** given by argument on a specified v
 
 ```bash
 # login as user devops
+>>> vm exec lxdev03 whoami  
+devops
+# use quotes to execute multiple commands
+>>> vm exec lxdev03 whoami ; pwd
+devops
+/home/vpenso
 >>> vm exec lxdev03 'whoami ; pwd'  
 devops
 /home/devops
@@ -137,6 +143,19 @@ devops:x:1000:1000:devops,,,:/home/devops:/bin/bash
 >>> echo text | ssh-instance 'cat - > /tmp/input.txt' && ssh-instance 'cat /tmp/input.txt'
 text
 ```
+
+Make sure to use a **double dash** `--` if options need to be passed to the commands executed in the virtual machine instance:
+
+```bash
+# the option parser presents an error message
+>>> vm exec lxcm01 -r ls -l '/etc/profile.d/'    
+getopt: invalid option -- 'l'
+...
+# use dashs to protect the -l option to ls
+>>> vm exec lxcm01 -r -- ls -l '/etc/profile.d/'
+...
+```
+
 
 ## Copy Files
 

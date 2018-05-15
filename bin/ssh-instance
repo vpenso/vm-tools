@@ -67,7 +67,7 @@ function _error() {
 sudo=
 options=
 # Parse the command line options
-ARGS=$(getopt -q -o hsrdA -l "help,sudo,root,debug" -- "$@")
+ARGS=$(getopt -o hsrdA -l "help,sudo,root,debug" -- "$@")
 eval set -- "$ARGS"
 while true; do
   case "$1" in
@@ -111,8 +111,8 @@ fi
 
 
 command="$sudo$command"
-_debug "Execute command [ssh -gt $options $host $command]"
-ssh -A -gt $options $host $command 2>/dev/null
+_debug "Execute command [ssh -gt $options $host \"$command\"]"
+ssh -A -gt $options $host "$command" 2>/dev/null
 if [ $? -ne 0 ]
 then
   _error "Host [$host] failed to execute [$@]!"
