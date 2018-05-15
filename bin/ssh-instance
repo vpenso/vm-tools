@@ -67,7 +67,7 @@ function _error() {
 sudo=
 options=
 # Parse the command line options
-ARGS=$(getopt -o hsrdA -l "help,sudo,root,debug" -- "$@")
+ARGS=$(getopt -q -o hsrdA -l "help,sudo,root,debug" -- "$@")
 eval set -- "$ARGS"
 while true; do
   case "$1" in
@@ -101,21 +101,12 @@ then
   options="-F $PWD/ssh_config $options"
 fi
 
-host=
+host=instance
 command=
 if [ $# -eq 0 ] ; then
-  host=instance
   command="/usr/bin/env bash"
-elif [ $# -eq 1 ] ; then
-  host=instance
-  command="$@"
-elif [ $# -eq 2 ] ; then
-  host=$1
-  shift
-  command="$@"
 else
-  _error "To many arguments!"
-  exit 1
+  command="$@"
 fi
 
 
