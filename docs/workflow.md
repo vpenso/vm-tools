@@ -148,12 +148,21 @@ Make sure to use a **double dash** `--` if options need to be passed to the comm
 
 ```bash
 # the option parser presents an error message
->>> vm exec lxcm01 -r ls -l '/etc/profile.d/'    
+>>> vm exec lxdev01 -r ls -l /etc/profile.d/
 getopt: invalid option -- 'l'
 ...
 # use dashs to protect the -l option to ls
->>> vm exec lxcm01 -r -- ls -l '/etc/profile.d/'
+>>> vm exec lxdev01 -r -- ls -l /etc/profile.d/
 ...
+```
+
+Make sure to handle globbing in your shell:
+
+```bash
+# use qoutation
+>>> vm exec lxcm01 -r -- ls -l '/etc/profile.d/*.sh'
+# or disable globbing
+>>> noglob vm exec lxcm01 -r -- ls -l /etc/profile.d/*.sh
 ```
 
 
