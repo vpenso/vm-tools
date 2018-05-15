@@ -107,29 +107,18 @@ fi
 
 RSYNC_RSH="$RSYNC_RSH $user"
 
-if [ $# -ne 2 ]
-then
-  _error "Not enough arguments!"
-  exit 1
-fi
-
-(echo "$1" | grep '^:' >/dev/null)
-if [ $? -eq 0 ]
-then
-  src="instance$1"
-  export RSYNC_RSH
-else
-  src=$1
-fi
-
-(echo "$2" | grep '^:' >/dev/null)
-if [ $? -eq 0 ]
-then
-  dst="instance$2"
-  export RSYNC_RSH
-else
-  dst=$2
-fi
+paths=
+for var in "$@"
+do
+  (echo "$var" | grep '^:' >/dev/null)
+  if [ $? -eq 0 ]
+  then
+    paths="$paths instance$var "
+    export RSYNC_RSH
+  else
+    paths="$paths $var "
+  fi
+done
 
 # Ignore version control system directories
 options="$options --exclude '.git' --exclude '.gitignore' --exclude '.svn'"
@@ -137,7 +126,7 @@ options="$options --exclude '.git' --exclude '.gitignore' --exclude '.svn'"
 options="$options $relative_path --omit-dir-times --recursive --copy-links --copy-dirlinks --delete"
 # Verbose
 options="$options --verbose"
-command="$options $src $dst" 
+command="$options $paths" 
 _debug "[sync] rsync$command"
 
 rsync $command

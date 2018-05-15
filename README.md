@@ -1,6 +1,6 @@
 # Virtual Machine Tools
 
-The programs distributed within this repository enable users to quickly configure and **use virtual machines as development and test environment** on a Linux workstation. Programs in the [bin/](bin) sub-directory build a tool-chain to bootstrap many virtual machine instances in a very customizable way. 
+The programs distributed within this repository enable users to quickly configure and **use virtual machines as development and test environment** on a Linux workstation. Programs in the [bin/](bin) sub-directory build a tool-chain to bootstrap multiple virtual machine instances in a very customizable way. 
 
 The tool-chain is based on software available in all modern Linux distributions: 
 
@@ -56,14 +56,14 @@ It will add the [bin/](bin/) sub-directory to your `PATH` and define several add
 
 ## Usage
 
-The [docs/](docs) sub-directory includes all documentation required to us this tool-chain:
+The [docs/](docs) sub-directory includes all documentation required to use this tool-chain:
 
-* [docs/network](docs/network.md) explains the setup of the **virtual machine network**
-* [docs/image](docs/image.md) describes how to create re-usable **virtual machine images** 
+* [docs/network.md](docs/network.md) explains the setup of the **virtual machine network**
+* [docs/image.md](docs/image.md) describes how to create re-usable **virtual machine images** 
   (aka templates)
-* [docs/instance](docs/instance.md) shows how to use virtual machine images to create 
+* [docs/instance.md](docs/instance.md) shows how to use virtual machine images to create 
   any number of **virtual machine instances** for development and testing
-* [docs/workflow](docs/workflow.md) explains in great detail how to efficiently 
+* [docs/workflow.md](docs/workflow.md) explains in great detail how to efficiently 
   interact with virtual machine instances
 * [docs/nodeset.md](docs/nodeset.md) exemplifies operation of multiple virtual 
   machine instance
