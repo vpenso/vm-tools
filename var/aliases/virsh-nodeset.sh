@@ -52,6 +52,10 @@ function virsh-nodeset() {
     "remove"|"rm"|"r")
       nodeset-loop virsh-instance remove {}
       ;;
+    "restart"|"rs")
+      nodeset-loop virsh-instance shutdown {}
+      nodeset-loop virsh-instance start {}
+      ;;
     *)
       echo "Usage: virsh-nodeset (c)ommand|(e)xecute|(s)hadow|(r)emove [args]"
       ;;
