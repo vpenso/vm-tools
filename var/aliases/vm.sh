@@ -22,10 +22,12 @@ vm <command>
  cd  <name>                   change to an instance directory
  c , create <file>            start instance from XML configuration
  cl, clone <image> <name>     copy image, and start instance
+ co, config <args>            configure instance (cf. virsh-config)
  d , define <file>            define an instance from an XML configuration
  ex, exec <name> <args>       execute a command in instance
  k , kill <name>              destroy an instance
  i , image                    list available images
+ ip                           instance IP-address
  m , mount <name>             mount the instance rootfs
  l , list                     list all instances
  lo, login <name> <args>      login into an instance
@@ -55,8 +57,15 @@ function vm() {
     ;;
   "clone"|"cl")                virsh-instance clone $@ ;;
   "create"|"c")                virsh create $@ ;;
+  "config"|"co")               
+    vm cd $1
+    shift
+    virsh-config $@ 
+    cd - >/dev/null
+    ;;
   "define"|"d")                virsh define $@ ;;
   "image"|"i")                 virsh-instance image ;;
+  "ip")                        virsh-nat-bridge lookup $1 | cut -d' ' -f2 ;;
   "kill"|"k")        
     virsh undefine $(virsh-instance fqdn $1)
     virsh destroy $(virsh-instance fqdn $1)
