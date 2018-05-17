@@ -30,7 +30,16 @@ function virsh-nodeset() {
         $@
         cd - >/dev/null
       done
-    ;;
+      ;;
+    "config"|"co")
+      shift
+      for node in $(nodeset -e $NODES)
+      do
+        cd $(virsh-instance path $node)
+        virsh-config $@
+        cd - >/dev/null
+      done
+      ;;
     "execute"|"exec"|"ex"|"e")
       shift
       local args=$@
