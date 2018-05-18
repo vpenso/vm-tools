@@ -21,6 +21,29 @@ require 'getoptlong'
 require 'logger'
 require 'erb'
 
+class System
+  def self.exec(command)
+    command = command.gsub(/\n/," ").strip.gsub(/\s+/,' ')
+    $logger.debug "Exec [#{command}]"
+    # Execute command as subprocess and return the exit code
+    pipe = IO.popen(command)
+    # Get the process ID from the child
+    pid = pipe.pid
+    # Read the output from the stream
+    output = pipe.read
+    # Wait for successful return and pass back the code to the caller
+    Process.wait(pid)
+    state=$?
+    $logger.debug "Returned with #{state}"
+    if state == 0
+      return output.gsub(/^$\n/, '')
+    else
+      $logger.warn "Failed to execute [#{command}]"
+      return nil
+    end
+  end
+end
+
 exec_name = File.split(__FILE__)[-1]
 HELP = <<EOF
 #{exec_name} [<options>] [<path>]
@@ -61,12 +84,6 @@ class Virsh
         exit 0 unless answer.empty? or "Y" == answer.upcase
       end
     end
-    
-    name = if $options.name.nil?
-             dir.split('/')[-1]
-           else
-             $options.name
-           end
 
     disks_list = if $options.disks.empty?
                    disks = Dir.glob("#{dir}/disk*.img")
@@ -115,7 +132,6 @@ class Virsh
     end
   end
 
-
 end
 
 begin
@@ -127,7 +143,7 @@ begin
   $options.debug = false
   $options.file = nil
   $options.bridge = 'nbr0'
-  $options.mac = '02:FF:0A:0A:06:1C'
+  $options.mac = String.new
   $options.memory = 1
   $options.vcpu = 1
   $options.vns = false
@@ -180,6 +196,7 @@ begin
       $options.console = true
     when '--debug'
       $options.debug = true
+      $logger.level = Logger::DEBUG
     when '--disks'
       arg.split(',').each do |disk|
         $options.disks << disk
@@ -216,6 +233,12 @@ begin
     end
   end
 
+  # if the user has node set a specific MAC address by command option
+  if $options.mac.empty?
+    $options.mac = System::exec("virsh-nat-bridge lookup #{$options.name}").split(' ')[-1]
+    $logger.debug "MAC-address set to #{$options.mac}"
+  end
+
   path = ARGV.shift || "#{ENV['PWD']}/libvirt_instance.xml"
   path = File.expand_path(path)
   Virsh::config(path)
@@ -238,7 +261,7 @@ exit 0
 __END__
 <?xml version="1.0"?>
 <domain type="kvm">
-  <name><%= name %></name>
+  <name><%= $options.name %></name>
   <memory unit='GB'><%= $options.memory %></memory>
   <vcpu><%= $options.vcpu %></vcpu>
   <os>
