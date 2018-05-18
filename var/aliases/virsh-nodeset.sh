@@ -15,6 +15,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+VN_FUNCTION_HELP="\
+vn <command>
+
+command:
+  c,  command <args>        execute a command in the path of each VM instance
+  co, config <args>         write a libvirt configuration file (cf. virsh-config)
+  ex, execute <args>        execute a command in each VM instance 
+  st, start                 start all VM instances
+  sh, shutdown              shutdown all VM instances
+  sh, shadow <image>        start VM instances using a template
+  rm, remove                remove all VM instances
+  rs, restart               restart all VM instances"
+
 ##
 # Operate on a nodeset of virtual machines
 #
@@ -49,15 +62,22 @@ function virsh-nodeset() {
       img=${2:-centos7}
       nodeset-loop virsh-instance shadow $img {}
       ;;
+    "start"|"st")
+      nodeset-loop virsh-instance start {}
+      ;;
+    "shutdown"|"sh")
+      nodeset-loop virsh-instance shutdown {}
+      ;;
     "remove"|"rm"|"r")
       nodeset-loop virsh-instance remove {}
       ;;
     "restart"|"rs")
       nodeset-loop virsh-instance shutdown {}
+      sleep 2
       nodeset-loop virsh-instance start {}
       ;;
     *)
-      echo "Usage: virsh-nodeset (c)ommand|(e)xecute|(s)hadow|(r)emove [args]"
+      echo "$VN_FUNCTION_HELP"
       ;;
   esac
 }
