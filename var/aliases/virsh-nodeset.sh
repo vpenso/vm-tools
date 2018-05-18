@@ -16,15 +16,20 @@
 #
 
 VN_FUNCTION_HELP="\
-vn <command>
+virsh-nodeset <command>
+
+Loops over a nodeset of VMs define by the \$NODES environment variable.
 
 command:
   c,  command <args>        execute a command in the path of each VM instance
+                            ('{}' brackets interpolated with node FQDN)
   co, config <args>         write a libvirt configuration file (cf. virsh-config)
-  ex, execute <args>        execute a command in each VM instance 
+  ex, execute <args>        execute a command in each VM instance
+  h,  help                  show this help text
   st, start                 start all VM instances
   sh, shutdown              shutdown all VM instances
   sh, shadow <image>        start VM instances using a template
+  rd, redefine              shutdown, undefine, define, start VM instances
   rm, remove                remove all VM instances
   rs, restart               restart all VM instances"
 
@@ -32,46 +37,76 @@ command:
 # Operate on a nodeset of virtual machines
 #
 function virsh-nodeset() {
-  local command=$1
+
+  # evaluate and remove command argument
+  local command=
+  if [ "$#" -ne 0 ]
+  then
+    command=$1
+    shift
+  else 
+    command=help
+  fi
+
+  # if unset or empty
+  if [ -z $NODES ]
+  then
+    echo -e "Error: Please set the environment variable \$NODES!\n"
+    command=help
+  fi    
+
+  # run command given by the user
   case $command in
-    "command"|"cmd"|"c")
-      shift
+    command|cmd|c)
       for node in $(nodeset -e $NODES)
       do
-        echo $node
-        cd $(virsh-instance path $node)
-        $@
+        local fqdn=$(virsh-instance fqdn $node)
+        cd $(virsh-instance path $fqdn)
+        # replace brackets with node FQDN
+        ${@//\{\}/$fqdn}
         cd - >/dev/null
       done
       ;;
-    "config"|"co")
-      shift
+    config|co)
       for node in $(nodeset -e $NODES)
       do
-        cd $(virsh-instance path $node)
-        virsh-config $@
+        local fqdn=$(virsh-instance fqdn $node)
+        cd $(virsh-instance path $fqdn)
+        virsh-config -n $fqdn $@
         cd - >/dev/null
       done
       ;;
-    "execute"|"exec"|"ex"|"e")
-      shift
+    execute|exec|ex|e)
       local args=$@
       nodeset-loop -s "cd \$(virsh-instance path {}) ; ssh-instance -r '$args'"
       ;;
-    "shadow"|"sh"|"s")
-      img=${2:-centos7}
+    shadow|sh|s)
+      img=${1:-centos7}
       nodeset-loop virsh-instance shadow $img {}
       ;;
-    "start"|"st")
+    start|st)
       nodeset-loop virsh-instance start {}
       ;;
-    "shutdown"|"sh")
+    shutdown|sh)
       nodeset-loop virsh-instance shutdown {}
       ;;
-    "remove"|"rm"|"r")
+    remove|rm|r)
       nodeset-loop virsh-instance remove {}
       ;;
-    "restart"|"rs")
+    redefine|rd)
+      for node in $(nodeset -e $NODES)
+      do
+        local fqdn=$(virsh-instance fqdn $node)
+        cd $(virsh-instance path $fqdn)
+        virsh shutdown $fqdn
+        sleep 2
+        virsh undefine $fqdn 
+        virsh define libvirt_instance.xml
+        virsh start $fqdn
+        cd - >/dev/null
+      done
+      ;;
+    restart|rs)
       nodeset-loop virsh-instance shutdown {}
       sleep 2
       nodeset-loop virsh-instance start {}
