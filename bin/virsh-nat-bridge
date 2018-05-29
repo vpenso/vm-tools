@@ -222,7 +222,7 @@ begin
   $options.nodes = %w( 
     lxdns01 lxdns02
     lxcm01 lxcm02 
-    lxcc01 lxcc02
+    lxcc01 lxcc02 lxcc03 lxcc04
     lxrm01 lxrm02
     lxb001 lxb002 lxb003 lxb004 lxb005 lxb006 lxb007 lxb008 lxb009 lxb010
     lxmon01 lxmon02 lxmon03 lxmon04 lxmon05
