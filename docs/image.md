@@ -137,15 +137,23 @@ Domain lxdev01.devops.test created from ./libvirt_instance.xml
 
 ### Password-less Login
 
+Depending on the Linux distribution you may need to add the `devops` user after the installation:
+
+```bash
+useradd -d /home/devops -m devops && passwd devops
+```
+
 The ↴ [ssh-instance](../bin/ssh-instance) command allows login to and the execution of command in the virtual machine. Similar the ↴ [rsync-instance](..bin/rsync-instance) allow top copy file into and from the virtual machine. 
 
 You may want to **install Sudo and Rsync** in the virtual machine unless this has been part of the basic OS deployment beforehand:
 
 ```bash
-# install required packages on Debian Stretch
->>> ssh-instance "su -lc 'apt install rsync sudo'"  # login as devops, execute command as root user
-# install required packages on CentOS
->>> ssh-instance -r 'yum install rsync sudo'
+# Debian (login as devops, execute command as root user)
+ssh-instance "su -lc 'apt install rsync sudo'"  
+# CentOS
+ssh-instance -r 'yum install rsync sudo'
+# Arch
+ssh-instance "su -lc 'pacman -S --noconfirm rsync sudo'"
 ```
 
 Use these tools to **enable password-less SSH login** to the virtual machine image for the users root and devops: 
