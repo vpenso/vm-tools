@@ -25,7 +25,7 @@ virt-install --name centos7 --ram 2048 --os-type linux --virt-type kvm --network
            --location http://mirror.centos.org/centos-7/7.3.1611/os/x86_64/
 ## -- ArchLinux --
 mkdir -p $VM_IMAGE_PATH/arch && cd $VM_IMAGE_PATH/arch
-wget -O arch http://ftp-stud.hs-esslingen.de/pub/Mirrors/archlinux/iso/2018.06.01/archlinux-2018.06.01-x86_64.iso
+wget -O arch.iso http://ftp-stud.hs-esslingen.de/pub/Mirrors/archlinux/iso/2018.06.01/archlinux-2018.06.01-x86_64.iso
 virt-install --name arch --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
          --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio --cdrom arch.iso
 ```

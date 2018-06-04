@@ -71,7 +71,7 @@ begin
   options.debug = false
   options.user = 'devops'
   options.id_file = String.new
-  options.ip = '10.1.1.28'
+  options.ip = '10.1.1.30'
   options.overwrite = false
   options.kerberos = false
 
