@@ -26,6 +26,21 @@ The tool-chain is based on software available in all modern Linux distributions:
 >>> sudo dnf -y install @virtualization clustershell
 ```
 
+**ArchLinux**
+
+```bash
+sudo pacman -Sy \
+       bridge-utils \
+       dnsmasq \
+       ebtables \
+       iptables \
+       libvirt \
+       virt-install \
+       virt-manager \
+       virt-viewer \
+       qemu 
+```
+
 ### Configuration
 
 Enable your user to manage virtual machines (re-login to activate these group rights):
