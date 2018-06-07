@@ -10,6 +10,13 @@ The tool-chain is based on software available in all modern Linux distributions:
 
 ## Prerequisites 
 
+```bash
+# check for hardware support
+LC_ALL=C lscpu | grep Virtualization
+# check kernel support
+zgrep CONFIG_KVM /proc/config.gz
+```
+
 **Debian** packages required:
 
 
@@ -23,7 +30,9 @@ The tool-chain is based on software available in all modern Linux distributions:
 **Fedora/CentOS** packages required:
 
 ```bash
->>> sudo dnf -y install @virtualization clustershell
+sudo dnf -y install \
+      @virtualization \
+      clustershell
 ```
 
 **ArchLinux**
@@ -35,6 +44,8 @@ sudo pacman -Sy \
        ebtables \
        iptables \
        libvirt \
+       openbsd-netcat \
+       vde2 \
        virt-install \
        virt-manager \
        virt-viewer \
