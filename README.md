@@ -38,7 +38,7 @@ sudo dnf -y install \
 **ArchLinux**
 
 ```bash
-sudo pacman -Sy \
+sudo pacman -Sy --noconfirm \
        bridge-utils \
        dnsmasq \
        ebtables \
@@ -54,7 +54,7 @@ sudo pacman -Sy \
 
 ### Configuration
 
-Enable your user to manage virtual machines (re-login to activate these group rights):
+Enable your user to manage virtual machines, **re-login** to activate these group rights:
 
 ```bash
 >>> sudo usermod -a -G libvirt,kvm `id -un`      
