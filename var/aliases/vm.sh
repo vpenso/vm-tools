@@ -33,6 +33,7 @@ vm <command>
  lo, login <name> <args>      login into an instance
  lk, lookup <name>            show network configuration tuple
  r , remove <name>            delete an instance
+ rb, reboot <name>            reboot an instance
  re, redefine <name>          re-define instance after configuration change
  p , path <name>              print path to an instance
  s , shadow <image> <name>    shadow image, and start instance
@@ -86,6 +87,7 @@ function vm() {
   mount|m)                 vm cd $1 ; shift ; sshfs-instance mount $@ ; cd - >/dev/null;;
   nat|n)                   virsh-nat-bridge $@ ;;
   path|p)                  virsh-instance path $@ ;;
+  reboot|rb)               virsh reboot $(virsh-instance fqdn $1) ;;
   remove|r)                virsh-instance remove $@ ;;
   redefine|re)
     virsh undefine $(virsh-instance fqdn $1)
