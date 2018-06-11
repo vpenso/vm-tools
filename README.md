@@ -15,29 +15,26 @@ The tool-chain is based on software available in all modern Linux distributions:
 LC_ALL=C lscpu | grep Virtualization
 # check kernel support
 zgrep CONFIG_KVM /proc/config.gz
-```
-
-**Debian** packages required:
-
-
-```bash
->>> sudo apt -y install \
-  libvirt-daemon-system libvirt-dev libvirt-clients \
-  virt-manager virt-viewer virt-top virtinst clustershell \
-  qemu-utils qemu-kvm libguestfs-tools ovmf ruby 
-```
-
-**Fedora/CentOS** packages required:
-
-```bash
+# Debian packages
+sudo apt -y install \
+       clustershell \
+       libguestfs-tools \
+       libvirt-clients \
+       libvirt-daemon-system \
+       libvirt-dev \
+       ovmf \
+       qemu-kvm \
+       qemu-utils \
+       ruby \
+       virt-manager \
+       virt-top \
+       virt-viewer \
+       virtinst
+# Fedora/CentOS packages
 sudo dnf -y install \
       @virtualization \
       clustershell
-```
-
-**ArchLinux**
-
-```bash
+# ArchLinux packages
 sudo pacman -Sy --noconfirm \
        bridge-utils \
        dnsmasq \
@@ -45,14 +42,14 @@ sudo pacman -Sy --noconfirm \
        iptables \
        libvirt \
        openbsd-netcat \
+       ruby \
        vde2 \
        virt-install \
        virt-manager \
        virt-viewer \
-       qemu 
+       qemu \
+       qemu-block-rbd
 ```
-
-### Configuration
 
 Enable your user to manage virtual machines, **re-login** to activate these group rights:
 
