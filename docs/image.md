@@ -19,6 +19,7 @@ virt-install --name debian9 --ram 2048 --os-type linux --virt-type kvm --network
          --graphics none --console pty,target_type=serial --extra-args 'console=ttyS0,115200n8 serial' \
          --location http://deb.debian.org/debian/dists/stretch/main/installer-amd64/
 ## -- CentOS 7 --
+mkdir -p $VM_IMAGE_PATH/centos7 && cd $VM_IMAGE_PATH/centos7
 virt-install --name centos7 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
            --disk path=disk.img,size=100,format=qcow2,sparse=true,bus=virtio \
            --graphics none --console pty,target_type=serial --extra-args 'console=ttyS0,115200n8 serial' \
