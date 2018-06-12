@@ -23,7 +23,7 @@ mkdir -p $VM_IMAGE_PATH/centos7 && cd $VM_IMAGE_PATH/centos7
 virt-install --name centos7 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
            --disk path=disk.img,size=100,format=qcow2,sparse=true,bus=virtio \
            --graphics none --console pty,target_type=serial --extra-args 'console=ttyS0,115200n8 serial' \
-           --location http://mirror.centos.org/centos-7/7.3.1611/os/x86_64/
+           --location http://mirror.centos.org/centos-7/7.5.1804/os/x86_64/
 ## -- ArchLinux --
 mkdir -p $VM_IMAGE_PATH/arch && cd $VM_IMAGE_PATH/arch
 wget -O arch.iso http://ftp-stud.hs-esslingen.de/pub/Mirrors/archlinux/iso/2018.06.01/archlinux-2018.06.01-x86_64.iso
