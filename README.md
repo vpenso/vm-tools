@@ -67,6 +67,13 @@ group = "jdow"
 >>> sudo systemctl restart libvirtd
 ```
 
+For host access to guests on non-isolated, bridged networks, enable the libvirt NSS module:
+
+```bash
+>>> grep hosts /etc/nsswitch.conf
+hosts: files libvirt ...
+```
+
 ### Environment
 
 The shell script ↴ [source_me.sh](source_me.sh) adds the tool-chain in this repository to your shell environment:
