@@ -110,7 +110,7 @@ Configure a virtual machine instance with a Configuration Management System:
 Comprehensive example using vm-tools:
 
 * [OpenHPC Slurm Cluster with SaltStack](https://github.com/vpenso/saltstack-slurm-example) 
-* [Apaache Mesos Cluster with SaltStack](https://github.com/vpenso/mesos-example)
+* [Apache Mesos Cluster with SaltStack](https://github.com/vpenso/mesos-example)
 
 # License
 
