@@ -29,6 +29,11 @@ command:
   rd, redefine              shutdown, undefine, define, start VM instances
   rm, remove                remove all VM instances
   rs, restart               restart all VM instances
+```
+
+A simple example working on two VM instances `lxdev0[1,2]`
+
+```
 # define a nodeset environment variable
 >>> export NODES=lxdev0[1,2]
 # $NODES is used to create virtual machine instances

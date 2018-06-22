@@ -107,9 +107,10 @@ Configure a virtual machine instance with a Configuration Management System:
 * [docs/salt.md](docs/salt.md) describes how to create a configuration to use 
   Salt SSH with `salt-instance`
 
-Find a comprehensive example using this tool-chain with [SaltStack](https://docs.saltstack.com) at:
+Comprehensive example using vm-tools:
 
-<https://github.com/vpenso/saltstack-slurm-example>
+* [OpenHPC Slurm Cluster with SaltStack](https://github.com/vpenso/saltstack-slurm-example) 
+* [Apaache Mesos Cluster with SaltStack](https://github.com/vpenso/mesos-example)
 
 # License
 
