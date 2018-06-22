@@ -25,13 +25,14 @@ vm <command>
  co, config <args>            configure instance (cf. virsh-config)
  d , define <file>            define an instance from an XML configuration
  ex, exec <name> <args>       execute a command in instance
- k , kill <name>              destroy an instance
  i , image                    list available images
- ip                           instance IP-address
- m , mount <name>             mount the instance rootfs
+ ip  <name>                   instance IP-address
+ k , kill <name>              destroy an instance
  l , list                     list all instances
  lo, login <name> <args>      login into an instance
  lk, lookup <name>            show network configuration tuple
+ m , mount <name>             mount the instance rootfs
+     name <ip>                instance hostname for given IP
  r , remove <name>            delete an instance
  rb, reboot <name>            reboot an instance
  re, redefine <name>          re-define instance after configuration change
@@ -85,6 +86,9 @@ function vm() {
     ;;
   lookup|lk)               virsh-nat-bridge lookup $@ ;;
   mount|m)                 vm cd $1 ; shift ; sshfs-instance mount $@ ; cd - >/dev/null;;
+  name)
+    virsh-nat-bridge list | grep $1 | cut -d, -f2
+    ;;
   nat|n)                   virsh-nat-bridge $@ ;;
   path|p)                  virsh-instance path $@ ;;
   reboot|rb)               virsh reboot $(virsh-instance fqdn $1) ;;
