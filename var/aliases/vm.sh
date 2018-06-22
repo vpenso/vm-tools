@@ -27,12 +27,12 @@ vm <command>
  ex, exec <name> <args>       execute a command in instance
  i , image                    list available images
  ip  <name>                   instance IP-address
+ hn, hostname <ip>            instance hostname for given IP
  k , kill <name>              destroy an instance
  l , list                     list all instances
  lo, login <name> <args>      login into an instance
  lk, lookup <name>            show network configuration tuple
  m , mount <name>             mount the instance rootfs
-     name <ip>                instance hostname for given IP
  r , remove <name>            delete an instance
  rb, reboot <name>            reboot an instance
  re, redefine <name>          re-define instance after configuration change
@@ -86,7 +86,7 @@ function vm() {
     ;;
   lookup|lk)               virsh-nat-bridge lookup $@ ;;
   mount|m)                 vm cd $1 ; shift ; sshfs-instance mount $@ ; cd - >/dev/null;;
-  name)
+  hostname|name|hn)
     virsh-nat-bridge list | grep $1 | cut -d, -f2
     ;;
   nat|n)                   virsh-nat-bridge $@ ;;
