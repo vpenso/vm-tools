@@ -8,6 +8,12 @@ The tool-chain is based on software available in all modern Linux distributions:
 * [Libvirt](http://libvirt.org/) is used as generic interface on top of KVM, and to manage the virtual machine network.
 * [SSH](http://www.openssh.com/), [Rsync](http://rsync.samba.org/), and [SSHfs](http://fuse.sourceforge.net/sshfs.html) allows access the virtual machine instances.
 
+### Comprehensive examples using vm-tools
+
+* [OpenHPC Slurm Cluster with SaltStack](https://github.com/vpenso/saltstack-slurm-example) 
+* [Apache Mesos Cluster with SaltStack](https://github.com/vpenso/mesos-example)
+* [Lustre filesystem setup with SaltStack](https://github.com/mtds/lustre_kvm_saltstack)
+
 ## Prerequisites 
 
 ```bash
@@ -98,20 +104,12 @@ The [docs/](docs) sub-directory includes all documentation required to use this 
 * [docs/nodeset.md](docs/nodeset.md) exemplifies operation of multiple virtual 
   machine instance
 
-### Provisioning
-
 Configure a virtual machine instance with a Configuration Management System:
 
 * [docs/chef.md](docs/chef.md) describes how to us the `chef-instance` command 
   to execute `chef-client` in a virtual machine instance.
 * [docs/salt.md](docs/salt.md) describes how to create a configuration to use 
   Salt SSH with `salt-instance`
-
-### Comprehensive examples using vm-tools
-
-* [OpenHPC Slurm Cluster with SaltStack](https://github.com/vpenso/saltstack-slurm-example) 
-* [Apache Mesos Cluster with SaltStack](https://github.com/vpenso/mesos-example)
-* [Lustre filesystem setup with SaltStack](https://github.com/mtds/lustre_kvm_saltstack)
 
 # License
 
