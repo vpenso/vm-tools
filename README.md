@@ -8,11 +8,11 @@ The tool-chain is based on software available in all modern Linux distributions:
 * [Libvirt](http://libvirt.org/) is used as generic interface on top of KVM, and to manage the virtual machine network.
 * [SSH](http://www.openssh.com/), [Rsync](http://rsync.samba.org/), and [SSHfs](http://fuse.sourceforge.net/sshfs.html) allows access the virtual machine instances.
 
-### Comprehensive examples using vm-tools
+Comprehensive examples:
 
 * [OpenHPC Slurm Cluster with SaltStack](https://github.com/vpenso/saltstack-slurm-example) 
 * [Apache Mesos Cluster with SaltStack](https://github.com/vpenso/mesos-example)
-* [Lustre filesystem setup with SaltStack](https://github.com/mtds/lustre_kvm_saltstack)
+* [Lustre Parallel Filesystem with SaltStack](https://github.com/mtds/lustre_kvm_saltstack)
 
 ## Prerequisites 
 
