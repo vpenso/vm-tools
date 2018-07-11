@@ -8,7 +8,7 @@ The tool-chain is based on software available in all modern Linux distributions:
 * [Libvirt][01] interfaces with KVM and manages the virtual machine network.
 * [SSH](http://www.openssh.com/), [Rsync](http://rsync.samba.org/), and [SSHfs](http://fuse.sourceforge.net/sshfs.html) allows access the virtual machine instances.
 
-**Make sure to [Install and configure Libvirt][INSTALL.md]**
+**Make sure to [Install and configure Libvirt](INSTALL.md)**
 
 Comprehensive examples:
 
@@ -45,7 +45,7 @@ Configure a virtual machine instance with a Configuration Management System:
 * [docs/salt.md](docs/salt.md) describes how to create a configuration to use 
   Salt SSH with `salt-instance`
 
-# License
+## License
 
 Copyright 2012-2018 Victor Penso
 
