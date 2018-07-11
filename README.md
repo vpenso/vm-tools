@@ -5,82 +5,16 @@ The programs distributed within this repository enable users to quickly configur
 The tool-chain is based on software available in all modern Linux distributions: 
 
 * Linux [KVM](http://www.linux-kvm.org) is used as virtualization platform.
-* [Libvirt](http://libvirt.org/) is used as generic interface on top of KVM, and to manage the virtual machine network.
+* [Libvirt][01] interfaces with KVM and manages the virtual machine network.
 * [SSH](http://www.openssh.com/), [Rsync](http://rsync.samba.org/), and [SSHfs](http://fuse.sourceforge.net/sshfs.html) allows access the virtual machine instances.
+
+**Make sure to [Install and configure Libvirt][INSTALL.md]**
 
 Comprehensive examples:
 
 * [OpenHPC Slurm Cluster with SaltStack](https://github.com/vpenso/saltstack-slurm-example) 
 * [Apache Mesos Cluster with SaltStack](https://github.com/vpenso/mesos-example)
 * [Lustre Parallel Filesystem with SaltStack](https://github.com/mtds/lustre_kvm_saltstack)
-
-## Prerequisites 
-
-```bash
-# check for hardware support
-LC_ALL=C lscpu | grep Virtualization
-# check kernel support
-zgrep CONFIG_KVM /proc/config.gz
-# Debian packages
-sudo apt -y install \
-       clustershell \
-       libguestfs-tools \
-       libvirt-clients \
-       libvirt-daemon-system \
-       libvirt-dev \
-       ovmf \
-       qemu-kvm \
-       qemu-utils \
-       ruby \
-       virt-manager \
-       virt-top \
-       virt-viewer \
-       virtinst
-# Fedora/CentOS packages
-sudo dnf -y install \
-      @virtualization \
-      clustershell
-# ArchLinux packages
-sudo pacman -Sy --noconfirm \
-       bridge-utils \
-       dnsmasq \
-       ebtables \
-       iptables \
-       libvirt \
-       openbsd-netcat \
-       ruby \
-       vde2 \
-       virt-install \
-       virt-manager \
-       virt-viewer \
-       qemu \
-       qemu-block-rbd
-```
-
-Enable your user to manage virtual machines, **re-login** to activate these group rights:
-
-```bash
->>> sudo usermod -a -G libvirt,kvm `id -un`      
-```
-
-Configure the libvirt service to run with your user ID (here illustrated with ID jdow):
-
-```bash
->>> sudo grep -e '^user' -e '^group' /etc/libvirt/qemu.conf
-user = "jdow"
-group = "jdow"
-# restart the Libvirt service daemon
->>> sudo systemctl restart libvirtd
-```
-
-For host access to guests on non-isolated, bridged networks, enable the libvirt NSS module:
-
-```bash
->>> grep hosts /etc/nsswitch.conf
-hosts: files libvirt ...
-```
-
-### Environment
 
 The shell script ↴ [source_me.sh](source_me.sh) adds the tool-chain in this repository to your shell environment:
 
@@ -130,3 +64,5 @@ You should have received a copy of the GNU General Public
 License along with this program. If not, see 
 <http://www.gnu.org/licenses/>.
 
+
+[01]: http://libvirt.org
