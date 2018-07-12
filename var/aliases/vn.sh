@@ -21,7 +21,7 @@ virsh-nodeset <command>
 Loops over a nodeset of VMs define by the \$NODES environment variable.
 
 command:
-  c,  command <args>        execute a command in the path of each VM instance
+  c,  cmd <args>            execute a command in the path of each VM instance
                             ('{}' brackets interpolated with node FQDN)
   co, config <args>         write a libvirt configuration file (cf. virsh-config)
   ex, exex <args>           execute a command in each VM instance
@@ -59,16 +59,7 @@ function virsh-nodeset() {
 
   # run command given by the user
   case $command in
-  command|cmd|c)
-      for node in $(nodeset -e $NODES)
-      do
-        local fqdn=$(virsh-instance fqdn $node)
-        cd $(virsh-instance path $fqdn)
-        # replace brackets with node FQDN
-        ${@//\{\}/$fqdn}
-        cd - >/dev/null
-      done
-      ;;
+
   config|co)
       for node in $(nodeset -e $NODES)
       do
@@ -78,9 +69,7 @@ function virsh-nodeset() {
         cd - >/dev/null
       done
       ;;
-  help)
-          echo -n $VN_FUNCTION_HELP
-          ;;
+
   redefine|rd)
     for node in $(nodeset -e $NODES)
     do
@@ -94,11 +83,36 @@ function virsh-nodeset() {
       cd - >/dev/null
     done
     ;;
-  exec|e|sync|sy|start|st|shadow|s|shutdown|sh|reboot|rb|remove|r)
+
+  help)
+          echo -n $VN_FUNCTION_HELP
+          ;;
+
+  *)
+          # loop over all defined nodes
           for node in $(nodeset -e $NODES)
           do
+                  # print the node name
                   echo --$node--
-                  vm $command $node $@
+                  case "$command" in
+
+                          cmd|c)
+                                   local fqdn=$(virsh-instance fqdn $node)
+                                   cd $(virsh-instance path $fqdn)
+                                   # replace brackets with node FQDN
+                                   ${@//\{\}/$fqdn}
+                                   cd - >/dev/null
+                                   ;;
+
+                          shadow|s)
+                                  vm shadow $1 $node 
+                                  ;;
+
+                          # by default pass arguments to the `vm` command
+                          *)
+                                  vm $command $node $@
+                                  ;;
+                  esac
           done
     ;;
   esac
