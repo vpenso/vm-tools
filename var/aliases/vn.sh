@@ -81,15 +81,21 @@ function virsh-nodeset() {
       nodeset-loop -s "cd \$(virsh-instance path {}) ; ssh-instance -r '$args'"
       ;;
     shadow|sh|s)
-      img=${1:-centos7}
-      nodeset-loop virsh-instance shadow $img {}
-      ;;
+            img=${1:-centos7}
+            nodeset-loop virsh-instance shadow $img {}
+            ;;
     start|st)
-      nodeset-loop virsh-instance start {}
-      ;;
+            nodeset-loop virsh-instance start {}
+            ;;
     shutdown|sh)
-      nodeset-loop virsh-instance shutdown {}
-      ;;
+            nodeset-loop virsh-instance shutdown {}
+            ;;
+    sync|sy)
+            for node in $(nodeset -e $NODES)
+            do
+                    vm sync $node -r $@
+            done
+            ;;
     remove|rm|r)
       nodeset-loop virsh-instance remove {}
       ;;
@@ -112,6 +118,8 @@ function virsh-nodeset() {
       nodeset-loop virsh-instance start {}
       ;;
     *)
+            case "$command"
+            esac
       echo "$VN_FUNCTION_HELP"
       ;;
   esac
