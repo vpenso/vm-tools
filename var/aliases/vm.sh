@@ -40,7 +40,8 @@ vm <command>
  s , shadow <image> <name>    shadow image, and start instance
  sh, shutdown <name>          graceful shutdown instance        
  st, start <name>             start a defined instance
- sy, sync <name> <args>       rsync files to/from instance 
+ sy, sync <name> <args>       rsync files to/from instance
+ v,  view <name>              view VNC console
  um, umount                   umount instance
  u , undefine <id|fqdn>       undefine instance"
 
@@ -106,6 +107,7 @@ function vm() {
     rsync-instance $@
     cd - >/dev/null 
     ;;
+  view|v)                  virt-viewer $(virsh-instance fqdn $1) ;;
   umount|um)               vm cd $1 ; sshfs-instance umount ; cd - >/dev/null ;;
   undefine|u)              virsh undefine $(virsh-instance fqdn $1) ;;
   *)
