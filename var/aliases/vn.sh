@@ -85,7 +85,7 @@ function virsh-nodeset() {
     ;;
 
   help)
-          echo -n $VN_FUNCTION_HELP
+          echo -n "$VN_FUNCTION_HELP"
           ;;
 
   *)
