@@ -23,7 +23,8 @@ vm <command>
  c , create <file>            start instance from XML configuration
  cl, clone <image> <name>     copy image, and start instance
  co, config <args>            configure instance (cf. virsh-config)
- d , define <name>            define an instance from ist configuration file
+ d , define <name>            define an instance from its configuration file
+ ds, destroy <name>           destroy instance
  ex, exec <name> <args>       execute a command in instance
  i , image                    list available images
  ip  <name>                   instance IP-address
@@ -68,15 +69,18 @@ function vm() {
     cd - >/dev/null
     ;;
   define|d)
-    virsh define $(virsh-instance path $name)/libvirt_instance.xml
+    virsh define $(virsh-instance path $1)/libvirt_instance.xml
+    ;;
+  destroy|ds)
+    virsh destroy $(virsh-instance fqdn $1) | sed '/^$/d'
     ;;
   image|i)                 virsh-instance image ;;
   ip)
     virsh-nat-bridge lookup $1 | cut -d' ' -f2 
     ;;
   kill|k)
-    virsh undefine $(virsh-instance fqdn $1)
-    virsh destroy $(virsh-instance fqdn $1)
+    virsh undefine $(virsh-instance fqdn $1) | sed '/^$/d'
+    virsh destroy $(virsh-instance fqdn $1) | sed '/^$/d'
     ;;
   list|l)
     virsh list --all | tail -n +3 | sed '/^$/d' | tr -s ' ' | cut -d' ' -f3- 
@@ -97,8 +101,8 @@ function vm() {
   reboot|rb)               virsh reboot $(virsh-instance fqdn $1) ;;
   remove|r)                virsh-instance remove $@ ;;
   redefine|re)
-    virsh undefine $(virsh-instance fqdn $1)
-    virsh define $(virsh-instance path $name)/libvirt_instance.xml
+    virsh undefine $(virsh-instance fqdn $1) | sed '/^$/d'
+    virsh define $(virsh-instance path $1)/libvirt_instance.xml | sed '/^$/d'
     ;;
   shutdown|sh)             virsh shutdown $(virsh-instance fqdn $1) ;;
   shadow|s)                virsh-instance shadow $@ ;;
