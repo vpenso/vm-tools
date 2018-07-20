@@ -23,7 +23,7 @@ vm <command>
  c , create <file>            start instance from XML configuration
  cl, clone <image> <name>     copy image, and start instance
  co, config <args>            configure instance (cf. virsh-config)
- d , define <file>            define an instance from an XML configuration
+ d , define <name>            define an instance from ist configuration file
  ex, exec <name> <args>       execute a command in instance
  i , image                    list available images
  ip  <name>                   instance IP-address
@@ -67,7 +67,9 @@ function vm() {
     virsh-config $@ 
     cd - >/dev/null
     ;;
-  define|d)                virsh define $@ ;;
+  define|d)
+    virsh define $(virsh-instance path $name)/libvirt_instance.xml
+    ;;
   image|i)                 virsh-instance image ;;
   ip)
     virsh-nat-bridge lookup $1 | cut -d' ' -f2 
