@@ -32,6 +32,7 @@ sudo pacman -Sy --noconfirm \
        iptables \
        libvirt \
        openbsd-netcat \
+       python-pip \
        ruby \
        vde2 \
        virt-install \
@@ -39,6 +40,7 @@ sudo pacman -Sy --noconfirm \
        virt-viewer \
        qemu \
        qemu-block-rbd
+sudo pip install ClusterShell
 ```
 
 Enable your user to manage virtual machines, **re-login** to activate these group rights:
