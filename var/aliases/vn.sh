@@ -32,7 +32,7 @@ command:
   sy, sync <args>           rsync files to/from VM instances
   rb, reboot                restart all VM instances
   rd, redefine              shutdown, undefine, define, start VM instances
-  rm, remove                remove all VM instances
+  r,  remove                remove all VM instances
 "
 
 ##
