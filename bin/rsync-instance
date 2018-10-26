@@ -30,7 +30,7 @@ SCRIPT=${0##*/}
 HELP=\
 "Usage: 
 
-  $SCRIPT [-Dh] [[user@hostname]:]src [[user@hostname]:]dest
+  $SCRIPT [-DhRr] [[user@hostname]:]src [[user@hostname]:]dest
   
 Sync files with remote nodes. If a file called *ssh_config* is 
 present in the working directory it will be automatically used 
