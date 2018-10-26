@@ -27,6 +27,7 @@ sudo dnf -y install \
 # ArchLinux packages
 sudo pacman -Sy --noconfirm \
        bridge-utils \
+       cpio \
        dnsmasq \
        ebtables \
        iptables \
