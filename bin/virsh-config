@@ -149,7 +149,7 @@ begin
   $options.vns = false
   $options.vnc_port = nil
   $options.overwrite = false
-  $options.name = 'lxdev01.devops.test'
+  $options.name = String.new
   $options.netboot = false
   $options.disks = Array.new
   $options.disk_type = 'qcow2'
@@ -228,12 +228,28 @@ begin
     when '--vcpu'
       $options.vcpu = arg
     when '--version'
-      $stdout.puts 0.5
+      $stdout.puts 0.51
       exit 0
     when '--vnc'
       $options.vnc = true
     when '--vnc-port'
       $options.vnc_port = arg
+    end
+  end
+
+  path = ARGV.shift || "#{ENV['PWD']}/libvirt_instance.xml"
+  path = File.expand_path(path)
+
+  # the user has not specified a VM instance name
+  if $options.name.empty?
+    # determine the name of the VM instance from the directory path
+    name = File.dirname(path).split('/')[-1]
+    # note: the domain name should not be hard wired
+    if name =~ /devops.test$/
+      $options.name = name
+    else
+      $options.name = 'lxdev01.devops.test'
+      $logger.debug 'Could not determine VM instance name, using default'
     end
   end
 
@@ -243,8 +259,6 @@ begin
     $logger.debug "MAC-address set to #{$options.mac}"
   end
 
-  path = ARGV.shift || "#{ENV['PWD']}/libvirt_instance.xml"
-  path = File.expand_path(path)
   Virsh::config(path)
   $stdout.puts "Domain #{$options.name} definition file #{path}"
 
