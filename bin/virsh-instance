@@ -49,7 +49,7 @@ HELP = <<EOF
                                    (default /srv/vms/instances)
   -l, --location <url>             Installation sources (default Debian stable)
   -O, --no-overwrite               Do not overwrite existing instances.
-  -r, --ram <size>                 Instance memory in GB (defaults 1)
+  -m, --memory <size>                 Instance memory in GB (defaults 1)
       --version                    Print version number
 
 Environment
@@ -197,7 +197,7 @@ class Virsh
       virsh-config
         --vnc
         --name #{Virsh.instance name}
-        --memory #{$options.ram}
+        --memory #{$options.memory}
         --mac-address #{Virsh.instance_mac name}
         libvirt_instance.xml
     "
@@ -306,7 +306,7 @@ begin
   $options.image_path = '/srv/vms/images'
   $options.instance_path = '/srv/vms/instances'
   $options.overwrite = true
-  $options.ram = 1 # GB
+  $options.memory = 1 # GB
   $options.shadow = false
   $options.bridge = 'nbr0'
 
@@ -338,7 +338,7 @@ begin
     ['--location','-l',GetoptLong::REQUIRED_ARGUMENT],
     ['--log-level','-L',GetoptLong::REQUIRED_ARGUMENT],
     ['--no-overwrite','-O',GetoptLong::NO_ARGUMENT],
-    ['--ram','-r',GetoptLong::REQUIRED_ARGUMENT],
+    ['--memory','-m',GetoptLong::REQUIRED_ARGUMENT],
     ['--version',GetoptLong::NO_ARGUMENT]
   ).each do |opt,arg|
     case opt
@@ -377,8 +377,8 @@ begin
        end
     when '--no-overwrite'
       $options.overwrite = false
-    when '--ram'
-      $options.ram = arg
+    when '--memory'
+      $options.memory = arg
     when '--version'
       $stdout.puts 1.3
       exit 0
