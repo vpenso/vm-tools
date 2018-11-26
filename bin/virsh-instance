@@ -49,7 +49,8 @@ HELP = <<EOF
                                    (default /srv/vms/instances)
   -l, --location <url>             Installation sources (default Debian stable)
   -O, --no-overwrite               Do not overwrite existing instances.
-  -m, --memory <size>                 Instance memory in GB (defaults 1)
+  -m, --memory <size>              Instance memory in GB (defaults 1)
+  -N, --net-boot                   Enable PXE boot
       --version                    Print version number
 
 Environment
@@ -203,6 +204,7 @@ class Virsh
     "
     # Respect the overwrite option set by the user
     command << " --overwrite" if $options.overwrite
+    command << " --net-boot" if $options.net_boot
     System::run command
 
     # Create the SSH configuration file for password-less login 
@@ -307,6 +309,7 @@ begin
   $options.instance_path = '/srv/vms/instances'
   $options.overwrite = true
   $options.memory = 1 # GB
+  $options.net_boot = false
   $options.shadow = false
   $options.bridge = 'nbr0'
 
@@ -339,6 +342,7 @@ begin
     ['--log-level','-L',GetoptLong::REQUIRED_ARGUMENT],
     ['--no-overwrite','-O',GetoptLong::NO_ARGUMENT],
     ['--memory','-m',GetoptLong::REQUIRED_ARGUMENT],
+    ['--net-boot','-N',GetoptLong::NO_ARGUMENT],
     ['--version',GetoptLong::NO_ARGUMENT]
   ).each do |opt,arg|
     case opt
@@ -379,8 +383,10 @@ begin
       $options.overwrite = false
     when '--memory'
       $options.memory = arg
+    when '--net-boot'
+      $options.net_boot = true
     when '--version'
-      $stdout.puts 1.3
+      $stdout.puts 1.4
       exit 0
     end
   end
