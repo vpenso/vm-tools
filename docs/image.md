@@ -5,7 +5,7 @@ In the following context the term virtual machine **image** refers to:
 * A generic configuration of a virtual machine and its corresponding disk image stored in a sub-directory defined by the environment variable **`VM_IMAGE_PATH`**.
 * A generic very basic Linux configuration (user accounts, network, etc.) common to the Linux deployed into the disk image.
 
-Virtual machine images are used as **templates** to create virtual machine instances in a _reproducible_ way for development and testing.
+Virtual machine images are used as **templates** (golden images) to create virtual machine instances in a _reproducible_ way for development and testing.
 
 ## Installation
 
