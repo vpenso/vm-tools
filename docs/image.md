@@ -5,11 +5,15 @@ In the following context the term virtual machine **image** refers to:
 * A generic configuration of a virtual machine and its corresponding disk image stored in a sub-directory defined by the environment variable **`VM_IMAGE_PATH`**.
 * A generic very basic Linux configuration (user accounts, network, etc.) common to the Linux deployed into the disk image.
 
-Virtual machine images are used as **templates** to create virtual machine instances in a _reproducible_ way for development and testing.
+Virtual machine images are used as **templates** (golden images) to create virtual machine instances in a _reproducible_ way for development and testing.
 
 ## Installation
 
-The [virt-install](https://virt-manager.org/) program creates a `disk.img` and start the installation program for a selected Linux distribution:
+### Manual Installation
+
+The [virt-install](https://virt-manager.org/) program creates a `disk.img` and start the installation program for a selected Linux distribution.
+
+#### Debian 9 / CentOS 7 / ArchLinux
 
 ```bash 
 ## -- Debian 9 --
@@ -42,9 +46,11 @@ During installation following configuration are required:
 
 Install a minimal standard system, no desktop environment (unless really needed), no services, no development environment, no editor, nothing except a bootable Linux.
 
-### Automation
+### Automated Installation
 
-Install a virtual machine image with [pressed](https://wiki.debian.org/DebianInstaller/Preseed) and the [Debian Installer](https://www.debian.org/releases/stable/amd64/ch06.html.en):
+#### Debian with Preseed
+
+Install a virtual machine image with [preseed](https://wiki.debian.org/DebianInstaller/Preseed) and the [Debian Installer](https://www.debian.org/releases/stable/amd64/ch06.html.en):
 
 ```bash
 # install a Debian Jessie virtual machine image
@@ -68,7 +74,9 @@ Install a virtual machine image with [pressed](https://wiki.debian.org/DebianIns
 >>> virsh undefine debian9
 ```
 
-Find Debian pressed files in [var/debian/](../var/debian).
+Find Debian preseed files in [var/debian/](../var/debian).
+
+#### CentOS/Fedora with Kickstart
 
 Install with CentOS/Fedora **Kickstart**:
 
@@ -110,13 +118,18 @@ disk.img
 
 ### Image Configuration
 
-The ↴ [virsh-config](../bin/virsh-config) command creates a file called `libvirt_instance.xml` which contains the configuration required by libvirt to operate the virtual machine image. Similar the ↴ [ssh-config-instance](../bin/ssh-config-instance) command prepares the configuration file `ssh_config` and a SSH key-pair for login:
+The ↴ [virsh-config](../bin/virsh-config) command creates a file called `libvirt_instance.xml` which contains the configuration required by libvirt to operate the virtual machine image:
 
 ```bash
 >>> virsh-config --vnc
 Domain name lxdev01.devops.test with MAC-address 02:FF:0A:0A:06:1C
 Using disk image with path: /srv/projects/vm-tools/vm/images/debian8/disk.img
 Libvirt configuration: /srv/projects/vm-tools/vm/images/debian8/libvirt_instance.xml
+```
+
+Similar the ↴ [ssh-config-instance](../bin/ssh-config-instance) command prepares the configuration file `ssh_config` and a SSH key-pair for login:
+
+```bash
 >>> ssh-config-instance 
 Password-less SSH key-pair create in /srv/projects/vm-tools/vm/images/debian8/keys
 SSH configuration: /srv/projects/vm-tools/vm/images/debian8/ssh_config
@@ -127,7 +140,7 @@ libvirt_instance.xml
 ssh_config
 ```
 
-Use the libvirt configuration file to start the virtual machine image with the `virsh` command
+Use the libvirt configuration file to start the virtual machine image with the `virsh` command:
 
 ```bash
 >>> virsh create ./libvirt_instance.xml
