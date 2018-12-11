@@ -41,9 +41,9 @@ The [docs/](docs) sub-directory includes all documentation required to use this 
 Configure a virtual machine instance with a Configuration Management System:
 
 * [docs/chef.md](docs/chef.md) describes how to us the `chef-instance` command 
-  to execute `chef-client` in a virtual machine instance.
+  to execute **Chef Solo** in a virtual machine instance.
 * [docs/salt.md](docs/salt.md) describes how to create a configuration to use 
-  Salt SSH with `salt-instance`
+  **Salt SSH** with `salt-instance`
 
 ## License
 
