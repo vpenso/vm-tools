@@ -110,13 +110,18 @@ disk.img
 
 ### Image Configuration
 
-The ↴ [virsh-config](../bin/virsh-config) command creates a file called `libvirt_instance.xml` which contains the configuration required by libvirt to operate the virtual machine image. Similar the ↴ [ssh-config-instance](../bin/ssh-config-instance) command prepares the configuration file `ssh_config` and a SSH key-pair for login:
+The ↴ [virsh-config](../bin/virsh-config) command creates a file called `libvirt_instance.xml` which contains the configuration required by libvirt to operate the virtual machine image:
 
 ```bash
 >>> virsh-config --vnc
 Domain name lxdev01.devops.test with MAC-address 02:FF:0A:0A:06:1C
 Using disk image with path: /srv/projects/vm-tools/vm/images/debian8/disk.img
 Libvirt configuration: /srv/projects/vm-tools/vm/images/debian8/libvirt_instance.xml
+```
+
+Similar the ↴ [ssh-config-instance](../bin/ssh-config-instance) command prepares the configuration file `ssh_config` and a SSH key-pair for login:
+
+```bash
 >>> ssh-config-instance 
 Password-less SSH key-pair create in /srv/projects/vm-tools/vm/images/debian8/keys
 SSH configuration: /srv/projects/vm-tools/vm/images/debian8/ssh_config
@@ -127,7 +132,7 @@ libvirt_instance.xml
 ssh_config
 ```
 
-Use the libvirt configuration file to start the virtual machine image with the `virsh` command
+Use the libvirt configuration file to start the virtual machine image with the `virsh` command:
 
 ```bash
 >>> virsh create ./libvirt_instance.xml
