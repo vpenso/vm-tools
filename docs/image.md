@@ -151,7 +151,7 @@ Domain lxdev01.devops.test created from ./libvirt_instance.xml
 
 ### Password-less Login
 
-Depending on the Linux distribution you may need to add the `devops` user after the installation:
+Depending on the installation you may need to add the `devops` user after the installation:
 
 ```bash
 useradd -d /home/devops -m devops && passwd devops
@@ -174,12 +174,12 @@ Use these tools to **enable password-less SSH login** to the virtual machine ima
 
 ```bash
 # Sudo configuration for user devops
->>> ssh-instance "su -lc 'echo \"devops ALL = NOPASSWD: ALL\" > /etc/sudoers.d/devops'"
+ssh-instance "su -lc 'echo \"devops ALL = NOPASSWD: ALL\" > /etc/sudoers.d/devops'"
 # paths for the SSH key
->>> ssh-instance 'mkdir -p -m 0700 /home/devops/.ssh ; sudo mkdir -p -m 0700 /root/.ssh'
+ssh-instance 'mkdir -p -m 0700 /home/devops/.ssh ; sudo mkdir -p -m 0700 /root/.ssh'
 # deploy the SSH key for password-less login
->>> rsync-instance keys/id_rsa.pub :.ssh/authorized_keys
->>> ssh-instance -s 'cp ~/.ssh/authorized_keys /root/.ssh/authorized_keys'
+rsync-instance keys/id_rsa.pub :.ssh/authorized_keys
+ssh-instance -s 'cp ~/.ssh/authorized_keys /root/.ssh/authorized_keys'
 # shutdown the virtual machine image
->>> ssh-instance -r "systemctl poweroff"
+ssh-instance -r "systemctl poweroff"
 ```
