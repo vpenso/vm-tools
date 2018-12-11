@@ -113,6 +113,13 @@ begin
   saltmaster = <<-EOF
     cachedir: /tmp/salt
     pki_dir: /tmp/salt
+    root_dir: .
+    file_roots:
+      base:
+        - srv/salt
+    pillar_roots:
+      base:
+        - srv/pillar
   EOF
 
   file_create("#{$options.saltdir}/master",saltmaster)
