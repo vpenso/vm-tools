@@ -9,7 +9,11 @@ Virtual machine images are used as **templates** to create virtual machine insta
 
 ## Installation
 
-The [virt-install](https://virt-manager.org/) program creates a `disk.img` and start the installation program for a selected Linux distribution:
+### Manual Installation
+
+The [virt-install](https://virt-manager.org/) program creates a `disk.img` and start the installation program for a selected Linux distribution.
+
+#### Debian 9 / CentOS 7 / ArchLinux
 
 ```bash 
 ## -- Debian 9 --
@@ -42,9 +46,11 @@ During installation following configuration are required:
 
 Install a minimal standard system, no desktop environment (unless really needed), no services, no development environment, no editor, nothing except a bootable Linux.
 
-### Automation
+### Automated Installation
 
-Install a virtual machine image with [pressed](https://wiki.debian.org/DebianInstaller/Preseed) and the [Debian Installer](https://www.debian.org/releases/stable/amd64/ch06.html.en):
+#### Debian with Preseed
+
+Install a virtual machine image with [preseed](https://wiki.debian.org/DebianInstaller/Preseed) and the [Debian Installer](https://www.debian.org/releases/stable/amd64/ch06.html.en):
 
 ```bash
 # install a Debian Jessie virtual machine image
@@ -68,7 +74,9 @@ Install a virtual machine image with [pressed](https://wiki.debian.org/DebianIns
 >>> virsh undefine debian9
 ```
 
-Find Debian pressed files in [var/debian/](../var/debian).
+Find Debian preseed files in [var/debian/](../var/debian).
+
+#### CentOS/Fedora with Kickstart
 
 Install with CentOS/Fedora **Kickstart**:
 
