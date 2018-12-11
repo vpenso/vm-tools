@@ -13,6 +13,8 @@ Virtual machine images are used as **templates** (golden images) to create virtu
 
 The [virt-install](https://virt-manager.org/) program creates a `disk.img` and start the installation program for a selected Linux distribution.
 
+To check the actual disk image size the following command can be used: `qemu-img info disk.img`.
+
 #### Debian 9 / CentOS 7 / ArchLinux
 
 ```bash 
