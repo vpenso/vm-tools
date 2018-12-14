@@ -21,7 +21,7 @@
 # exit of statement returns a non-true return value
 #set -o errexit
 
-VERSION=0.3
+VERSION=0.4
 
 # Filename of this script
 SCRIPT=${0##*/}
@@ -33,20 +33,20 @@ HELP=\
 "$SCRIPT [<options>] <command> [<arguments]
 
 <command>
-  co, cookbook <name>        Add a cookbooks to the configuration.
-                             Search paths defined by CHEF_COOKBOOKS
-  ro, role <path>            Add a role to the configuration
-  so, solo                   Copy the configuration to the virtual
-                             machine instance and execute Chef.
+  co, cookbook <name>             Add a cookbooks to the configuration.
+                                  Search paths defined by CHEF_COOKBOOKS
+  ro, role <path>                 Add a role to the configuration
+  so, solo                        Copy the configuration to the virtual
+                                  machine instance and execute Chef.
   
 <options>
-  -r,--run-list <list>       Chef run-list to be executed
-  -d,--destination <path>    Directory used for the configuration 
-                             in the virtual machine instance.
-                             (defaults to /var/tmp/chef)
-  -V, --version              Print version information.
-  -D,--debug                 Run in debug mode.
-  -h,--help                  Show this information.
+  -r,--run-list <role>[,<role>]  Chef run-list to be executed (comma separated)
+  -d,--destination <path>        Directory used for the configuration 
+                                 in the virtual machine instance.
+                                 (defaults to /var/tmp/chef)
+  -V, --version                  Print version information.
+  -D,--debug                     Run in debug mode.
+  -h,--help                      Show this information.
 
 Following directories and files contain the configuration used to
 execute chef-solo on the target virtual machine instance:
@@ -89,7 +89,7 @@ while true; do
       ;;
     -r|--run-list)
       shift
-      run_list=$1
+      run_list=$(echo "$1" | sed 's/,/","/')
       shift
       ;;
     -v|--version)
