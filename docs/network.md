@@ -72,5 +72,52 @@ Options to the `virsh-nat-bridge` command allow to customise:
 * The IP-address prefix (default `10.1.1`)
 * Hostnames in form of a list
 
+### Port Forwarding
 
+By default, VMs are instantied on a closed network which is shielded from the LAN via NAT.
+
+It is possible to allow connections to a particular port on a VM, thus opening a service running on top of it to the rest of the LAN.
+
+**SECURITY NOTICE**: The following procedure will basically 'punch holes' on the local firewall of the host (IPTables) and allows external connections from the LAN. It is assumed that the internal network where the KVM host is running is reasonable safe from the network security point of view (e.g. isolated from direct connection from the Internet). If it's not the case or you plan to attach the KVM host directly to the Internet, the following procedure can put your network security in peril. __You have been warned__.
+
+Forward SSH connections to a VM on local host port:
+```bash
+# Get the IP address of the VM:
+>>> VM_IP=`vm ip lxdev01`
+>>> sudo iptables -A PREROUTING -t nat -i enp5s0 -p tcp --dport 2222 -j DNAT --to $VM_IP:22
+>>> sudo iptables -I FORWARD 1 -p tcp -d $VM_IP --dport 22 -j ACCEPT
+```
+
+Shows IPtables rules (as noted at the beginning of this document, the default network created by ``vm_tools`` is **10.1.1.0/24**):
+```bash
+>>> echo "NAT rules:"; sudo iptables -L -n -t nat | grep 10.1.1 
+DNAT        tcp  --  0.0.0.0/0           0.0.0.0/0             tcp dpt:2222 to:10.1.1.28:22
+MASQUERADE  tcp  --  10.1.1.0/24         !10.1.1.0/24          masq ports: 1024-65535
+MASQUERADE  udp  --  10.1.1.0/24         !10.1.1.0/24          masq ports: 1024-65535
+MASQUERADE  all  --  10.1.1.0/24         !10.1.1.0/24
+
+>>> echo "Forwarding:";	sudo iptables -L FORWARD -n | grep 10.1.1
+Forwarding:
+ACCEPT     tcp  --  0.0.0.0/0            10.1.1.28            tcp dpt:22
+ACCEPT     all  --  0.0.0.0/0            10.1.1.0/24          state RELATED,ESTABLISHED
+ACCEPT     all  --  10.1.1.0/24          0.0.0.0/0 
+```
+
+Remove the rules from IPtables:
+```bash
+>>> sudo iptables -D PREROUTING -t nat -i enp5s0 -p tcp --dport 2222 -j DNAT --to $VM_IP:22
+>>> sudo iptables -D FORWARD -p tcp -d $VM_IP --dport 22 -j ACCEPT
+```
+
+**Network Interface name**: on reasonable modern version of Linux, systemd/udev will automatically assign predictable, stable network interface names for all local Ethernet, WLAN and WWAN interfaces. In the example above, the name used ``enp5s0`` represent the first ethernet network card (``en`` stands for Ethernet, ``p`` is the bus number of the card and ``s`` is the slot number). Further info are [available here](https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/).
+
+```bash
+# Shows all network connections:
+>>> ip a
+[...]
+2: enp5s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    link/ether 00:AA:BB:CC:DD:EE brd ff:ff:ff:ff:ff:ff
+        inet 10.2.1.1/24 brd 10.2.1.255 scope global enp5s0
+[...]
+```
 
