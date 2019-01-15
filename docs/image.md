@@ -28,6 +28,11 @@ virt-install --name debian10 --ram 2048 --os-type linux --virt-type kvm --networ
          --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
          --graphics none --console pty,target_type=serial --extra-args 'console=ttyS0,115200n8 serial' \
          --location http://deb.debian.org/debian/dists/buster/main/installer-amd64/
+## -- Debian Sid (testing) --
+mkdir -p $VM_IMAGE_PATH/sid && cd $VM_IMAGE_PATH/sid
+wget -O testing.iso http://cdimage.debian.org/cdimage/daily-builds/daily/current/amd64/iso-cd/debian-testing-amd64-netinst.iso
+virt-install --name sid --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
+         --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio --cdrom testing.iso
 ## -- CentOS 7 --
 mkdir -p $VM_IMAGE_PATH/centos7 && cd $VM_IMAGE_PATH/centos7
 virt-install --name centos7 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
