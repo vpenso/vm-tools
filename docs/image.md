@@ -15,8 +15,6 @@ The [virt-install](https://virt-manager.org/) program creates a `disk.img` and s
 
 To check the actual disk image size the following command can be used: `qemu-img info disk.img`.
 
-#### Debian 9 / CentOS 7 / ArchLinux
-
 ```bash 
 ## -- Debian 9 --
 mkdir -p $VM_IMAGE_PATH/debian9 && cd $VM_IMAGE_PATH/debian9
@@ -24,6 +22,12 @@ virt-install --name debian9 --ram 2048 --os-type linux --virt-type kvm --network
          --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
          --graphics none --console pty,target_type=serial --extra-args 'console=ttyS0,115200n8 serial' \
          --location http://deb.debian.org/debian/dists/stretch/main/installer-amd64/
+## -- Debian 10 --
+mkdir -p $VM_IMAGE_PATH/debian10 && cd $VM_IMAGE_PATH/debian10
+virt-install --name debian10 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
+         --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
+         --graphics none --console pty,target_type=serial --extra-args 'console=ttyS0,115200n8 serial' \
+         --location http://deb.debian.org/debian/dists/buster/main/installer-amd64/
 ## -- CentOS 7 --
 mkdir -p $VM_IMAGE_PATH/centos7 && cd $VM_IMAGE_PATH/centos7
 virt-install --name centos7 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
