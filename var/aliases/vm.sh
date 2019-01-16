@@ -15,6 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+function virsh-instance-undefine() {
+        local vm=$(virsh-instance fqdn $1)
+        # is the VM instance defined?
+        if virsh list --all --name --persistent | grep -sq $vm ; then
+                virsh undefine $vm | sed '/^$/d'
+        fi
+}
+
 VM_FUNCTION_HELP="\
 vm <command> 
 
@@ -101,9 +109,11 @@ function vm() {
   reboot|rb)               virsh reboot $(virsh-instance fqdn $1) ;;
   remove|r)                virsh-instance remove $@ ;;
   redefine|re)
-    # ignore failure, may be not defined yet
-    virsh undefine $(virsh-instance fqdn $1) | sed '/^$/d' |:
+    virsh-instance shutdown $1
+    sleep 5 # wait for the shutdown
+    virsh-instance-undefine $1
     virsh define $(virsh-instance path $1)/libvirt_instance.xml | sed '/^$/d'
+    virsh start $(virsh-instance fqdn $1)
     ;;
   shutdown|sh)             virsh shutdown $(virsh-instance fqdn $1) ;;
   shadow|s)                virsh-instance shadow $@ ;;
@@ -116,7 +126,7 @@ function vm() {
     ;;
   view|v)                  virt-viewer $(virsh-instance fqdn $1) ;;
   umount|um)               vm cd $1 ; sshfs-instance umount ; cd - >/dev/null ;;
-  undefine|u)              virsh undefine $(virsh-instance fqdn $1) ;;
+  undefine|u)              virsh-instance-undefine $1 ;;
   *)
     echo "$VM_FUNCTION_HELP"
     ;;
