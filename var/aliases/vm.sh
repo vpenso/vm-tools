@@ -101,7 +101,8 @@ function vm() {
   reboot|rb)               virsh reboot $(virsh-instance fqdn $1) ;;
   remove|r)                virsh-instance remove $@ ;;
   redefine|re)
-    virsh undefine $(virsh-instance fqdn $1) | sed '/^$/d'
+    # ignore failure, may be not defined yet
+    virsh undefine $(virsh-instance fqdn $1) | sed '/^$/d' |:
     virsh define $(virsh-instance path $1)/libvirt_instance.xml | sed '/^$/d'
     ;;
   shutdown|sh)             virsh shutdown $(virsh-instance fqdn $1) ;;
