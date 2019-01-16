@@ -21,7 +21,7 @@
 # exit of statement returns a non-true return value
 #set -o errexit
 
-VERSION=0.2
+VERSION=0.3
 
 # Filename of this script
 SCRIPT=${0##*/}
@@ -96,9 +96,24 @@ while true; do
   esac
 done
 
+ip=
 if [ -e "$PWD/ssh_config" ]
 then
   options="-F $PWD/ssh_config $options"
+  # read the IP address from the configuration
+  ip=$(grep HostName $PWD/ssh_config | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
+fi
+
+# if an IP address is known
+if [ -n $ip ] ; then
+	# wait until VM instance can be pinged...
+        until $(ping -c 1 -w 1 $ip | grep -q "^64" ) ; do
+  		sleep 1
+	done
+	# wait until the SSH port is available
+	while ! netcat -zv $ip 22 2>&- ; do
+		sleep 1
+	done	
 fi
 
 host=instance
