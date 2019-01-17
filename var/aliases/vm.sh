@@ -37,7 +37,6 @@ vm <command>
  i , image                    list available images
  ip  <name>                   instance IP-address
  hn, hostname <ip>            instance hostname for given IP
- k , kill <name>              destroy an instance
  l , list                     list all instances
  lo, login <name> <args>      login into an instance
  lk, lookup <name>            show network configuration tuple
@@ -86,10 +85,6 @@ function vm() {
   ip)
     virsh-nat-bridge lookup $1 | cut -d' ' -f2 
     ;;
-  kill|k)
-    virsh undefine $(virsh-instance fqdn $1) | sed '/^$/d'
-    virsh destroy $(virsh-instance fqdn $1) | sed '/^$/d'
-    ;;
   list|l)
     virsh list --all | tail -n +3 | sed '/^$/d' | tr -s ' ' | cut -d' ' -f3- 
     ;;
@@ -109,9 +104,8 @@ function vm() {
   reboot|rb)               virsh reboot $(virsh-instance fqdn $1) ;;
   remove|r)                virsh-instance remove $@ ;;
   redefine|re)
-    virsh-instance shutdown $1
+    virsh-instance remove $1
     sleep 5 # wait for the shutdown
-    virsh-instance-undefine $1
     virsh define $(virsh-instance path $1)/libvirt_instance.xml | sed '/^$/d'
     virsh start $(virsh-instance fqdn $1)
     ;;
