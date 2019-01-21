@@ -24,7 +24,7 @@ command:
   c,  cmd <args>            execute a command in the path of each VM instance
                             ('{}' brackets interpolated with node FQDN)
   co, config <args>         write a libvirt configuration file (cf. virsh-config)
-  ex, exex <args>           execute a command in each VM instance
+  ex, exec <args>           execute a command in each VM instance
   h,  help                  show this help text
   st, start                 start all VM instances
   sh, shutdown              shutdown all VM instances
