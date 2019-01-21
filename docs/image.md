@@ -156,7 +156,11 @@ Use the libvirt configuration file to start the virtual machine image with the `
 ```bash
 >>> virsh create ./libvirt_instance.xml
 Domain lxdev01.devops.test created from ./libvirt_instance.xml
-# follwoing command allows to access the VNC graphical console (if required)
+
+# login as root from command line (prefered way of configuring the vm)
+>>> vm lo lxdev01.devops.test -r
+
+# alternatively access to the VNC graphical console is also possible
 >>> virt-viewer lxdev01.devops.test
 ```
 
