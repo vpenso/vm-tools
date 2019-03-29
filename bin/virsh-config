@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright 2012 Victor Penso
+# Copyright 2012-2019 Victor Penso
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -61,6 +61,7 @@ HELP = <<EOF
   -h,--help                        Show this help information.
   -k,--kernel <path>               Linux kernel to boot
   -i,--initrd <path>               Init file-system to us with kernel
+  -I,--isoboot <path>              Boot from an ISO image
   -m,--mac-address <address>       MAC-address (default 02:FF:0A:0A:06:00)
   -M,--memory <size>               Memory in GB
   -n,--name <name>                 Name (default is the enclosing directory name)
@@ -140,6 +141,7 @@ begin
 
   $options = OpenStruct.new
   $options.console = false
+  $options.isoboot = ''
   $options.debug = false
   $options.file = nil
   $options.bridge = 'nbr0'
@@ -180,6 +182,7 @@ begin
     ['--help','-h',GetoptLong::NO_ARGUMENT],
     ['--kernel','-k',GetoptLong::REQUIRED_ARGUMENT],
     ['--initrd','-i',GetoptLong::REQUIRED_ARGUMENT],
+    ['--isoboot','-I',GetoptLong::REQUIRED_ARGUMENT],
     ['--mac-address','-m',GetoptLong::REQUIRED_ARGUMENT],
     ['--name','-n',GetoptLong::REQUIRED_ARGUMENT],
     ['--net-boot','-N',GetoptLong::NO_ARGUMENT],
@@ -213,6 +216,8 @@ begin
       $options.kernel = arg
     when '--initrd'
       $options.initrd = arg
+    when '--isoboot'
+      $options.isoboot = arg
     when '--mac-address'
       $options.mac = arg
     when '--memory'
@@ -228,7 +233,7 @@ begin
     when '--vcpu'
       $options.vcpu = arg
     when '--version'
-      $stdout.puts 0.51
+      $stdout.puts 0.6
       exit 0
     when '--vnc'
       $options.vnc = true
@@ -293,6 +298,9 @@ __END__
 <% if $options.initrd -%>
     <initrd><%= $options.initrd %></initrd>
 <% end -%>
+<% if $options.isoboot -%>
+    <boot dev='cdrom'/>
+<% end -%>
 <% if $options.netboot -%>
     <boot dev='network'/>
 <% end -%>
@@ -318,5 +326,14 @@ __END__
       <model type="virtio"/>
     </interface>
     <%= disks.join("\n      ") %>
+    <% if $options.isoboot -%>
+      <disk type='file' device='cdrom'>
+        <driver name='qemu' type='raw'/>
+        <source file='<%= $options.isoboot -%>'/>
+        <target dev='hdc' bus='ide'/>
+        <readonly/>
+       <address type='drive' controller='0' bus='1' unit='0'/>
+      </disk>
+    <% end -%>
   </devices>
 </domain>
