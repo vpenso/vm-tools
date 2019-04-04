@@ -233,7 +233,7 @@ begin
     when '--vcpu'
       $options.vcpu = arg
     when '--version'
-      $stdout.puts 0.6
+      $stdout.puts 0.61
       exit 0
     when '--vnc'
       $options.vnc = true
@@ -298,7 +298,7 @@ __END__
 <% if $options.initrd -%>
     <initrd><%= $options.initrd %></initrd>
 <% end -%>
-<% if $options.isoboot -%>
+<% unless $options.isoboot.empty? -%>
     <boot dev='cdrom'/>
 <% end -%>
 <% if $options.netboot -%>
@@ -326,7 +326,7 @@ __END__
       <model type="virtio"/>
     </interface>
     <%= disks.join("\n      ") %>
-    <% if $options.isoboot -%>
+    <% unless $options.isoboot.empty? -%>
       <disk type='file' device='cdrom'>
         <driver name='qemu' type='raw'/>
         <source file='<%= $options.isoboot -%>'/>
