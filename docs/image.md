@@ -13,7 +13,7 @@ Virtual machine images are used as **templates** (golden images) to create virtu
 
 The [virt-install](https://virt-manager.org/) program creates a `disk.img` and start the installation program for a selected Linux distribution.
 
-To check the actual disk image size the following command can be used: `qemu-img info disk.img`.
+Boot the installer over HTTP:
 
 ```bash 
 ## -- Debian 9 --
@@ -28,22 +28,30 @@ virt-install --name debian10 --ram 2048 --os-type linux --virt-type kvm --networ
          --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
          --graphics none --console pty,target_type=serial --extra-args 'console=ttyS0,115200n8 serial' \
          --location http://deb.debian.org/debian/dists/buster/main/installer-amd64/
-## -- Debian Sid (testing) --
-mkdir -p $VM_IMAGE_PATH/sid && cd $VM_IMAGE_PATH/sid
-wget -O testing.iso http://cdimage.debian.org/cdimage/daily-builds/daily/current/amd64/iso-cd/debian-testing-amd64-netinst.iso
-virt-install --name sid --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
-         --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio --cdrom testing.iso
 ## -- CentOS 7 --
 mkdir -p $VM_IMAGE_PATH/centos7 && cd $VM_IMAGE_PATH/centos7
 virt-install --name centos7 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
            --disk path=disk.img,size=100,format=qcow2,sparse=true,bus=virtio \
            --graphics none --console pty,target_type=serial --extra-args 'console=ttyS0,115200n8 serial' \
            --location http://mirror.centos.org/centos-7/7.5.1804/os/x86_64/
+```
+
+Install from an CD ISO image:
+
+```bash
 ## -- ArchLinux --
 mkdir -p $VM_IMAGE_PATH/arch && cd $VM_IMAGE_PATH/arch
 wget -O arch.iso http://ftp-stud.hs-esslingen.de/pub/Mirrors/archlinux/iso/2018.06.01/archlinux-2018.06.01-x86_64.iso
-virt-install --name arch --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
-         --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio --cdrom arch.iso
+virt-install --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
+             --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
+             --name arch --cdrom arch.iso
+## -- Debian (Sid) Testing - Daily Builds --
+mkdir -p $VM_IMAGE_PATH/debian-testing && cd $VM_IMAGE_PATH/debian-testing
+netinst=https://cdimage.debian.org/cdimage/daily-builds/daily/arch-latest/amd64/iso-cd/debian-testing-amd64-netinst.iso
+wget -O debian.iso $netinst
+virt-install --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
+             --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
+             --name debian-testing --cdrom debian.iso
 ```
 
 During installation following configuration are required:
@@ -56,6 +64,8 @@ During installation following configuration are required:
 * Single primary partition for `/` (no SWAP).
 
 Install a minimal standard system, no desktop environment (unless really needed), no services, no development environment, no editor, nothing except a bootable Linux.
+
+To check the actual disk image size the following command can be used: `qemu-img info disk.img`.
 
 ### Automated Installation
 
