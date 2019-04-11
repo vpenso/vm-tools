@@ -118,7 +118,7 @@ function vm() {
     rsync-instance $@
     cd - >/dev/null 
     ;;
-  view|v)                  virt-viewer $(virsh-instance fqdn $1) ;;
+  view|v)                  virt-viewer $(virsh-instance fqdn $1) & ;;
   umount|um)               vm cd $1 ; sshfs-instance umount ; cd - >/dev/null ;;
   undefine|u)              virsh-instance-undefine $1 ;;
   *)
