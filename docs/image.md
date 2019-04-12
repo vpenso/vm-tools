@@ -166,12 +166,10 @@ Use the libvirt configuration file to start the virtual machine image with the `
 ```bash
 >>> virsh create ./libvirt_instance.xml
 Domain lxdev01.devops.test created from ./libvirt_instance.xml
-
 # login as root from command line (prefered way of configuring the vm)
->>> vm lo lxdev01.devops.test -r
-
+>>> vm lo lxdev01 -r
 # alternatively access to the VNC graphical console is also possible
->>> virt-viewer lxdev01.devops.test
+>>> vm v lxdev01
 ```
 
 ### Password-less Login
@@ -188,7 +186,7 @@ You may want to **install Sudo and Rsync** in the virtual machine unless this ha
 
 ```bash
 # Debian (login as devops, execute command as root user)
-ssh-instance "su -lc 'apt install rsync sudo'"  
+ssh-instance "su -lc 'apt install rsync sudo haveged'"  
 # CentOS
 ssh-instance -r 'yum install rsync sudo'
 # Arch
