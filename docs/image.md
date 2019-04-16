@@ -7,9 +7,9 @@ In the following context the term virtual machine **image** refers to:
 
 Virtual machine images are used as **templates** (golden images) to create virtual machine instances in a _reproducible_ way for development and testing.
 
-## Installation
+# Installation
 
-### Manual Installation
+## Manual Installation
 
 The [virt-install](https://virt-manager.org/) program creates a `disk.img` and start the installation program for a selected Linux distribution.
 
@@ -67,9 +67,9 @@ Install a minimal standard system, no desktop environment (unless really needed)
 
 To check the actual disk image size the following command can be used: `qemu-img info disk.img`.
 
-### Automated Installation
+## Automated Installation
 
-#### Debian with Preseed
+### Debian with Preseed
 
 Install a virtual machine image with [preseed](https://wiki.debian.org/DebianInstaller/Preseed) and the [Debian Installer](https://www.debian.org/releases/stable/amd64/ch06.html.en):
 
@@ -97,7 +97,7 @@ Install a virtual machine image with [preseed](https://wiki.debian.org/DebianIns
 
 Find Debian preseed files in [var/debian/](../var/debian).
 
-#### CentOS/Fedora with Kickstart
+### CentOS/Fedora with Kickstart
 
 Install with CentOS/Fedora **Kickstart**:
 
@@ -116,7 +116,7 @@ Install with CentOS/Fedora **Kickstart**:
 
 Find the kickstart file in [var/centos](../var/centos).
 
-### Permissions
+## Permissions
 
 The `virt-install` program may leave the disk images with the wrong permissions. 
 
@@ -126,7 +126,7 @@ The following command will adjust the permissions to all `disk.img` files in `VM
 >>> sudo find $VM_IMAGE_PATH/ -name disk.img -exec chmod a+rw {} \;
 ```
 
-## Customization
+# Customization
 
 After the installation has finished the virtual machine image can be booted and customized.
 
@@ -137,7 +137,7 @@ After the installation has finished the virtual machine image can be booted and 
 disk.img
 ```
 
-### Image Configuration
+## Image Configuration
 
 The ↴ [virsh-config](../bin/virsh-config) command creates a file called `libvirt_instance.xml` which contains the configuration required by libvirt to operate the virtual machine image:
 
@@ -172,7 +172,7 @@ Domain lxdev01.devops.test created from ./libvirt_instance.xml
 >>> vm v lxdev01
 ```
 
-### Password-less Login
+## Password-less Login
 
 Depending on the installation you may need to add the `devops` user after the installation:
 
@@ -205,4 +205,17 @@ rsync-instance keys/id_rsa.pub :.ssh/authorized_keys
 ssh-instance -s 'cp ~/.ssh/authorized_keys /root/.ssh/authorized_keys'
 # shutdown the virtual machine image
 ssh-instance -r "systemctl poweroff"
+```
+
+## DHCP
+
+Following is optional an particular to Debian...
+
+Set the VM instance hostname during boot using information from DNS:
+
+```bash
+# install a hook script for the ISC DHCP version of Debian
+rsync-instance -r $VM_TOOLS/var/debian/hostname :/etc/dhcp/dhclient-exit-hooks.d/hostname
+# make sure the dependencies are installed
+ssh-instance -r -- apt install -y hostname bind9-host coreutils
 ```
