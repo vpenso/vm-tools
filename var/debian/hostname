@@ -18,9 +18,9 @@ fi
 
 echo dhclient-exit-hooks.d/hostname: Dynamic IP address = $new_ip_address
 
-hostname=$(host $new_ip_address | cut -d ' ' -f 5)
+hostname=$(host $new_ip_address | cut -d ' ' -f 5 | sed 's/.$//')
 
-echo ${hostname::-1}> /etc/hostname
+echo $hostname > /etc/hostname
 
 hostname $hostname
 

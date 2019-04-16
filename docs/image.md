@@ -217,5 +217,5 @@ Set the VM instance hostname during boot using information from DNS:
 # install a hook script for the ISC DHCP version of Debian
 rsync-instance -r $VM_TOOLS/var/debian/hostname :/etc/dhcp/dhclient-exit-hooks.d/hostname
 # make sure the dependencies are installed
-ssh-instance -r -- apt install -y hostname bind9-host coreutils
+ssh-instance -r -- apt install -y hostname bind9-host coreutils sed
 ```
