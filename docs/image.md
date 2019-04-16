@@ -209,9 +209,9 @@ ssh-instance -r "systemctl poweroff"
 
 ## DHCP
 
-Following is optional an particular to Debian...
+Following is optional for Debian based images.
 
-Set the VM instance hostname during boot using information from DNS:
+Set the VM instance hostname during boot using information from DNS...
 
 ```bash
 # install a hook script for the ISC DHCP version of Debian
@@ -219,3 +219,5 @@ rsync-instance -r $VM_TOOLS/var/debian/hostname :/etc/dhcp/dhclient-exit-hooks.d
 # make sure the dependencies are installed
 ssh-instance -r -- apt install -y hostname bind9-host coreutils sed
 ```
+
+with a DHCP hook script [hostname](../var/debian/hostname)
