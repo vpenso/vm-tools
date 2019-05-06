@@ -30,7 +30,7 @@ vm <command>
  cd  <name>                   change to an instance directory
  c , create <file>            start instance from XML configuration
  cl, clone <image> <name>     copy image, and start instance
- co, config <args>            configure instance (cf. virsh-config)
+ co, config <name> <args>     configure instance (cf. virsh-config)
  d , define <name>            define an instance from its configuration file
  ds, destroy <name>           destroy instance
  ex, exec <name> <args>       execute a command in instance
