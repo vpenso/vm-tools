@@ -33,7 +33,13 @@ mkdir -p $VM_IMAGE_PATH/centos7 && cd $VM_IMAGE_PATH/centos7
 virt-install --name centos7 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
            --disk path=disk.img,size=100,format=qcow2,sparse=true,bus=virtio \
            --graphics none --console pty,target_type=serial --extra-args 'console=ttyS0,115200n8 serial' \
-           --location http://mirror.centos.org/centos-7/7.5.1804/os/x86_64/
+           --location http://mirror.centos.org/centos-7/7/os/x86_64/
+## -- Cern CentOS 7 --
+mkdir -p $VM_IMAGE_PATH/cc7 && cd $VM_IMAGE_PATH/cc7
+virt-install --name centos7 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
+           --disk path=disk.img,size=100,format=qcow2,sparse=true,bus=virtio \
+           --graphics none --console pty,target_type=serial --extra-args 'console=ttyS0,115200n8 serial' \
+           --location http://linuxsoft.cern.ch/cern/centos/7/os/x86_64/
 ```
 
 Install from an CD ISO image:
