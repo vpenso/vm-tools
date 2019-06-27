@@ -21,7 +21,7 @@
 # exit of statement returns a non-true return value
 #set -o errexit
 
-VERSION=0.5
+VERSION=0.6
 
 # Filename of this script
 SCRIPT=${0##*/}
@@ -180,20 +180,23 @@ function cookbook() {
 }
 
 function role() {
-  local role=$1
-  local name=$(basename $role)
-  if [ -h $PWD/roles/$name ]
-  then
-    _debug "Role [$name] already linked"
-  else
-    if [[ -e $role ]]
-    then
-      ln -s $role $PWD/roles/$name
-      echo "Role [$name] added."
-    else
-      _error "Role [$name] isn't existing!"
-    fi 
-  fi
+        # iterate over all arguments
+        for role in "$@"
+        do
+                # name of the file
+                local name=$(basename $role)
+                # target path in the roles/ subdirectory
+                local t_path=$PWD/roles/$name
+                # unless the file exists
+                if ! [ -f $t_path ]
+                then
+                        # link to the file in roles/
+                        ln -s $role $t_path
+                        echo "${name} role added"
+                else
+                        echo "${name} role exists"
+                fi
+        done
 }
 
 function solo() {
