@@ -21,7 +21,7 @@
 # exit of statement returns a non-true return value
 #set -o errexit
 
-VERSION=0.6
+VERSION=0.61
 
 # Filename of this script
 SCRIPT=${0##*/}
@@ -125,6 +125,7 @@ data_bag_path     "$dest/data-bags"
 role_path         "$dest/roles"
 cache_type        "BasicFile"
 cache_options({   :path => "$dest/cache/checksums", :skip_expires => true })
+chef_license      "accept"
 EOF
 )
 
