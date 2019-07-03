@@ -30,6 +30,7 @@ vm <command>
  cd  <name>                   change to an instance directory
  c , create <file>            start instance from XML configuration
  cl, clone <image> <name>     copy image, and start instance
+ cm, command <name> <cmd>     run a command in the instance directory
  co, config <name> <args>     configure instance (cf. virsh-config)
  d , define <name>            define an instance from its configuration file
  ds, destroy <name>           destroy instance
@@ -63,37 +64,53 @@ function vm() {
   # remove first argument if present
   [[ $# -ge 1 ]] && shift
   case "$command" in
-  cd)                
-    name=${1:?Expecting a virtual machine instance name as argument!}
-    cd $(virsh-instance path $name)
-    ;;
-  clone|cl)                virsh-instance clone $@ ;;
-  create|c)                virsh create $@ ;;
-  config|co)               
-    vm cd $1
-    shift
-    virsh-config $@ 
-    cd - >/dev/null
-    ;;
+  cd)
+          name=${1:?Expecting a virtual machine instance name as argument!}
+          cd $(virsh-instance path $name)
+          ;;
+  clone|cl)
+          virsh-instance clone $@
+          ;;
+  create|c)
+          virsh create $@
+          ;;
+  command|cm)
+          vm cd $1
+          shift
+          $@
+          cd - >/dev/null
+          ;;
+  config|co)
+          vm cd $1
+          shift
+          virsh-config $@ 
+          cd - >/dev/null
+          ;;
   define|d)
-    virsh define $(virsh-instance path $1)/libvirt_instance.xml
-    ;;
+          virsh define $(virsh-instance path $1)/libvirt_instance.xml
+          ;;
   destroy|ds)
-    virsh destroy $(virsh-instance fqdn $1) | sed '/^$/d'
-    ;;
-  image|i)                 virsh-instance image ;;
+          virsh destroy $(virsh-instance fqdn $1) | sed '/^$/d'
+           ;;
+  image|i)
+          virsh-instance image
+          ;;
   ip)
-    virsh-nat-bridge lookup $1 | cut -d' ' -f2 
-    ;;
+          virsh-nat-bridge lookup $1 | cut -d' ' -f2 
+          ;;
   list|l)
-    virsh list --all | tail -n +3 | sed '/^$/d' | tr -s ' ' | cut -d' ' -f3- 
-    ;;
+          virsh list --all |\
+                  tail -n +3 |\
+                  sed '/^$/d' |\
+                  tr -s ' ' |\
+                  cut -d' ' -f3-
+          ;;
   login|lo|exec|ex)
-    vm cd $1
-    shift
-    ssh-instance $@
-    cd - >/dev/null
-    ;;
+          vm cd $1
+          shift
+          ssh-instance $@
+          cd - >/dev/null
+          ;;
   lookup|lk)               virsh-nat-bridge lookup $@ ;;
   mount|m)                 vm cd $1 ; shift ; sshfs-instance mount $@ ; cd - >/dev/null;;
   hostname|name|hn)
