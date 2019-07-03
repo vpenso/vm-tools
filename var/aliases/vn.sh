@@ -21,7 +21,7 @@ virsh-nodeset <command>
 Loops over a nodeset of VMs define by the \$NODES environment variable.
 
 command:
-  c,  cmd <args>            execute a command in the path of each VM instance
+  cm, cmd <args>            execute a command in the path of each VM instance
                             ('{}' brackets interpolated with node FQDN)
   co, config <args>         write a libvirt configuration file (cf. virsh-config)
   ex, exec <args>           execute a command in each VM instance
@@ -96,7 +96,7 @@ function virsh-nodeset() {
                   echo --$node--
                   case "$command" in
 
-                          cmd|c)
+                          cmd|cm|c)
                                    local fqdn=$(virsh-instance fqdn $node)
                                    cd $(virsh-instance path $fqdn)
                                    # replace brackets with node FQDN
