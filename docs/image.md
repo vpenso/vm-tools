@@ -11,7 +11,10 @@ Virtual machine images are used as **templates** (golden images) to create virtu
 
 ## Manual Installation
 
-The [virt-install](https://virt-manager.org/) program creates a `disk.img` and start the installation program for a selected Linux distribution.
+The [virt-install](https://virt-manager.org/) program 
+
+* Creates a `disk.img` and start the installation program for a selected Linux distribution.
+* Specify `--os-variant`, list acceptable values with `osinfo-query os`
 
 Boot the installer over HTTP:
 
@@ -36,7 +39,7 @@ virt-install --name centos7 --ram 2048 --os-type linux --virt-type kvm --network
            --location http://mirror.centos.org/centos-7/7/os/x86_64/
 ## -- Cern CentOS 7 --
 mkdir -p $VM_IMAGE_PATH/cc7 && cd $VM_IMAGE_PATH/cc7
-virt-install --name centos7 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
+virt-install --name cc7 --ram 2048 --os-variant centos7.0 --virt-type kvm --network bridge=nbr0 \
            --disk path=disk.img,size=100,format=qcow2,sparse=true,bus=virtio \
            --graphics none --console pty,target_type=serial --extra-args 'console=ttyS0,115200n8 serial' \
            --location http://linuxsoft.cern.ch/cern/centos/7/os/x86_64/

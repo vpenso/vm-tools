@@ -9,6 +9,7 @@ zgrep CONFIG_KVM /proc/config.gz
 sudo apt -y install \
        clustershell \
        libguestfs-tools \
+       libosinfo-bin \
        libvirt-clients \
        libvirt-daemon-system \
        libvirt-dev \
