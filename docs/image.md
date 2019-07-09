@@ -195,9 +195,9 @@ You may want to **install Sudo and Rsync** in the virtual machine unless this ha
 
 ```bash
 # Debian (login as devops, execute command as root user)
-ssh-instance "su -lc 'apt install rsync sudo haveged'"  
+ssh-instance "su -lc 'apt install -y rsync sudo haveged'"  
 # CentOS
-ssh-instance -r 'yum install rsync sudo'
+ssh-instance -r 'yum install -y rsync sudo'
 # Arch
 ssh-instance "su -lc 'pacman -S --noconfirm rsync sudo'"
 ```
