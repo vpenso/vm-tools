@@ -21,7 +21,7 @@ Boot the installer over HTTP:
 ```bash 
 ## -- Debian 9 --
 mkdir -p $VM_IMAGE_PATH/debian9 && cd $VM_IMAGE_PATH/debian9
-virt-install --name debian9 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
+virt-install --name debian9 --ram 2048 --os-variant debian9 --virt-type kvm --network bridge=nbr0 \
          --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
          --graphics none --console pty,target_type=serial --extra-args 'console=ttyS0,115200n8 serial' \
          --location http://deb.debian.org/debian/dists/stretch/main/installer-amd64/
@@ -33,7 +33,7 @@ virt-install --name debian10 --ram 2048 --os-type linux --virt-type kvm --networ
          --location http://deb.debian.org/debian/dists/buster/main/installer-amd64/
 ## -- CentOS 7 --
 mkdir -p $VM_IMAGE_PATH/centos7 && cd $VM_IMAGE_PATH/centos7
-virt-install --name centos7 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
+virt-install --name centos7 --ram 2048 --os-variant centos7.0 --virt-type kvm --network bridge=nbr0 \
            --disk path=disk.img,size=100,format=qcow2,sparse=true,bus=virtio \
            --graphics none --console pty,target_type=serial --extra-args 'console=ttyS0,115200n8 serial' \
            --location http://mirror.centos.org/centos-7/7/os/x86_64/
@@ -85,7 +85,7 @@ Install a virtual machine image with [preseed](https://wiki.debian.org/DebianIns
 ```bash
 # install a Debian Jessie virtual machine image
 >>> mkdir -p $VM_IMAGE_PATH/debian8 && cd $VM_IMAGE_PATH/debian8
->>> virt-install --name debian8 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
+>>> virt-install --name debian8 --ram 2048 --os-variant debian8 --virt-type kvm --network bridge=nbr0 \
              --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
              --location http://deb.debian.org/debian/dists/jessie/main/installer-amd64/ \
              --graphics none --console pty,target_type=serial --noreboot \
@@ -94,7 +94,7 @@ Install a virtual machine image with [preseed](https://wiki.debian.org/DebianIns
 >>> virsh undefine debian8
 # install a Debian Stretch virtual machine image
 >>> mkdir -p $VM_IMAGE_PATH/debian9 && cd $VM_IMAGE_PATH/debian9
->>> virt-install --name debian9 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
+>>> virt-install --name debian9 --ram 2048 --os-variant debian9 --virt-type kvm --network bridge=nbr0 \
              --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
              --location http://deb.debian.org/debian/dists/stretch/main/installer-amd64/ \
              --graphics none --console pty,target_type=serial --noreboot \
@@ -112,7 +112,7 @@ Install with CentOS/Fedora **Kickstart**:
 
 ```bash
 >>> mkdir -p $VM_IMAGE_PATH/centos7 && cd $VM_IMAGE_PATH/centos7
->>> virt-install --name centos7 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
+>>> virt-install --name centos7 --ram 2048 --os-variant centos7 --virt-type kvm --network bridge=nbr0 \
              --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
              --location http://mirror.centos.org/centos-7/7/os/x86_64/ \
              --graphics none --console pty,target_type=serial --noreboot \
