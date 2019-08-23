@@ -186,6 +186,11 @@ function role() {
         do
                 # name of the file
                 local name=$(basename $role)
+                # Tests if file exist. If not, skip it!
+                if ! [ -f $role ]; the
+                        echo "File not found: '${role}' - Skipped!"
+                        continue
+                fi
                 # target path in the roles/ subdirectory
                 local t_path=$PWD/roles/$name
                 # unless the file exists
