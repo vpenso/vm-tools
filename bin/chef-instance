@@ -89,7 +89,7 @@ while true; do
       ;;
     -r|--run-list)
       shift
-      run_list=$(echo "$1" | sed 's/,/","/')
+      run_list=$(echo "$1" | sed 's/,/","/g')
       shift
       ;;
     -v|--version)
