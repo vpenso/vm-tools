@@ -69,3 +69,29 @@ Domain lxdev01.devops.test destroyed
 Domain lxdev01.devops.test has been undefined
 ```
 
+## Configuration
+
+The ↴  [virsh-config](../bin/virsh-config) command creates `libvirt_instance.xml`
+containing the configuration to start virtual machine image using a Libvirt [doxml].
+
+The ↴  [vm](../var/aliases/vm.sh) function `config` executes the above command
+for a specific virtual machine instance:
+
+```bash
+# overwite the VM instance configuration
+vm config lxdev01 --overwrite --vcpu 4 --memory 4
+# look at the configuration file
+grep -e vcpu -e memory  $(vm path lxdev01)/libvirt_instance.xml
+# stop the instance if running, update its configuration, and start the VM instance 
+vm redefine lxdev01 
+```
+
+
+
+# References
+
+[doxml] Libvirt Domain XML format
+https://libvirt.org/formatdomain.html
+
+
+
