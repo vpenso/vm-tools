@@ -31,10 +31,13 @@ The [docs/](docs) sub-directory includes all documentation required to use this 
 * [docs/network.md](docs/network.md) explains the setup of the **virtual machine network**
 * [docs/image.md](docs/image.md) describes how to create re-usable **virtual machine images** 
   (aka templates)
-* [docs/instance.md](docs/instance.md) shows how to use virtual machine images to create 
-  any number of **virtual machine instances** for development and testing
+* [docs/instance.md](docs/instance.md) shows how to use VM images to create 
+  any number of **virtual machine instances**, and how to configure the
+  resources available to VM instance.
 * [docs/workflow.md](docs/workflow.md) explains in great detail how to efficiently 
-  interact with virtual machine instances
+  interact with virtual machine instances. How to login, execute commands within
+  a VM, copy file between host and the VM, and how to mount the VM root
+  file-system.
 * [docs/nodeset.md](docs/nodeset.md) exemplifies operation of multiple virtual 
   machine instance
 
@@ -47,7 +50,7 @@ Configure a virtual machine instance with a Configuration Management System:
 
 ## License
 
-Copyright 2012-2018 Victor Penso
+Copyright 2012-2019 Victor Penso
 
 This is free software: you can redistribute it
 and/or modify it under the terms of the GNU General Public
