@@ -71,10 +71,10 @@ Domain lxdev01.devops.test has been undefined
 
 ## Configuration
 
-The ↴  [virsh-config](../bin/virsh-config) command creates `libvirt_instance.xml`
+The ↴  [`virsh-config`](../bin/virsh-config) command creates `libvirt_instance.xml`
 containing the configuration to start virtual machine image using a Libvirt [doxml].
 
-The ↴  [vm](../var/aliases/vm.sh) function `config` executes the above command
+The ↴  [`vm`](../var/aliases/vm.sh) function `config` executes the above command
 for a specific virtual machine instance:
 
 ```bash
