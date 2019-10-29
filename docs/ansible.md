@@ -1,12 +1,12 @@
 
-## Ansible
+# Ansible
 
-If the [Libvirt NSS modules][../INSTALL.md] is available:
+If the [Libvirt NSS modules](../INSTALL.md) is available:
 
 ```bash
 # and the host_list inventory plugin is enabled 
 >>> grep enable_plugins /etc/ansible/ansible.cfg
-enable_plugins = ini, host_list, advanced_host_list
+enable_plugins = host_list, advanced_host_list
 ```
 ```bash
 # Get the list of availabe VM instance names
@@ -24,8 +24,10 @@ ssh-add $(vm path lxdev02)/keys/id_rsa
 ansible -u root lxdev02 -a ls
 ```
 
-Otherwise use ↴ [`ansible-instance`](../bin/ansible-instance) to create an 
-inventory file `ansible.ini` per VM instance:
+### Ansible Instance Command
+
+Without Libvirt NSS module use ↴ [`ansible-instance`](../bin/ansible-instance) 
+to create an **inventory file** `ansible.ini` per VM instance:
 
 ```bash
 >>> vm shadow centos7 lxdev01
@@ -53,10 +55,9 @@ lxdev01 | CHANGED | rc=0 >>
 anaconda-ks.cfg
 ```
 
-### Playbooks
+Create a simple example playbook to install Apache
 
 ```bash
-# create a simple example playbook to install Apache
 cat > httpd.yaml <<EOF
 ---
 - hosts: lxdev01
