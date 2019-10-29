@@ -76,7 +76,7 @@ hosts: files libvirt libvirt_guest ...
 Commands like `ssh` should work with VM instance names now:
 
 ```bash
->>> vm shadow $image lxdev01
+>>> vm shadow ${image} lxdev01
 >>> ssh -i $(vm path lxdev01)/keys/id_rsa devops@lxdev01
 Last login: Tue Jul  9 11:42:57 2019 from gateway
 [devops@lxdev01 ~]$
