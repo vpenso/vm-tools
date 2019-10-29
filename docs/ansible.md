@@ -17,11 +17,11 @@ alias ansible='ansible -i "$NODES"'
 ansible --list-hosts all
 ```
 ```bash
->>> vm shadow ${image} lxdev02
+# create a VM instance and load its SSH private key
+vm shadow ${image} lxdev02
+ssh-add $(vm path lxdev02)/keys/id_rsa
 # run a command in a VM instance
->>> ansible --user root --key-file $(vm path lxdev02)/keys/id_rsa lxdev02 -a 'uname -a'
-lxdev02 | CHANGED | rc=0 >>
-Linux lxdev02 3.10.0-957.el7.x86_64 #1 SMP Thu Nov 8 23:39:32 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
+ansible -u root lxdev02 -a ls
 ```
 
 Otherwise use ↴ [`ansible-instance`](../bin/ansible-instance) to create an 
