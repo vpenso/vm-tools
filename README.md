@@ -43,6 +43,8 @@ The [docs/](docs) sub-directory includes all documentation required to use this 
 
 Configure a virtual machine instance with a Configuration Management System:
 
+* [docs/ansible.md](docs/ansible.md) show how to configure virtual machine
+  instance with [Ansible](https://github.com/ansible/ansible). 
 * [docs/chef.md](docs/chef.md) describes how to us the `chef-instance` command 
   to execute **Chef Solo** in a virtual machine instance.
 * [docs/salt.md](docs/salt.md) describes how to create a configuration to use 
