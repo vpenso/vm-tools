@@ -1,7 +1,31 @@
+
 ## Ansible
 
-The ↴ [`ansible-instance`](../bin/ansible-instance) program writes an inventory to `ansible.ini`,
-execute `ansible` for a given VM instance:
+If the [Libvirt NSS modules][../INSTALL.md] is available:
+
+```bash
+# and the host_list inventory plugin is enabled 
+>>> grep enable_plugins /etc/ansible/ansible.cfg
+enable_plugins = ini, host_list, advanced_host_list
+```
+```bash
+# Get the list of availabe VM instance names
+export NODES=$(virsh-nat-bridge list | cut -d, -f2 | cut -d. -f1 | nodeset -f | nodeset -e -S,)
+# use an environment variable to consume the VM instances names
+alias ansible='ansible -i "$NODES"'
+# list the available inventory
+ansible --list-hosts all
+```
+```bash
+>>> vm shadow ${image} lxdev02
+# run a command in a VM instance
+>>> ansible --user root --key-file $(vm path lxdev02)/keys/id_rsa lxdev02 -a 'uname -a'
+lxdev02 | CHANGED | rc=0 >>
+Linux lxdev02 3.10.0-957.el7.x86_64 #1 SMP Thu Nov 8 23:39:32 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
+```
+
+Otherwise use ↴ [`ansible-instance`](../bin/ansible-instance) to create an 
+inventory file `ansible.ini` per VM instance:
 
 ```bash
 >>> vm shadow centos7 lxdev01
