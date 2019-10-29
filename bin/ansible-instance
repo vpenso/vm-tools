@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright 2016 Victor Penso
+# Copyright 2016-2019 Victor Penso
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,15 +21,14 @@ begin
   # current working directory
   path = ENV['PWD']
   # name of the virtual machine instance 
-  name = File.basename(path)
+  name = File.basename(path).split('.')[0]
   # get the network configuration
-  name, ip, mac = `virsh-nat-bridge lookup #{name}`.split
+  null, ip, mac = `virsh-nat-bridge lookup #{name}`.split
   # target configuration file for Ansible
-  config_file = 'ansible.ini'
+  config_file = "#{path}/ansible.ini"
   # Ansible configuration
   config = <<-EOF
-    [instance]
-    instance ansible_user=root ansible_host=#{ip} host_key_checking=no ansible_ssh_private_key_file=#{path}/keys/id_rsa
+    #{name} ansible_user=root ansible_host=#{ip} host_key_checking=no ansible_ssh_private_key_file=#{path}/keys/id_rsa
   EOF
 
   # Create a configuration file if missing
@@ -40,7 +39,7 @@ begin
     $stdout.puts "#{config_file} written."
   end
 
-  $stdout.puts `ansible -i #{config_file} instance #{ARGV.join(' ')}`
+  $stdout.puts `ansible -i #{config_file} #{name} #{ARGV.join(' ')}`
 
 rescue => exc
   $stderr.puts "ERROR: #{exc.message}"
