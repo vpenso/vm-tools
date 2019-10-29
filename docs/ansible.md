@@ -29,10 +29,11 @@ lxdev01 | CHANGED | rc=0 >>
 anaconda-ks.cfg
 ```
 
-Execute an Ansible playbook [anply] in the VM instance:
+### Playbooks
 
 ```bash
-cat > httpd.yaml <EOF
+# create a simple example playbook to install Apache
+cat > httpd.yaml <<EOF
 ---
 - hosts: lxdev01
   tasks:
@@ -45,6 +46,9 @@ cat > httpd.yaml <EOF
         - httpd-tools
 EOF
 ```
+
+Execute an Ansible playbook [anply] in the VM instance:
+
 ```bash
 ansible-playbook -i ansible.ini httpd.yaml
 ```
