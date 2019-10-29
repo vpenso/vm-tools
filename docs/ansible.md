@@ -1,6 +1,6 @@
 ## Ansible
 
-The ↴ [`ansible-instance`] program writes `ansible,ini` to the VM instance
+The ↴ [`ansible-instance`](../bin/ansible-instance) program writes `ansible.ini` to the VM instance
 directory and execute `ansible`
 
 ```bash
@@ -16,6 +16,8 @@ lxdev01 | SUCCESS => {
     "changed": false,
     "ping": "pong"
 }
+>>> cat ansible.ini
+lxdev01 ansible_user=root ansible_host=10.1.1.30 host_key_checking=no ansible_ssh_private_key_file=...
 >>> ansible-instance --list-hosts
   hosts (1):
     lxdev01
