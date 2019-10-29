@@ -9,6 +9,7 @@ zgrep CONFIG_KVM /proc/config.gz
 sudo apt -y install \
        clustershell \
        libguestfs-tools \
+       libnss-libvirt \
        libosinfo-bin \
        libvirt-clients \
        libvirt-daemon-system \
@@ -61,10 +62,24 @@ group = "jdow"
 >>> sudo systemctl restart libvirtd
 ```
 
-For host access to guests on non-isolated, bridged networks, enable the libvirt NSS module:
+## Libvirt NSS Module
+
+For host access to guests on non-isolated, bridged networks, enable the [libvirt NSS module][01]:
 
 ```bash
 >>> grep hosts /etc/nsswitch.conf
-hosts: files libvirt ...
+hosts: files libvirt libvirt_guest ...
+>>> getent hosts lxdev01
+10.1.1.30       lxdev01
 ```
 
+Commands like `ssh` should work with VM instance names now:
+
+```bash
+>>> vm shadow $image lxdev01
+>>> ssh -i $(vm path lxdev01)/keys/id_rsa devops@lxdev01
+Last login: Tue Jul  9 11:42:57 2019 from gateway
+[devops@lxdev01 ~]$
+```
+
+[01]: https://libvirt.org/nss.html
