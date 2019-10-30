@@ -4,7 +4,9 @@
 If the [Libvirt NSS modules](../INSTALL.md) is available:
 
 ```bash
-# and the host_list inventory plugin is enabled 
+# install Ansible on Debian
+>>> sudo apt install -y ansible
+# Enable the  host_list inventory plugin [ahlip]
 >>> grep enable_plugins /etc/ansible/ansible.cfg
 enable_plugins = host_list, advanced_host_list
 ```
@@ -83,3 +85,6 @@ ansible-playbook -i ansible.ini httpd.yaml
 
 [anply] Ansible - Intro to Playbooks  
 https://docs.ansible.com/ansible/latest/user_guide/playbooks_intro.html
+
+[ahlip] Ansible - Host List Inventory Plugin  
+https://docs.ansible.com/ansible/latest/plugins/inventory/host_list.html
