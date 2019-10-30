@@ -5,11 +5,18 @@ If the [Libvirt NSS modules](../INSTALL.md) is available:
 
 ```bash
 # install Ansible on Debian
->>> sudo apt install -y ansible
-# Enable the  host_list inventory plugin [ahlip]
->>> grep enable_plugins /etc/ansible/ansible.cfg
-enable_plugins = host_list, advanced_host_list
+sudo apt install -y ansible
 ```
+
+Enable the  host_list inventory plugin [ahlip] in `/etc/ansible/ansible.cfg`
+
+```ini
+[inventory]
+enable_plugins = host_list, ...
+```
+
+Use a static list of VM instance with Ansible:
+
 ```bash
 # Get the list of availabe VM instance names
 export NODES=$(virsh-nat-bridge list | cut -d, -f2 | cut -d. -f1 | nodeset -f | nodeset -e -S,)
