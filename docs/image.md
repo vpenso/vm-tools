@@ -90,24 +90,24 @@ Install a virtual machine image with [preseed](https://wiki.debian.org/DebianIns
 
 ```bash
 # install a Debian Jessie virtual machine image
->>> mkdir -p $VM_IMAGE_PATH/debian8 && cd $VM_IMAGE_PATH/debian8
->>> virt-install --name debian8 --ram 2048 --os-variant debian8 --virt-type kvm --network bridge=nbr0 \
-             --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
-             --location http://deb.debian.org/debian/dists/jessie/main/installer-amd64/ \
-             --graphics none --console pty,target_type=serial --noreboot \
-             --extra-args 'auto=true hostname=jessie domain=devops.test console=ttyS0,115200n8 serial' \
-             --initrd-inject=$VM_TOOLS/var/debian/8/preseed.cfg
->>> virsh undefine debian8
+mkdir -p $VM_IMAGE_PATH/debian8 && cd $VM_IMAGE_PATH/debian8
+virt-install --name debian8 --ram 2048 --os-variant debian8 --virt-type kvm --network bridge=nbr0 \
+         --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
+         --location http://deb.debian.org/debian/dists/jessie/main/installer-amd64/ \
+         --graphics none --console pty,target_type=serial --noreboot \
+         --extra-args 'auto=true hostname=jessie domain=devops.test console=ttyS0,115200n8 serial' \
+         --initrd-inject=$VM_TOOLS/var/debian/8/preseed.cfg
+virsh undefine debian8
 # install a Debian Stretch virtual machine image
->>> mkdir -p $VM_IMAGE_PATH/debian9 && cd $VM_IMAGE_PATH/debian9
->>> virt-install --name debian9 --ram 2048 --os-variant debian9 --virt-type kvm --network bridge=nbr0 \
-             --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
-             --location http://deb.debian.org/debian/dists/stretch/main/installer-amd64/ \
-             --graphics none --console pty,target_type=serial --noreboot \
-             --extra-args 'auto=true hostname=stretch domain=devops.test console=ttyS0,115200n8 serial' \
-             --initrd-inject=$VM_TOOLS/var/debian/9/preseed.cfg \
-             --initrd-inject=$VM_TOOLS/var/debian/9/post-install.sh
->>> virsh undefine debian9
+mkdir -p $VM_IMAGE_PATH/debian9 && cd $VM_IMAGE_PATH/debian9
+virt-install --name debian9 --ram 2048 --os-variant debian9 --virt-type kvm --network bridge=nbr0 \
+         --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
+         --location http://deb.debian.org/debian/dists/stretch/main/installer-amd64/ \
+         --graphics none --console pty,target_type=serial --noreboot \
+         --extra-args 'auto=true hostname=stretch domain=devops.test console=ttyS0,115200n8 serial' \
+         --initrd-inject=$VM_TOOLS/var/debian/9/preseed.cfg \
+         --initrd-inject=$VM_TOOLS/var/debian/9/post-install.sh
+virsh undefine debian9
 ```
 
 Find Debian preseed files in [var/debian/](../var/debian).
@@ -117,16 +117,16 @@ Find Debian preseed files in [var/debian/](../var/debian).
 Install with CentOS/Fedora **Kickstart**:
 
 ```bash
->>> mkdir -p $VM_IMAGE_PATH/centos7 && cd $VM_IMAGE_PATH/centos7
->>> virt-install --name centos7 --ram 2048 --os-variant centos7.0 --virt-type kvm --network bridge=nbr0 \
-             --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
-             --location http://mirror.centos.org/centos-7/7/os/x86_64/ \
-             --graphics none --console pty,target_type=serial --noreboot \
-             --initrd-inject=$VM_TOOLS/var/centos/7/kickstart.cfg \
-             --extra-args 'console=ttyS0,115200n8 serial \
-                           inst.repo=http://mirror.centos.org/centos-7/7/os/x86_64/ \
-                           inst.text inst.ks=file:/kickstart.cfg'
->>> virsh undefine centos7
+mkdir -p $VM_IMAGE_PATH/centos7 && cd $VM_IMAGE_PATH/centos7
+virt-install --name centos7 --ram 2048 --os-variant centos7.0 --virt-type kvm --network bridge=nbr0 \
+         --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
+         --location http://mirror.centos.org/centos-7/7/os/x86_64/ \
+         --graphics none --console pty,target_type=serial --noreboot \
+         --initrd-inject=$VM_TOOLS/var/centos/7/kickstart.cfg \
+         --extra-args 'console=ttyS0,115200n8 serial \
+                       inst.repo=http://mirror.centos.org/centos-7/7/os/x86_64/ \
+                       inst.text inst.ks=file:/kickstart.cfg'
+virsh undefine centos7
 ```
 
 Find the kickstart file in [var/centos](../var/centos).
