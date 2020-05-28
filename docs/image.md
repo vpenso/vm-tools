@@ -79,6 +79,12 @@ wget http://linuxsoft.cern.ch/centos/7.8.2003/isos/x86_64/CentOS-7-x86_64-Minima
 virt-install --ram 2048 --virt-type kvm --network bridge=nbr0 \
              --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
              --name centos7.8 --cdrom CentOS-7-x86_64-Minimal-2003.iso
+# CentOS 8.1.1911
+mkdir -p $VM_IMAGE_PATH/centos8.1 && cd $VM_IMAGE_PATH/centos8.1
+wget http://linuxsoft.cern.ch/centos/8.1.1911/isos/x86_64/CentOS-8.1.1911-x86_64-boot.iso
+virt-install --ram 2048 --virt-type kvm --network bridge=nbr0 \
+             --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
+             --name centos8.1 --cdrom CentOS-8.1.1911-x86_64-boot.iso
 ```
 
 During installation following configuration are required:
