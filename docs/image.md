@@ -54,19 +54,31 @@ virt-install --name centos8 --ram 2048 --os-variant rhel-unknown --virt-type kvm
 Install from an CD ISO image:
 
 ```bash
-## -- ArchLinux --
+## ArchLinux
 mkdir -p $VM_IMAGE_PATH/arch && cd $VM_IMAGE_PATH/arch
 wget -O arch.iso http://ftp-stud.hs-esslingen.de/pub/Mirrors/archlinux/iso/2018.06.01/archlinux-2018.06.01-x86_64.iso
 virt-install --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
              --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
              --name arch --cdrom arch.iso
-## -- Debian (Sid) Testing - Daily Builds --
+## Debian (Sid) Testing - Daily Builds
 mkdir -p $VM_IMAGE_PATH/debian-testing && cd $VM_IMAGE_PATH/debian-testing
 netinst=https://cdimage.debian.org/cdimage/daily-builds/daily/arch-latest/amd64/iso-cd/debian-testing-amd64-netinst.iso
 wget -O debian.iso $netinst
 virt-install --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
              --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
              --name debian-testing --cdrom debian.iso
+# CentOS 7.7.1908 (from a CentOS Vault mirror)
+mkdir -p $VM_IMAGE_PATH/centos7.7 && cd $VM_IMAGE_PATH/centos7.7
+wget http://linuxsoft.cern.ch/centos-vault/7.7.1908/isos/x86_64/CentOS-7-x86_64-Minimal-1908.iso
+virt-install --ram 2048 --virt-type kvm --network bridge=nbr0 \
+             --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
+             --name centos7.7 --cdrom CentOS-7-x86_64-Minimal-1908.iso
+# CentOS 7.8.2003
+mkdir -p $VM_IMAGE_PATH/centos7.8 && cd $VM_IMAGE_PATH/centos7.8
+wget http://linuxsoft.cern.ch/centos/7.8.2003/isos/x86_64/CentOS-7-x86_64-Minimal-2003.iso
+virt-install --ram 2048 --virt-type kvm --network bridge=nbr0 \
+             --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
+             --name centos7.8 --cdrom CentOS-7-x86_64-Minimal-2003.iso
 ```
 
 During installation following configuration are required:
