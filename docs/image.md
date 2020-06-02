@@ -106,14 +106,9 @@ To check the actual disk image size the following command can be used: `qemu-img
 
 Install a virtual machine image with [preseed](https://wiki.debian.org/DebianInstaller/Preseed) and the [Debian Installer](https://www.debian.org/releases/stable/amd64/ch06.html.en):
 
-**NOTE**: if ``virt-install`` is launched from an host behind a __proxy__, the following line has to be added to ``preseed.cfg``:
-```
-# Use an http proxy
-d-i mirror/http/proxy string http://proxy.fqdn:port
-```
+#### Debian 8 (Jessie)
 
 ```bash
-# install a Debian Jessie virtual machine image
 mkdir -p $VM_IMAGE_PATH/debian8 && cd $VM_IMAGE_PATH/debian8
 virt-install --name debian8 --ram 2048 --os-variant debian8 --virt-type kvm --network bridge=nbr0 \
          --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
@@ -122,7 +117,11 @@ virt-install --name debian8 --ram 2048 --os-variant debian8 --virt-type kvm --ne
          --extra-args 'auto=true hostname=jessie domain=devops.test console=ttyS0,115200n8 serial' \
          --initrd-inject=$VM_TOOLS/var/debian/8/preseed.cfg
 virsh undefine debian8
-# install a Debian Stretch virtual machine image
+```
+
+#### Debian 9 (Stretch)
+
+```bash
 mkdir -p $VM_IMAGE_PATH/debian9 && cd $VM_IMAGE_PATH/debian9
 virt-install --name debian9 --ram 2048 --os-variant debian9 --virt-type kvm --network bridge=nbr0 \
          --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
@@ -136,15 +135,15 @@ virsh undefine debian9
 
 Find Debian preseed files in [var/debian/](../var/debian).
 
+**NOTE**: if ``virt-install`` is launched from an host behind a __proxy__, the following line has to be added to ``preseed.cfg``:
+```
+# Use an http proxy
+d-i mirror/http/proxy string http://proxy.fqdn:port
+```
+
 ### CentOS/Fedora with Kickstart
 
 Install a CentOS/Fedora VM with [**Kickstart**](https://docs.centos.org/en-US/centos/install-guide/Kickstart2/):
-
-**NOTE**: if ``virt-install`` is launched from an host behind a __proxy__, the following line has to be modified in ``kickstart.cfg``:
-```
-# At the end of the line with the url directive just add the proxy:
-url --url=[...] --proxy="http://proxy.fqdn:port"
-```
 
 #### CentOS 8
 
@@ -177,6 +176,12 @@ virsh undefine centos7
 ```
 
 Find the kickstart file in [var/centos](../var/centos).
+
+**NOTE**: if ``virt-install`` is launched from an host behind a __proxy__, the following line has to be modified in ``kickstart.cfg``:
+```
+# At the end of the line with the url directive just add the proxy:
+url --url=[...] --proxy="http://proxy.fqdn:port"
+```
 
 ## Permissions
 
