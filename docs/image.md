@@ -106,6 +106,12 @@ To check the actual disk image size the following command can be used: `qemu-img
 
 Install a virtual machine image with [preseed](https://wiki.debian.org/DebianInstaller/Preseed) and the [Debian Installer](https://www.debian.org/releases/stable/amd64/ch06.html.en):
 
+**NOTE**: if ``virt-install`` is launched from an host behind a __proxy__, the following line has to be added to ``preseed.cfg``:
+```
+# Use an http proxy
+d-i mirror/http/proxy string http://proxy.fqdn:port
+```
+
 ```bash
 # install a Debian Jessie virtual machine image
 mkdir -p $VM_IMAGE_PATH/debian8 && cd $VM_IMAGE_PATH/debian8
@@ -132,7 +138,13 @@ Find Debian preseed files in [var/debian/](../var/debian).
 
 ### CentOS/Fedora with Kickstart
 
-Install with CentOS/Fedora **Kickstart**:
+Install a CentOS/Fedora VM with [**Kickstart**](https://docs.centos.org/en-US/centos/install-guide/Kickstart2/):
+
+**NOTE**: if ``virt-install`` is launched from an host behind a __proxy__, the following line has to be modified in ``kickstart.cfg``:
+```
+# At the end of the line with the url directive just add the proxy:
+url --url=[...] --proxy="http://proxy.fqdn:port"
+```
 
 #### CentOS 8
 
