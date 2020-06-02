@@ -134,6 +134,23 @@ Find Debian preseed files in [var/debian/](../var/debian).
 
 Install with CentOS/Fedora **Kickstart**:
 
+#### CentOS 8
+
+```bash
+mkdir -p $VM_IMAGE_PATH/centos8 && cd $VM_IMAGE_PATH/centos8
+virt-install --name centos8 --ram 2048 --virt-type kvm --network bridge=nbr0 \
+         --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
+         --location http://mirror.centos.org/centos-8/8.1.1911/BaseOS/x86_64/os/ \
+         --graphics none --console pty,target_type=serial --noreboot \
+         --initrd-inject=$VM_TOOLS/var/centos/8/kickstart.cfg \
+         --extra-args 'console=ttyS0,115200n8 serial \
+                       inst.repo=http://mirror.centos.org/centos-8/8.1.1911/BaseOS/x86_64/os/ \
+                       inst.text inst.ks=file:/kickstart.cfg'
+virsh undefine centos8
+```
+
+#### CentOS 7
+
 ```bash
 mkdir -p $VM_IMAGE_PATH/centos7 && cd $VM_IMAGE_PATH/centos7
 virt-install --name centos7 --ram 2048 --os-variant centos7.0 --virt-type kvm --network bridge=nbr0 \
