@@ -96,7 +96,10 @@ During installation following configuration are required:
 * Create a user `devops` with password "devops"
 * Single primary partition for `/` (no SWAP).
 
-Install a minimal standard system, no desktop environment (unless really needed), no services, no development environment, no editor, nothing except a bootable Linux.
+Install a minimal standard system e.g. no desktop environment (unless really needed), no further services (except a SSH server), no development environment, no editor, nothing except a bootable Linux.
+
+_Before shutting down the VM you should also guarantee that the ssh server is running.
+DHCP should also be enabled for the network card.__
 
 To check the actual disk image size the following command can be used: `qemu-img info disk.img`.
 
