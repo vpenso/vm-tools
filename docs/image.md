@@ -155,7 +155,7 @@ virt-install --name centos8 --ram 2048 --virt-type kvm --network bridge=nbr0 \
          --graphics none --console pty,target_type=serial --noreboot \
          --initrd-inject=$VM_TOOLS/var/centos/8/kickstart.cfg \
          --extra-args 'console=ttyS0,115200n8 serial \
-                       inst.repo=http://mirror.centos.org/centos-8/8.1.1911/BaseOS/x86_64/os/ \
+                       inst.repo=http://mirror.centos.org/centos-8/8/BaseOS/x86_64/ \
                        inst.text inst.ks=file:/kickstart.cfg'
 virsh undefine centos8
 ```
