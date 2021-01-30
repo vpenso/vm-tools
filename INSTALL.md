@@ -15,11 +15,10 @@ sudo apt -y install \
        libvirt-daemon-system \
        libvirt-dev \
        ovmf \
-       qemu-kvm \
+       qemu-system-x86 \
        qemu-utils \
        ruby \
        virt-manager \
-       virt-top \
        virt-viewer \
        virtinst
 # Fedora/CentOS packages
