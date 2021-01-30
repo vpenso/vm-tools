@@ -31,9 +31,9 @@ virt-install --name debian10 --ram 2048 --os-type linux --virt-type kvm --networ
          --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
          --graphics none --console pty,target_type=serial --extra-args 'console=ttyS0,115200n8 serial' \
          --location http://deb.debian.org/debian/dists/buster/main/installer-amd64/
-## -- Debian 10 --
+## -- Debian 11 --
 mkdir -p $VM_IMAGE_PATH/debian11 && cd $VM_IMAGE_PATH/debian11
-virt-install --name debian10 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
+virt-install --name debian11 --ram 2048 --os-type linux --virt-type kvm --network bridge=nbr0 \
          --disk path=disk.img,size=40,format=qcow2,sparse=true,bus=virtio \
          --graphics none --console pty,target_type=serial --extra-args 'console=ttyS0,115200n8 serial' \
          --location http://deb.debian.org/debian/dists/bullseye/main/installer-amd64/
