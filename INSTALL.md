@@ -7,6 +7,7 @@ LC_ALL=C lscpu | grep Virtualization
 zgrep CONFIG_KVM /proc/config.gz
 # Debian packages
 sudo apt -y install \
+       bridge-utils \
        clustershell \
        libguestfs-tools \
        libnss-libvirt \

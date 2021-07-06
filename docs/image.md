@@ -43,18 +43,19 @@ virt-install --name centos7 --ram 2048 --os-variant centos7.0 --virt-type kvm --
            --disk path=disk.img,size=100,format=qcow2,sparse=true,bus=virtio \
            --graphics none --console pty,target_type=serial --extra-args 'console=ttyS0,115200n8 serial' \
            --location http://mirror.centos.org/centos-7/7/os/x86_64/
-## -- Cern CentOS 7 --
-mkdir -p $VM_IMAGE_PATH/cc7 && cd $VM_IMAGE_PATH/cc7
-virt-install --name cc7 --ram 2048 --os-variant centos7.0 --virt-type kvm --network bridge=nbr0 \
-           --disk path=disk.img,size=100,format=qcow2,sparse=true,bus=virtio \
-           --graphics none --console pty,target_type=serial --extra-args 'console=ttyS0,115200n8 serial' \
-           --location http://linuxsoft.cern.ch/cern/centos/7/os/x86_64/
 ## -- CentOS 8 --
 mkdir -p $VM_IMAGE_PATH/centos8 && cd $VM_IMAGE_PATH/centos8
 virt-install --name centos8 --ram 2048 --os-variant rhel-unknown --virt-type kvm --network bridge=nbr0 \
            --disk path=disk.img,size=100,format=qcow2,sparse=true,bus=virtio \
            --graphics none --console pty,target_type=serial --extra-args 'console=ttyS0,115200n8 serial' \
            --location http://mirror.centos.org/centos-8/8/BaseOS/x86_64/os
+## -- CentOS Stream 8 --
+mkdir -p $VM_IMAGE_PATH/centos-stream && cd $VM_IMAGE_PATH/centos-stream
+virt-install --name centos-stream8 --ram 2048 --os-variant centos-stream8 \
+           --virt-type kvm --network bridge=nbr0 \
+           --disk path=disk.img,size=100,format=qcow2,sparse=true,bus=virtio \
+           --graphics none --console pty,target_type=serial --extra-args 'console=ttyS0,115200n8 serial' \
+           --location http://mirror.centos.org/centos/8-stream/BaseOS/x86_64/os
 ```
 
 Install from an CD ISO image:
